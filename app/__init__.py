@@ -2,9 +2,23 @@ import os
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+# SQLite ForeignKey constraints enforcement enable, as per: https://stackoverflow.com/a/15542046
+# from sqlalchemy import event
+# from sqlalchemy.engine import Engine
+# from sqlite3 import Connection as SQLite3Connection
+# @event.listens_for(Engine, "connect")
+# def _set_sqlite_pragma(dbapi_connection, connection_record):
+#     if isinstance(dbapi_connection, SQLite3Connection):
+#         cursor = dbapi_connection.cursor()
+#         cursor.execute("PRAGMA foreign_keys=ON;")
+#         cursor.close()
+
 
 # Create DB engine
 db = SQLAlchemy()
+migrate = Migrate()
 
 
 def create_app(test_config=None):
@@ -12,7 +26,7 @@ def create_app(test_config=None):
     import app.models
 
     # Create and configure app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask("app", instance_relative_config=True)
     # Create preliminary config, will be used, if no config.py file is found.
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -34,6 +48,9 @@ def create_app(test_config=None):
 
     # Attach DB to app
     db.init_app(app)
+
+    # Attach migrations to app
+    migrate.init_app(app)
 
     @app.cli.command()
     def createdb():
