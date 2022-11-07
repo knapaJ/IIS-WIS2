@@ -17,7 +17,7 @@ class CourseRegistration(db.Model):
     course = db.relationship("Course", backref=db.backref("user_registrations", cascade="all,delete"), lazy="joined")
 
     def __init__(self, user, course, **kwargs):
-        self.user = user
+        self.student = user
         self.course = course
         super(CourseRegistration, self).__init__(**kwargs)
 

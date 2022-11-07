@@ -50,4 +50,4 @@ class User(db.Model):
         return wsec.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return f"{self.user_type.name}[{self.id}] {self.name} {self.surname}"
+        return f"{self.user_type.name}[{self._id}] {self.name} {self.surname}"

@@ -1,7 +1,7 @@
 from app import db
 
 
-term_pupil_rel = db.Table("lecture_pupil_rel",
+term_pupil_rel = db.Table("term_pupil_rel",
                           db.Column('_user_id', db.Integer, db.ForeignKey('users.id')),
                           db.Column('_term_id', db.Integer, db.ForeignKey('terms.id'))
                           )

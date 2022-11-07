@@ -25,7 +25,7 @@ class TermMark(db.Model):
     def modify(self, mark, by_user):
         self.mark = mark
         self.lastModifiedBy = by_user
-        self.lastModifiedBy = datetime.utcnow()
+        self.lastModified = datetime.utcnow()
 
     def __repr__(self):
         return f"TermMark[{self._id}] last modified {self.lastModified}"
