@@ -1,6 +1,9 @@
 from app import create_app, db
 from app.models.User import User, UserType
 from app.models.Course import Course
+from app.models.Lecture import Lecture
+from app.models.CourseRegistration import CourseRegistration
+from app.models.Classroom import Classroom
 
 app = create_app({"SECRET_KEY": "DEV",
                   "SQLALCHEMY_ECHO": True,
@@ -10,17 +13,24 @@ with app.app_context():
     try:
         db.create_all()
 
-        user1 = User("xuser1", "user", "one", "one@user.mail", UserType.ADMIN, "passwd")
-        course = Course("SHORT", "Some course name", 10, garant=user1)
-        db.session.add(course)
-        db.session.commit()
-        # So far so good
+        uzivatel1 = User("xja007", "ja", "takyja", "daco@nekde.com", UserType.ADMIN, "dev")
+        kurz1 = Course("IEL", "Elektronika", 999, uzivatel1)
+        kurz1.lecturers.append(uzivatel1)
+        prednaska1 = Lecture("Proste prednaska", 100, uzivatel1, kurz1)
 
-        print(Course.query.filter_by(short_name="SHORT").first())
-        user2 = User("xuser2", "user", "two", "two@user.mail", UserType.USER, "passwd")
-        user2.taught_courses.append(course)
-        db.session.add(user2)
-        db.session.commit()  # This crashes with "Working outside of application context."
+        db.session.add(prednaska1)
+
+        zacek1 = User("xzacek01", "zacek", "maly", "picumam@sprosty.jsem", UserType.USER, "dev")
+        randomkurzik = Course.query.filter_by(short_name='IEL').first()
+        nova_registrace = CourseRegistration(zacek1, randomkurzik)
+        nova_prednaska = Lecture("prednaska", 100, User.query.filter_by(login="xja007").first(), randomkurzik)
+        nova_prednaska.attendees.append(zacek1)
+
+        db.session.add(nova_registrace)
+        db.session.add(nova_prednaska)
+        db.session.commit()
+
+        print("=============DONE==============")
 
     finally:
         db.drop_all()
