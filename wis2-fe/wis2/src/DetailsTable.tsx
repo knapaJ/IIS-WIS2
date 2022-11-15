@@ -27,7 +27,7 @@ function DetailsTable({tableData, tableValues}:Props) {
                         <td>{td.shortcut}</td>
                         <td>{td.fullname}</td>
                         <td>{td.credits}</td>
-                        <td><Link to={td.detailsLink + '/' + td.shortcut}>detail</Link></td>
+                        <td><Link to={td.detailsLink + '/' + td.shortcut + '/' + td.id}>detail</Link></td>
                     </tr>
                     ))}
                 </tbody>

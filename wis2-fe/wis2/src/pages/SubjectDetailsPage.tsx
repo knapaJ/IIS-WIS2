@@ -11,6 +11,7 @@ import data from '../mockData/mockRegistrationtableData.json';
 function SubjectDetailsPage() {
 	const [tableData, setTableData] = useState(data);
 	const {id} = useParams();
+	const {subName} = useParams();
 
 	useEffect(() => {
 		fetch("/getDetail", {
@@ -32,7 +33,7 @@ function SubjectDetailsPage() {
 			<PageHeader homePage='/'></PageHeader>
 				<div id="mainContentSubjectDetailsPage">
 					<div className="semesterTitle">
-						Detaily predmetu {id}
+						Detaily predmetu {subName}
 					</div>
 					<Table tableData={tableData}></Table>
 				</div>
