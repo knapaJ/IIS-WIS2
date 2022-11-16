@@ -1,5 +1,3 @@
-import EventButton from './EventButton';
-import logo from './logo.svg';
 import './Table.css';
 
 type Props = {

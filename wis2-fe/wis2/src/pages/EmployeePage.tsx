@@ -7,16 +7,16 @@ import PageFooter from '../PageFooter';
 
 function EmployeePage() {
   return (
-  <div>
-	<PageHeader homePage='/'></PageHeader>
-	<div id="employeeMainContent">
-		<div id="buttonMenu">
-			<LinkButton linkText='Profil 🤓' linkValue='/profile'></LinkButton>
-			<LinkButton linkText='Vyucovane kurzy' linkValue='/lecturedCourses'></LinkButton>
+	<div>
+		<PageHeader homePage='/'></PageHeader>
+		<div id="employeeMainContent">
+			<div id="buttonMenu">
+				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>
+				<LinkButton linkText='Vyucovane kurzy' linkValue='/lecturedCourses'></LinkButton>
+			</div>
 		</div>
+		<PageFooter></PageFooter>
 	</div>
-	<PageFooter></PageFooter>
-  </div>
   );
 }
 

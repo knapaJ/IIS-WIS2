@@ -9,6 +9,8 @@ import RegisteredSubjectsPage from './pages/RegisteredSubjectsPage';
 import SubjectRegistrationPage from './pages/SubjectRegistrationPage';
 import LecturedCourses from './pages/LecturedCourses';
 import LecturedCourseDetail from './pages/LecturedCourseDetail';
+import UserProfile from './pages/UserProfile';
+import NoAccPage from './pages/NoAccPage';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
       <Route path="/termRegistration" element={<SubjectRegistrationPage/>}/>
       <Route path="/lecturedCourses" element={<LecturedCourses/>}/>
       <Route path="/lecturedCourseDetail/:subName/:id" element={<LecturedCourseDetail/>}/>
+      <Route path="/userProfile" element={<UserProfile/>}/>
+      <Route path="/noAccount" element={<NoAccPage/>}/>
 
       
     </Routes>

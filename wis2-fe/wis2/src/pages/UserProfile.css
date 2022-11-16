@@ -1,0 +1,17 @@
+#userProfileMainContent {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1500px;
+    min-width: 300px;
+    margin: 0 auto;
+    margin-bottom: 100px;
+}
+
+#userProfileMainContent > form > button {
+    margin-top: 10px;
+}
+
+.form-group {
+    margin-top: 10px;
+    width: 50%;
+}

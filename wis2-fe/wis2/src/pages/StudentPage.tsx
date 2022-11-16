@@ -11,7 +11,7 @@ function StudentPage() {
     <PageHeader homePage='/'></PageHeader>
 		<div id="studentPageMainContent">
 			<div id="buttonMenu">
-				<LinkButton linkText='Profil 🤓' linkValue='/profile'></LinkButton>
+				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>
 				<LinkButton linkText='Registracie terminov 📅' linkValue='/termRegistration'></LinkButton>
 				<LinkButton linkText='Aktualne predmety 😩' linkValue='/registeredSubjects'></LinkButton>
 			</div>

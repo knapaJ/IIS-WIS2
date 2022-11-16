@@ -361,4 +361,47 @@ def set_lectured_course_detail():
     return jsonify({"message":"accepted"})
 
 
+@app.route('/setNewPwd', methods = ['POST'])
+def set_new_pwd():
+    tableData = request.json
+    print(tableData)
+
+    return jsonify({"message":"accepted"})
+
+
+@app.route('/getAllCourses')
+def get_all_courses():
+    return (
+            [
+                {
+                    "id": 1,
+                    "name": "IPK",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa tincidunt dui ut ornare. Viverra ipsum nunc aliquet bibendum. Nec tincidunt praesent semper feugiat nibh sed. Non blandit massa enim nec dui nunc mattis. Erat pellentesque adipiscing commodo elit at imperdiet dui. Tortor pretium viverra suspendisse potenti nullam. Condimentum mattis pellentesque id nibh tortor. Feugiat nibh sed pulvinar proin gravida hendrerit. Urna porttitor rhoncus dolor purus non enim praesent. Id semper risus in hendrerit gravida. Adipiscing diam donec adipiscing tristique risus. Adipiscing elit pellentesque habitant morbi. Non enim praesent elementum facilisis leo vel. Purus semper eget duis at tellus at urna condimentum. Nisi lacus sed viverra tellus in hac habitasse. Urna neque viverra justo nec. Consectetur adipiscing elit ut aliquam purus. Integer quis auctor elit sed. Ac auctor augue mauris augue neque gravida in fermentum."
+                },
+                {
+                    "id": 2,
+                    "name": "IMP",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa tincidunt dui ut ornare. Viverra ipsum nunc aliquet bibendum. Nec tincidunt praesent semper feugiat nibh sed. Non blandit massa enim nec dui nunc mattis. Erat pellentesque adipiscing commodo elit at imperdiet dui. Tortor pretium viverra suspendisse potenti nullam. Condimentum mattis pellentesque id nibh tortor. Feugiat nibh sed pulvinar proin gravida hendrerit. Urna porttitor rhoncus dolor purus non enim praesent. Id semper risus in hendrerit gravida. Adipiscing diam donec adipiscing tristique risus. Adipiscing elit pellentesque habitant morbi. Non enim praesent elementum facilisis leo vel. Purus semper eget duis at tellus at urna condimentum. Nisi lacus sed viverra tellus in hac habitasse. Urna neque viverra justo nec. Consectetur adipiscing elit ut aliquam purus. Integer quis auctor elit sed. Ac auctor augue mauris augue neque gravida in fermentum."
+                },
+                {
+                    "id": 3,
+                    "name": "INC",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa tincidunt dui ut ornare. Viverra ipsum nunc aliquet bibendum. Nec tincidunt praesent semper feugiat nibh sed. Non blandit massa enim nec dui nunc mattis. Erat pellentesque adipiscing commodo elit at imperdiet dui. Tortor pretium viverra suspendisse potenti nullam. Condimentum mattis pellentesque id nibh tortor. Feugiat nibh sed pulvinar proin gravida hendrerit. Urna porttitor rhoncus dolor purus non enim praesent. Id semper risus in hendrerit gravida. Adipiscing diam donec adipiscing tristique risus. Adipiscing elit pellentesque habitant morbi. Non enim praesent elementum facilisis leo vel. Purus semper eget duis at tellus at urna condimentum. Nisi lacus sed viverra tellus in hac habitasse. Urna neque viverra justo nec. Consectetur adipiscing elit ut aliquam purus. Integer quis auctor elit sed. Ac auctor augue mauris augue neque gravida in fermentum."
+                },
+                {
+                    "id": 4,
+                    "name": "INP",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa tincidunt dui ut ornare. Viverra ipsum nunc aliquet bibendum. Nec tincidunt praesent semper feugiat nibh sed. Non blandit massa enim nec dui nunc mattis. Erat pellentesque adipiscing commodo elit at imperdiet dui. Tortor pretium viverra suspendisse potenti nullam. Condimentum mattis pellentesque id nibh tortor. Feugiat nibh sed pulvinar proin gravida hendrerit. Urna porttitor rhoncus dolor purus non enim praesent. Id semper risus in hendrerit gravida. Adipiscing diam donec adipiscing tristique risus. Adipiscing elit pellentesque habitant morbi. Non enim praesent elementum facilisis leo vel. Purus semper eget duis at tellus at urna condimentum. Nisi lacus sed viverra tellus in hac habitasse. Urna neque viverra justo nec. Consectetur adipiscing elit ut aliquam purus. Integer quis auctor elit sed. Ac auctor augue mauris augue neque gravida in fermentum."
+                },
+                {
+                    "id": 5,
+                    "name": "RET",
+                    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Massa tincidunt dui ut ornare. Viverra ipsum nunc aliquet bibendum. Nec tincidunt praesent semper feugiat nibh sed. Non blandit massa enim nec dui nunc mattis. Erat pellentesque adipiscing commodo elit at imperdiet dui. Tortor pretium viverra suspendisse potenti nullam. Condimentum mattis pellentesque id nibh tortor. Feugiat nibh sed pulvinar proin gravida hendrerit. Urna porttitor rhoncus dolor purus non enim praesent. Id semper risus in hendrerit gravida. Adipiscing diam donec adipiscing tristique risus. Adipiscing elit pellentesque habitant morbi. Non enim praesent elementum facilisis leo vel. Purus semper eget duis at tellus at urna condimentum. Nisi lacus sed viverra tellus in hac habitasse. Urna neque viverra justo nec. Consectetur adipiscing elit ut aliquam purus. Integer quis auctor elit sed. Ac auctor augue mauris augue neque gravida in fermentum."
+                }
+            ]
+        )
+
+
+
+
 

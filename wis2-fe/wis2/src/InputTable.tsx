@@ -37,12 +37,14 @@ function InputTable({tableData}:Props) {
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
 
-    console.log("formValue:", fieldValue);
+    if (!isNaN(fieldValue)) {
+      console.log("formValue:", fieldValue);
 
-    const newFormData = {...editFormData}
-    newFormData[fieldName as keyof typeof editFormData] = fieldValue;
+      const newFormData = {...editFormData}
+      newFormData[fieldName as keyof typeof editFormData] = fieldValue;
 
-    setEditFormData(newFormData);
+      setEditFormData(newFormData);
+    }
   }
 
   const handleEditFormSubmit = (event:any) => {
