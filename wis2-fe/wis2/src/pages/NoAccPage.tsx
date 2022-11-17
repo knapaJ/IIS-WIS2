@@ -18,7 +18,7 @@ function EmployeePage() {
 
   return (
 	<div>
-		<PageHeader homePage='/'></PageHeader>
+		<PageHeader homePage='/home' useLogout={true}></PageHeader>
 			<div id="noAccMainContent">
 				<h1>Prehlad kurzov</h1>
 				<Accordion defaultActiveKey="0">

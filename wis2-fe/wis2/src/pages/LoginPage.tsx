@@ -55,7 +55,7 @@ function LoginPage() {
 
   return (
 	<div>
-		<PageHeader homePage='/'></PageHeader>
+		<PageHeader homePage='/home' useLogout={false}></PageHeader>
 		<div id="loginPageMainContent">
 			<form>
 				<div className="form-group">

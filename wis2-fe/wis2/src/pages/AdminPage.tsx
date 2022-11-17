@@ -348,7 +348,7 @@ function AdminPage() {
 
 	return (
 	<div>	
-		<PageHeader homePage='/'></PageHeader>
+		<PageHeader homePage='/home' useLogout={true}></PageHeader>
 		<div id="adminPageMainContent">
 			<div>
 				<h1>Prehlad uzivatelov</h1>
@@ -399,7 +399,7 @@ function AdminPage() {
 											<TableCell>
 												<TextField value={editFormData.email} name='email' size="small" id="standard-basic" label="E-mail" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
-											<TableCell  sx={{ borderBottom: '0'}} style={{display:'flex', justifyContent: 'center'}}>
+											<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
 												<Button onClick={onSaveButton}>Ulozit</Button>
 											</TableCell>
 										</TableRow>
@@ -448,7 +448,7 @@ function AdminPage() {
 											<TableCell>
 												<TextField value={editRoomFormData.seats} name='seats' size="small" id="standard-basic" label="Pocet miest" variant="standard" onChange={handleRoomEditFormChange}/>
 											</TableCell>
-											<TableCell  sx={{ borderBottom: '0'}} style={{display:'flex', justifyContent: 'center'}}>
+											<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
 												<Button onClick={onRoomSaveButton}>Ulozit</Button>
 											</TableCell>
 										</TableRow>

@@ -1,4 +1,4 @@
-#registrationTable {
+.wisTable {
     table-layout: fixed;
     width: 100%;
     border-collapse: collapse;
@@ -7,26 +7,26 @@
     margin-bottom: 100px;
 }
 
-#registrationTable > tbody tr:nth-child(even) {
+.wisTable > tbody tr:nth-child(even) {
     background-color: rgba(255, 181, 84, 0.3);
 }
 
-#registrationTable > tbody tr:nth-child(odd) {
+.wisTable > tbody tr:nth-child(odd) {
     background-color: rgba(255, 181, 84, 0.6);
 }
 
-#registrationTable > thead tr:nth-child(1) {
+.wisTable > thead tr:nth-child(1) {
     background-color: lightgray;
 }
 
-#registrationTable > tr,
-#registrationTable > th,
-#registrationTable > td {
+.wisTable tr,
+.wisTable th,
+.wisTable td {
 padding: 10px;
 text-align: left;
 }
 
-#registrationTable>tbody>tr:hover td,
-#registrationTable>tbody>tr:hover th {
+.wisTable>tbody>tr:hover td,
+.wisTable>tbody>tr:hover th {
     background-color: rgba(255, 0, 0, 0.1)!important;
 }

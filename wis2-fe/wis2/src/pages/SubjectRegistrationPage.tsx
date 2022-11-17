@@ -4,6 +4,7 @@ import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
 import RegisrationTable from '../components/RegistrationTable';
 import '../components/RegistrationTable';
+import './SubjectRegistrationPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
 
 function SubjectRegistrationPage() {
@@ -48,7 +49,7 @@ function SubjectRegistrationPage() {
 	
 	return (
 		<div>
-			<PageHeader homePage='/'></PageHeader>
+			<PageHeader homePage='/home' useLogout={true}></PageHeader>
 			<div id="subjectRegistrationMainContent">
 				<div>
 					<RegisrationTable tableData={tableData}></RegisrationTable>

@@ -7,7 +7,7 @@ import PageFooter from '../components/PageFooter';
 function EmployeePage() {
   return (
 	<div>
-		<PageHeader homePage='/'></PageHeader>
+		<PageHeader homePage='/home' useLogout={true}></PageHeader>
 		<div id="employeeMainContent">
 			<div id="buttonMenu">
 				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>

@@ -6,7 +6,7 @@ import './StudentPage.css';
 function StudentPage() {
   return (
   <div>
-    <PageHeader homePage='/'></PageHeader>
+    <PageHeader homePage='/home' useLogout={true}></PageHeader>
 		<div id="studentPageMainContent">
 			<div id="buttonMenu">
 				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>

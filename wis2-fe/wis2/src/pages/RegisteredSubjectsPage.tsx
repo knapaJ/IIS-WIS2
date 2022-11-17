@@ -25,7 +25,7 @@ function RegisteredSubjectsPage() {
 
 	return (
 	<div>
-		<PageHeader homePage='/'></PageHeader>
+		<PageHeader homePage='/home' useLogout={true}></PageHeader>
 			<div id="registeredSubjectsMainContent">
 				<div className="semesterTitle">
 					Zimny semester {year}

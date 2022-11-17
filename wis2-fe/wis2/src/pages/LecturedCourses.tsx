@@ -45,7 +45,7 @@ function LecturedCourses() {
 
 	return (
 		<div>
-			<PageHeader homePage='/'></PageHeader>
+			<PageHeader homePage='/home' useLogout={true}></PageHeader>
 				<div id="lecturedCoursesMainContent">
 					<DropDown onChange={onDropDownChange} dropDownData={dropDownValue}></DropDown>
 					<DetailsTable tableData={tableData} tableValues={tableValues}></DetailsTable>

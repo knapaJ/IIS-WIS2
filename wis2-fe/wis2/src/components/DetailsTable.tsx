@@ -10,7 +10,7 @@ type Props = {
 function DetailsTable({tableData, tableValues}:Props) {
     return (
         <div>
-            <table id="detailsTable">
+            <table id="detailsTable" className='wisTable'>
                 <thead>
                     {tableValues.map((td:any) => (
                         <tr key={td.id}>

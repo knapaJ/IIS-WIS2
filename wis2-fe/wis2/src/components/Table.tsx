@@ -7,7 +7,7 @@ type Props = {
 
 function Table({tableData}:Props) {
   return (
-    <table id="registrationTable">
+    <table id="registrationTable" className='wisTable'>
       <thead>
         <tr>
           <th>Nazov</th>

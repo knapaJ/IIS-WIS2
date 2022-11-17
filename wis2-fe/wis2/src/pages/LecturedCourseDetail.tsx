@@ -12,7 +12,7 @@ function LecturedCourses() {
 
 	return (
 		<div>
-			<PageHeader homePage='/'></PageHeader>
+			<PageHeader homePage='/home' useLogout={true}></PageHeader>
 				<div id="lecturedCoursesMainContent">
 					<InputTable tableData={tableData}></InputTable>
 				</div>

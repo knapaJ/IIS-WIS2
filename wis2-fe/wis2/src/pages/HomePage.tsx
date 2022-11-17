@@ -6,14 +6,9 @@ import PageFooter from '../components/PageFooter';
 import { useEffect } from 'react';
 
 function HomePage() {
-
-    useEffect(() => {
-        document!.getElementById("headerLogOut")!.style.visibility = "hidden";
-    })
-
     return (
     <div>
-    <PageHeader homePage='/'></PageHeader>
+    <PageHeader homePage='/home' useLogout={true}></PageHeader>
     <div id="mainHomePageContent">
         <div id="buttonMenu">
             <LinkButton linkText='Student 🧑‍🎓' linkValue='/student'></LinkButton>

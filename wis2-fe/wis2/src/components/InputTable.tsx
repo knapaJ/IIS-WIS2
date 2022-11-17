@@ -82,7 +82,7 @@ function InputTable({tableData}:Props) {
   
   return (
     <form onSubmit={handleEditFormSubmit}>
-      <table id="registrationTable">
+      <table id="registrationTable" className='wisTable'>
         <thead>
           <tr>
             <th>Meno studenta</th>

@@ -7,7 +7,7 @@ type Props = {
 
 function LogoutButton({}: Props) {
   return (
-    <Link to="/home">ODHLASIT ☕</Link>
+    <Link to="/">ODHLASIT ☕</Link>
   );
 }
 

@@ -8,7 +8,7 @@ function RegistrationTable({tableData}:Props) {
   
   return (
   <div>
-    <table id="registrationTable">
+    <table id="registrationTable" className='wisTable'>
       <thead>
         <tr>
           <th>Skratka predmetu</th>

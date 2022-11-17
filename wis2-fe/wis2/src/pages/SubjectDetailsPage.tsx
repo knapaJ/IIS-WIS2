@@ -29,7 +29,7 @@ function SubjectDetailsPage() {
 
 	return (
 		<div>
-			<PageHeader homePage='/'></PageHeader>
+			<PageHeader homePage='/home' useLogout={true}></PageHeader>
 				<div id="mainContentSubjectDetailsPage">
 					<div className="semesterTitle">
 						Detaily predmetu {subName}
