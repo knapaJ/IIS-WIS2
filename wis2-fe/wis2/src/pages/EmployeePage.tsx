@@ -1,9 +1,8 @@
 import logo from './logo.svg';
 import './EmployeePage.css';
-import LinkButton from '../LinkButton';
-import LogoutButton from '../LogoutButton';
-import PageHeader from '../PageHeader';
-import PageFooter from '../PageFooter';
+import LinkButton from '../components/LinkButton';
+import PageHeader from '../components/PageHeader';
+import PageFooter from '../components/PageFooter';
 
 function EmployeePage() {
   return (

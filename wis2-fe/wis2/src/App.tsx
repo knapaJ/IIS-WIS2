@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import HomePage from './pages/HomePage';
 import { Route, Routes } from 'react-router-dom';
@@ -11,11 +10,22 @@ import LecturedCourses from './pages/LecturedCourses';
 import LecturedCourseDetail from './pages/LecturedCourseDetail';
 import UserProfile from './pages/UserProfile';
 import NoAccPage from './pages/NoAccPage';
+import AdminPage from './pages/AdminPage';
+import LoginPage from './pages/LoginPage';
+import PrivateRoute from './components/ProtectedRoute';
 
 function App() {
+
+  /* <Route element={<PrivateRoute userType='admin' url='/home'/>}>
+        <Route path="/home" element={<HomePage/>}/>
+      </Route>
+  */
+
+
   return (
     <Routes>
-      <Route path="/" element={<HomePage/>}/>
+      <Route path="/home" element={<HomePage/>}/>
+      <Route path="/" element={<LoginPage/>}/>
       <Route path="/student" element={<StudentPage/>}/>
       <Route path="/employee" element={<EmployeePage/>}/>
       <Route path="/subjectDetails" element={<SubjectDetailsPage/>}/>
@@ -26,8 +36,7 @@ function App() {
       <Route path="/lecturedCourseDetail/:subName/:id" element={<LecturedCourseDetail/>}/>
       <Route path="/userProfile" element={<UserProfile/>}/>
       <Route path="/noAccount" element={<NoAccPage/>}/>
-
-      
+      <Route path="/adminPage" element={<AdminPage/>}/>
     </Routes>
   );
 }

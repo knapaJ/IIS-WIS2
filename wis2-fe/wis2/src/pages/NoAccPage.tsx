@@ -1,8 +1,5 @@
-import logo from './logo.svg';
-import LinkButton from '../LinkButton';
-import LogoutButton from '../LogoutButton';
-import PageHeader from '../PageHeader';
-import PageFooter from '../PageFooter';
+import PageHeader from '../components/PageHeader';
+import PageFooter from '../components/PageFooter';
 import { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import data from '../mockData/mockAccordionData.json';

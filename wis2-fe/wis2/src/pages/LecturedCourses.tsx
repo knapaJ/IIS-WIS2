@@ -1,14 +1,11 @@
-import logo from './logo.svg';
 import './LecturedCourses.css';
-import LinkButton from '../LinkButton';
-import LogoutButton from '../LogoutButton';
-import PageHeader from '../PageHeader';
-import PageFooter from '../PageFooter';
+import PageHeader from '../components/PageHeader';
+import PageFooter from '../components/PageFooter';
 import data from '../mockData/mockLecturerClassesTable.json';
 import dropDownData from '../mockData/mockDropDownData.json';
 import { useEffect, useState } from 'react';
-import DetailsTable from '../DetailsTable';
-import DropDown from '../DropDown';
+import DetailsTable from '../components/DetailsTable';
+import DropDown from '../components/DropDown';
 
 function LecturedCourses() {
 	const [tableData, setTableData] = useState(data);

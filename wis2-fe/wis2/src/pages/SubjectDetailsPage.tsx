@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import LogoutButton from '../LogoutButton';
-import PageFooter from '../PageFooter';
-import PageHeader from '../PageHeader';
-import Table from '../Table';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import Table from '../components/Table';
 import logo from './logo.svg';
 import './SubjectDetailsPage.css';
 import data from '../mockData/mockRegistrationtableData.json';

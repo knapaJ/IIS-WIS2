@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import Checkbox from './Checkbox';
 
 type Props = {

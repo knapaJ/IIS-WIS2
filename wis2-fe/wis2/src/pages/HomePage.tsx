@@ -1,9 +1,8 @@
-import logo from './logo.svg';
 import './SubjectDetailsPage.css';
 import './HomePage.css';
-import LinkButton from '../LinkButton';
-import PageHeader from '../PageHeader';
-import PageFooter from '../PageFooter';
+import LinkButton from '../components/LinkButton';
+import PageHeader from '../components/PageHeader';
+import PageFooter from '../components/PageFooter';
 import { useEffect } from 'react';
 
 function HomePage() {
@@ -20,6 +19,7 @@ function HomePage() {
             <LinkButton linkText='Student 🧑‍🎓' linkValue='/student'></LinkButton>
             <LinkButton linkText='Zamestnanec 👷' linkValue='/employee'></LinkButton>
             <LinkButton linkText='Nemam ucet 😢' linkValue='/noAccount'></LinkButton>
+            <LinkButton linkText='Admin B-)' linkValue='/adminPage'></LinkButton>
         </div>
     </div>
 

@@ -1,5 +1,3 @@
-import logo from './logo.svg';
-
 type Props = {
   id:string
   checkBoxName:string

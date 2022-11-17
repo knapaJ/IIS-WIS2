@@ -21,7 +21,7 @@ header {
 
 #headerImage {
   display: inline-block;
-  background-image: url('./img/headerIcon.png');
+  background-image: url('../img/headerIcon.png');
   position: relative;
   background-repeat: no-repeat;
   background-size: cover;

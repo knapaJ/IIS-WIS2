@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import DetailsTable from '../DetailsTable';
-import PageFooter from '../PageFooter';
-import PageHeader from '../PageHeader';
+import DetailsTable from '../components/DetailsTable';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
 import './RegisteredSubjectsPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
 
@@ -11,9 +11,9 @@ function RegisteredSubjectsPage() {
     var tableValues = [{id:'1', shortcut:'Skratka predmet', fullname:'Nazov predmetu', credits:'Pocet kreditov', link:'Detail predmetu'}];
 	
 	useEffect(() => {
-	  fetch('/detailsTable').then(res => res.json()).then(recData => {
-		setTableData(recData);
-	  });
+		fetch('/detailsTable').then(res => res.json()).then(recData => {
+			setTableData(recData);
+		});
 	}, []);
 
 	useEffect(() => {

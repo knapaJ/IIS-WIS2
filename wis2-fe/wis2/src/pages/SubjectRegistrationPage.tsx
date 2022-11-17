@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
-import EventButton from '../EventButton';
-import LogoutButton from '../LogoutButton';
-import PageFooter from '../PageFooter';
-import PageHeader from '../PageHeader';
-import RegisrationTable from '../RegistrationTable';
-import './SubjectRegistrationPage.css';
+import EventButton from '../components/EventButton';
+import PageFooter from '../components/PageFooter';
+import PageHeader from '../components/PageHeader';
+import RegisrationTable from '../components/RegistrationTable';
+import '../components/RegistrationTable';
 import data from '../mockData/mockRegistrationtableData.json';
 
 function SubjectRegistrationPage() {
