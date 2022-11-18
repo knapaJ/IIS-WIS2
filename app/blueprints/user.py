@@ -128,7 +128,8 @@ def admin_edit_user():
     data = request.get_json()
     try:
         target_user: User = User.query.filter_by(uuid=data["id"]).first_or_404(description="Target user not found")
-        target_user.name, target_user.surname = data["name"].split(' ')
+        target_user.name, *surname = data["name"].split(' ')
+        target_user.surname = ' '.join(surname)
         target_user.login = data["login"]
         target_user.e_mail = data["email"]
         if not data["password"] == "":
@@ -144,4 +145,17 @@ def admin_edit_user():
         return jsonify(message=f"Login {data['login']} is already taken"), 409
 
 
-
+@user_endpoint.route("/remove", methods=["DELETE"])
+@user_auth(UserType.ADMIN)
+@need_user_logged
+def remove_user(user):
+    data = request.get_json()
+    try:
+        if user.uuid == data["id"]:
+            abort(400, description="User can not delete himself")
+        deleted_user = User.query.filter_by(uuid=data["id"]).first_or_404(description="Designated user not found")
+        db.session.delete(deleted_user)
+        db.session.commit()
+        return jsonify(status='OK'), 200
+    except KeyError:
+        abort_bad_json()
