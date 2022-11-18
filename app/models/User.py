@@ -5,8 +5,8 @@ from . import Utils
 
 
 class UserType(enum.Enum):
-    ADMIN = enum.auto()
-    USER = enum.auto()
+    ADMIN = 100
+    USER = 1
 
 
 class User(db.Model):

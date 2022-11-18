@@ -23,7 +23,8 @@ migrate = Migrate()
 
 def create_app(test_config=None):
     # Import ORM models
-    import app.models
+    import app.models as models
+    import app.blueprints as bp
 
     # Create and configure app
     app = Flask("app", instance_relative_config=True)
@@ -56,10 +57,22 @@ def create_app(test_config=None):
     def createdb():
         print("Creating DB")
         db.create_all()
+        root_user = models.User.User("xrootx00", "root", "root", "root@this.wis", models.User.UserType.ADMIN,
+                                     "dev")
+        db.session.add(root_user)
+        db.session.commit()
+
+    @app.cli.command()
+    def dropdb():
+        print(f"Dropping db ...", end='')
+        db.drop_all()
+        print(f"DONE")
 
     # hello world just for testing
     @app.route('/hello-world')
     def hello_world():
         return "Hello world!", 200
+
+    app.register_blueprint(bp.user.user_endpoint, url_prefix='/user')
 
     return app
