@@ -1,1 +1,3 @@
 Pipfile.lock
+instance/
+__pycache__/
