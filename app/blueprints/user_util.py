@@ -16,3 +16,13 @@ def user_auth(level: UserType):
             return func(*args, **kwargs)
         return wrapped
     return decorator
+
+
+def need_user_logged(func):
+    @wraps(func)
+    def wrapped(*args, **kwargs):
+        if "user" not in session:
+            abort(403, description="No user logged in")
+        logged_user = User.query.filter_by(uuid=session["user"]).first_or_404()
+        return func(logged_user, *args, **kwargs)
+    return wrapped

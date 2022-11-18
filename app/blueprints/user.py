@@ -2,9 +2,13 @@ from app import db
 from app.models.User import User, UserType
 from flask import Blueprint, abort, jsonify, request, session
 from sqlalchemy.exc import IntegrityError
-from app.blueprints.user_auth import user_auth
+from app.blueprints.user_util import user_auth, need_user_logged
 
 user_endpoint = Blueprint("user_endpoint", __name__)
+
+
+def abort_bad_json():
+    abort(400, description="Missing fields in JSON data")
 
 
 @user_endpoint.errorhandler(400)
@@ -60,6 +64,7 @@ def login():
         abort(400, description="Missing keys in JSON data")
 
 
+@user_endpoint.route("/auth", defaults={'level': UserType.USER})
 @user_endpoint.route("/auth/<string:level>", methods=["GET"])
 def check_auth(level: str):
     if "user" not in session:
@@ -80,6 +85,63 @@ def logout():
     if "user" in session:
         del session["user"]
     return jsonify(status="OK"), 200
+
+
+@user_endpoint.route("/change-passwd", methods=["POST"])
+@need_user_logged
+def change_passwd(user):
+    data = request.get_json()
+    try:
+        if user.check_password(data["oldPwd"]):
+            user.set_password(data["newPwd"])
+            db.session.add(user)
+            db.session.commit()
+        else:
+            abort(403, description="Bad password")
+    except KeyError:
+        abort(400, description="Missing keys in JSON data")
+    return jsonify(status="OK"), 200
+
+
+@user_endpoint.route("/list/all/<int:page>", methods=["GET"])
+@user_auth(UserType.ADMIN)
+def list_all_users(page):
+    users_paged = db.paginate(db.select(User).order_by(User.surname), page=page, per_page=20)
+    ret = {
+        "totalPages": users_paged.pages,
+        "currentPage": users_paged.page,
+        "users": []
+    }
+    for user in users_paged:
+        ret["users"].append({
+            "id": user.uuid,
+            "login": user.login,
+            "name": f"{user.name} {user.surname}",
+            "email": user.e_mail
+        })
+    return jsonify(ret), 200
+
+
+@user_endpoint.route("/edit/admin", methods=["POST"])
+@user_auth(UserType.ADMIN)
+def admin_edit_user():
+    data = request.get_json()
+    try:
+        target_user: User = User.query.filter_by(uuid=data["id"]).first_or_404(description="Target user not found")
+        target_user.name, target_user.surname = data["name"].split(' ')
+        target_user.login = data["login"]
+        target_user.e_mail = data["email"]
+        if not data["password"] == "":
+            target_user.set_password(data["password"])
+        db.session.add(target_user)
+        db.session.commit()
+        return jsonify(stat="OK"), 200
+    except ValueError:
+        abort_bad_json()
+    except KeyError:
+        abort_bad_json()
+    except IntegrityError:
+        return jsonify(message=f"Login {data['login']} is already taken"), 409
 
 
 
