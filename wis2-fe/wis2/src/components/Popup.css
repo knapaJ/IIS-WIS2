@@ -1,0 +1,23 @@
+.popup{
+    position: fixed;
+    top: 45%;
+    left: 50%;
+    height: 85vh;
+    width: 100%;
+    max-width: 650px;
+    background-color: white;
+
+    transform: translate(-50%, -50%);
+    box-shadow: 0 5px 20px rgba(0,0,0,.30);
+}
+
+.blurable {
+    transition: 0.2s;
+}
+
+.blurable.blur {
+    filter: blur(20px);
+    pointer-events: none;
+    user-select: none;
+    transition: 0.2s;
+}
