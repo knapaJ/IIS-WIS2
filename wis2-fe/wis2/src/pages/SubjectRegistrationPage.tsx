@@ -2,48 +2,39 @@ import { useEffect, useState } from 'react';
 import EventButton from '../components/EventButton';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import RegisrationTable from '../components/RegistrationTable';
-import '../components/RegistrationTable';
 import './SubjectRegistrationPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
+import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 function SubjectRegistrationPage() {
 	const [tableData, setTableData] = useState(data);
 	
 	useEffect(() => {
-	  fetch('/regTable').then(res => res.json()).then(recData => {
+	  fetch('/course/list/notregistered').then(res => res.json()).then(recData => {
 		console.log(recData);
 		setTableData(recData);
 	  });
 	}, []);
 	
-	function onButtonClick() {
-		console.log("sending table data")
-
-		var dataToSend = []
-		var checkBoxData = document.getElementsByClassName("reg-table-check-box");
-
-		for (var i = 0; i < checkBoxData.length; i++) {
-			if ((checkBoxData[i] as HTMLInputElement).checked) {
-				var checkedCheckBox = checkBoxData[i];
-				
-				for (var j = 0; j < tableData.length; j++) {
-					if (parseInt((checkedCheckBox as HTMLInputElement).value, 10) == tableData[j].id) {
-						dataToSend.push(tableData[j]);
-					}
-				}
-			}
-		}
-
-		fetch("/regTableRes", {
+	const onButtonClick = (event:any, tableData:any) => {
+		fetch("/course/register", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
 				"content_type":"application/json",
 			},
-			body:JSON.stringify(dataToSend)
+			body:JSON.stringify(tableData)
 			}
-		)
+		).then((response) => {
+			if (!response.ok) {
+				alert("Incorrect data");		
+			}
+		}).then((recData) => {
+			console.log(recData);
+			fetch('/course/list/notregistered').then(res => res.json()).then(recData => {
+				setTableData(recData);
+			});
+		});
 	}
 		
 	
@@ -52,8 +43,31 @@ function SubjectRegistrationPage() {
 			<PageHeader homePage='/home' useLogout={true}></PageHeader>
 			<div id="subjectRegistrationMainContent">
 				<div>
-					<RegisrationTable tableData={tableData}></RegisrationTable>
-					<EventButton buttonText='Registrovat' onClick={onButtonClick}></EventButton>
+					<Table id="registrationTable" sx={{ boxShadow: 2}}>
+						<colgroup>
+							<col style={{width:'40%'}}/>
+							<col style={{width:'40%'}}/>
+							<col style={{width:'20%'}}/>
+						</colgroup>
+						<TableHead>
+							<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+							<TableCell>Skratka predmetu</TableCell>
+							<TableCell>Nazov predmetu</TableCell>
+							<TableCell>Pocet kreditov</TableCell>
+							<TableCell></TableCell>
+							</TableRow>
+						</TableHead>
+						<TableBody>
+							{tableData.map((td:any) => (
+							<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+								<TableCell>{td.shortcut}</TableCell>
+								<TableCell>{td.fullname}</TableCell>
+								<TableCell>{td.credits}</TableCell>
+								<TableCell><Button onClick={(event) => onButtonClick(event, td)}>Registrovat</Button></TableCell>
+							</TableRow>
+							))}
+						</TableBody>
+					</Table>
 				</div>
 			</div>
 			<PageFooter></PageFooter>

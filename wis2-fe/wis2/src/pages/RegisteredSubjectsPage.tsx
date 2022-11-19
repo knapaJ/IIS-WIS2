@@ -7,34 +7,26 @@ import data from '../mockData/mockRegistrationtableData.json';
 
 function RegisteredSubjectsPage() {
 	const [tableData, setTableData] = useState(data);
-	const [year, setYear] = useState("ziadenrok");
-    var tableValues = [{id:'1', shortcut:'Skratka predmet', fullname:'Nazov predmetu', credits:'Pocet kreditov', link:'Detail predmetu'}];
+	//const [year, setYear] = useState("ziadenrok");
 	
 	useEffect(() => {
-		fetch('/detailsTable').then(res => res.json()).then(recData => {
+		fetch('/course/list/registered').then(res => res.json()).then(recData => {
+			console.log(recData);
 			setTableData(recData);
 		});
 	}, []);
 
-	useEffect(() => {
+	/*useEffect(() => {
 		fetch('/year').then(res => res.json()).then(recData => {
 			setYear(recData.year);
 		});
-	}, []);
-
+	}, []);*/
 
 	return (
 	<div>
 		<PageHeader homePage='/home' useLogout={true}></PageHeader>
 			<div id="registeredSubjectsMainContent">
-				<div className="semesterTitle">
-					Zimny semester {year}
-				</div>
-				<DetailsTable tableData={tableData} tableValues={tableValues}></DetailsTable>
-				<div className="semesterTitle">
-					Letny semester {year}
-				</div>
-				<DetailsTable tableData={tableData} tableValues={tableValues}></DetailsTable>
+				<DetailsTable tableData={tableData}></DetailsTable>
 			</div>
 		<PageFooter></PageFooter>
 	</div>

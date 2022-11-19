@@ -1,9 +1,13 @@
-[
+{
+  "totalPages":10,
+  "currentPage":3,
+  "classes":
+  [
     {
-      "id": 1,
-      "shortcut": "niemam",
-      "fullname": "data",
-      "points": ":(",
-      "visible": "true"
+        "id": 1,
+        "shortcut": "IPK",
+        "className": "cviko",
+        "studentCount": "20"
     }
-]
+  ]
+}

@@ -1,37 +1,37 @@
 import logo from './logo.svg';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 type Props = {
-    tableValues:any
     tableData:any
 }
 
-function DetailsTable({tableData, tableValues}:Props) {
+function DetailsTable({tableData}:Props) {
     return (
         <div>
-            <table id="detailsTable" className='wisTable'>
-                <thead>
-                    {tableValues.map((td:any) => (
-                        <tr key={td.id}>
-                            <th>{td.shortcut}</th>
-                            <th>{td.fullname}</th>
-                            <th>{td.credits}</th>
-                            <th>{td.link}</th>
-                        </tr>
-                    ))}
-                </thead>
-                <tbody>
+            <Table id="detailsTable" sx={{ boxShadow: 2}}>
+                <TableHead>
+                    <TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+                        <TableCell>Skratka predmet</TableCell>
+                        <TableCell>Nazov predmetu</TableCell>
+                        <TableCell>Pocet kreditov</TableCell>
+                        <TableCell>Pocet bodov</TableCell>
+                        <TableCell>Detail Predmetu</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {tableData.map((td:any) => (
-                    <tr key={td.id} style={{display: td.visible === "true" ? 'table-row' : 'none' }}>
-                        <td>{td.shortcut}</td>
-                        <td>{td.fullname}</td>
-                        <td>{td.credits}</td>
-                        <td><Link to={td.detailsLink + '/' + td.shortcut + '/' + td.id}>detail</Link></td>
-                    </tr>
+                    <TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+                        <TableCell>{td.shortcut}</TableCell>
+                        <TableCell>{td.fullname}</TableCell>
+                        <TableCell>{td.credits}</TableCell>
+                        <TableCell>{td.points}</TableCell>
+                        <TableCell><Link to={'registeredSubjectsDetails/' + td.shortcut + '/' + td.id}>detail</Link></TableCell>
+                    </TableRow>
                     ))}
-                </tbody>
-            </table>
+                </TableBody>
+            </Table>
         </div>
     );
 }

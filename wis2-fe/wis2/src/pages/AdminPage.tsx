@@ -2,35 +2,42 @@ import './AdminPage.css';
 import { nanoid } from "nanoid";
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
-import { Button, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
-import { Fragment, useState } from 'react';
+import { Button, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow, TextField } from '@mui/material';
+import { Fragment, useEffect, useState } from 'react';
 import data from '../mockData/mockAdminUsertableData.json'
 import roomData from '../mockData/mockAdminPageRoomsData.json'
 import requestData from '../mockData/mockAdminPageRequestData.json'
-import { table } from 'console';
 
 function AdminPage() {
+	const [pageNumber, setPageNumber] = useState(1);
+	const [maxPagesNumber, setMaxPagesNumber] = useState(1);
+
+	const [pageRoomNumber, setRoomPageNumber] = useState(1);
+	const [maxRoomPagesNumber, setRoomMaxPagesNumber] = useState(1);
+
+	
 	// PEOPLE TABLE DATA
-	const [tableData, setTableData] = useState(data);
+	const [tableData, setTableData] = useState(data.users);
 	const [addNewFlag, setAddNewFlag] = useState(true);
 
 	const [editId, setEditId] = useState<string | null>(null);
 	const [editFormData, setEditFormData] = useState({
 		login: "",
 		name: "",
+		surname: "",
 		password: "",
 		email: "",
 	});
 	// PEOPLE TABLE DATA
 
 	// ROOMS TABLE DATA	
-	const [roomTableData, setRoomTableData] = useState(roomData);
+	const [roomTableData, setRoomTableData] = useState(roomData.rooms);
 	const [addNewRoomFlag, setAddNewRoomFlag] = useState(true);
 
 	const [editRoomId, setEditRoomId] = useState<string | null>(null);
 	const [editRoomFormData, setEditRoomFormData] = useState({
 		name: "",
-		seats: ""
+		building: ""
 	});
 	// ROOMS TABLE DATA
 
@@ -38,6 +45,58 @@ function AdminPage() {
 	const [requestTableData, setRequestTableData] = useState(requestData);
 	// REQ TABLE DATA
 
+	useEffect(() => {console.log("render")}, []);
+
+	useEffect(() => {console.log("addNewRoom:", addNewRoomFlag)}, [addNewRoomFlag	])
+
+	// USER DATA FETCH
+	function fetchData(number:number) {
+		const url = "/user/list/all/" + number;
+		fetch(url).then(res => res.json()).then(data => {
+			setTableData(data.users);
+			console.log(data.users);
+			
+			setPageNumber(data.currentPage);
+			setMaxPagesNumber(data.totalPages);
+		});
+	}
+	// USER DATA FETCH
+
+	// ROOM DATA FETCH
+	function fetchRoomData(number:number) {
+		const url = "/classroom/list/" + number;
+		fetch(url).then(res => res.json()).then(data => {
+			setRoomTableData(data.rooms);
+			console.log("ROOMS:", data.rooms);
+			
+			setRoomPageNumber(data.currentPage);
+			setRoomMaxPagesNumber(data.totalPages);
+		});
+	}
+	// ROOM DATA FETCH
+
+
+	useEffect(() => {
+		fetchData(1);
+	}, [])
+
+	
+	useEffect(() => {
+		fetchRoomData(1);
+	}, [])
+
+
+	// PAGINATION USERS
+	const usersPaginationChange = (event:any) => {
+		fetchData(event.target.textContent);
+	};
+	// PAGINATION USERS
+
+	// PAGINATION ROOMS
+	const roomsPaginationChange = (event:any) => {
+		fetchRoomData(event.target.textContent);
+	}
+	// PAGINATION ROOMS
 
 	// ROOMS TABLE LOGIC
 	const onRoomEditButton = (event:any, roomTableData:any) => {
@@ -48,7 +107,7 @@ function AdminPage() {
 			
 			const rowValue = {
 				name:roomTableData.name,
-				seats:roomTableData.seats
+				building:roomTableData.building
 			}
 
 			setEditRoomFormData(rowValue);
@@ -64,12 +123,12 @@ function AdminPage() {
 			const newRow = {
 				id: nanoid(),
 				name: "",
-				seats: ""
+				building: ""
 			}
 
 			const formData = {
 				name: "",
-				seats: ""
+				building: ""
 			}
 
 			const newData = [...roomTableData, newRow];
@@ -92,18 +151,29 @@ function AdminPage() {
 
 			const roomTableDataCopy = [...roomTableData];
 			const index = roomTableData.findIndex((td:any) => td.id === tableRowData.id);
-			
 			roomTableDataCopy.splice(index, 1);
+			setRoomTableData(roomTableDataCopy);
 
-			fetch("/printData", {
-				method:"POST",
+			fetch("/classroom/delete", {
+				method:"DELETE",
 				cache: "no-cache",
 				headers:{
 					"content_type":"application/json",
 				},
 				body:JSON.stringify(dataToSend)
 				}
-			).then(res => res.json()).then(recData => {
+			).then((response) => {
+				if (!response.ok) {
+					console.log("Incorrect data");		
+				}
+			}).then((recData) => {
+				console.log(recData);
+			
+				const url = "/classroom/list/" + pageNumber;
+				fetch(url).then(res => res.json()).then(data => {
+					setRoomTableData(data.rooms);
+					console.log(data.rooms);
+				});
 				console.log(recData);
 			});
 
@@ -117,42 +187,54 @@ function AdminPage() {
 		const dataToSend = {
 			id: editRoomId as any,
 			name: editRoomFormData.name,
-			seats: editRoomFormData.seats
+			building: editRoomFormData.building
 		}
 
 		const tableDataCopy = [...roomTableData];
 		const index = roomTableData.findIndex((td:any) => td.id === editRoomId);
+		tableDataCopy[index] = dataToSend;
+		setRoomTableData(tableDataCopy);
 
-		if (editRoomId != "" && dataToSend.name != "" && dataToSend.seats != "") {
-			console.log(dataToSend);
 
-			fetch("/printData", {
-				method:"POST",
-				cache: "no-cache",
-				headers:{
-					"content_type":"application/json",
-				},
-				body:JSON.stringify(dataToSend)
-				}
-			).then(res => res.json()).then(recData => {
-				console.log(recData);
-			});
-
-			tableDataCopy[index] = dataToSend;
-		} else {
-			tableDataCopy.splice(index, 1);
+		var url = "/classroom/create";
+		if (addNewRoomFlag) {
+			url = "/classroom/edit";
 		}
 
-		setRoomTableData(tableDataCopy);
+		fetch(url, {
+			method:"POST",
+			cache: "no-cache",
+			headers:{
+				"content_type":"application/json",
+			},
+			body:JSON.stringify(dataToSend)
+			}
+		).then((response) => {
+			if (!response.ok) {
+				console.log("Incorrect data");		
+			}
+		}).then((recData) => {
+			const url = "/classroom/list/" + pageNumber;
+			fetch(url).then(res => res.json()).then(data => {
+				console.log(data.rooms);
+				setRoomTableData(data.rooms);
+				setRoomMaxPagesNumber(data.totalPages);
+				setRoomPageNumber(data.currentPage);
+				
+			});
+			console.log(recData);
+		});
+		
 		setAddNewRoomFlag(true);
 		setEditRoomId(null);
 	}
 
 	const handleRoomEditFormChange = (event:any) => {
 		event.preventDefault();
-
+		
 		const fieldName = event.target.getAttribute("name");
 		const fieldValue = event.target.value;
+		console.log(fieldValue);
 
 		const newRoomFormData = { ...editRoomFormData };
 		newRoomFormData[fieldName as keyof typeof editRoomFormData] = fieldValue;
@@ -170,6 +252,7 @@ function AdminPage() {
 			const rowValue = {
 				login:tableData.login,
 				name:tableData.name,
+				surname:tableData.surname,
 				password:"",
 				email:tableData.email
 			}
@@ -188,6 +271,7 @@ function AdminPage() {
 				id: nanoid(),
 				login: "",
 				name: "",
+				surname: "",
 				password: "",
 				email: "",
 			}
@@ -195,6 +279,7 @@ function AdminPage() {
 			const formData = {
 				login: "",
 				name: "",
+				surname: "",
 				password: "",
 				email: "",
 			}
@@ -219,22 +304,30 @@ function AdminPage() {
 
 			const tableDataCopy = [...tableData];
 			const index = tableData.findIndex((td:any) => td.id === tableRowData.id);
-			
 			tableDataCopy.splice(index, 1);
+			setTableData(tableDataCopy);
 
-			fetch("/printData", {
-				method:"POST",
+			fetch("/user/remove", {
+				method:"DELETE",
 				cache: "no-cache",
 				headers:{
 					"content_type":"application/json",
 				},
 				body:JSON.stringify(dataToSend)
 				}
-			).then(res => res.json()).then(recData => {
+			).then((response) => {
+					if (!response.ok) {
+						console.log("Incorrect data");		
+					}
+			}).then((recData) => {
 				console.log(recData);
+			
+				const url = "/user/list/all/" + pageNumber;
+				fetch(url).then(res => res.json()).then(data => {
+					setTableData(data.users);
+					console.log(data.users);
+				});
 			});
-
-			setTableData(tableDataCopy);
 		}
 	}
 
@@ -245,34 +338,49 @@ function AdminPage() {
 			id: editId as any,
 			login: editFormData.login,
 			name: editFormData.name,
+			surname: editFormData.surname,
 			password: editFormData.password,
 			email: editFormData.email
 		}
-
+		
 		const tableDataCopy = [...tableData];
 		const index = tableData.findIndex((td:any) => td.id === editId);
+		tableDataCopy[index] = dataToSend;
+		setTableData(tableDataCopy);
 
-		if (editId != "" && dataToSend.login != "" && dataToSend.name != "" && dataToSend.email != "") {
-			console.log(dataToSend);
 
-			fetch("/printData", {
-				method:"POST",
-				cache: "no-cache",
-				headers:{
-					"content_type":"application/json",
-				},
-				body:JSON.stringify(dataToSend)
-				}
-			).then(res => res.json()).then(recData => {
-				console.log(recData);
-			});
+		console.log(dataToSend);
 
-			tableDataCopy[index] = dataToSend;
-		} else {
-			tableDataCopy.splice(index, 1);
+		setAddNewFlag(false);
+
+		var url = "/user/register";
+		if (addNewFlag) {
+			url = "/user/edit/admin";
 		}
 
-		setTableData(tableDataCopy);
+		fetch(url, {
+			method:"POST",
+			cache: "no-cache",
+			headers:{
+				"content_type":"application/json",
+			},
+			body:JSON.stringify(dataToSend)
+			}
+		).then((response) => {
+				if (!response.ok) {
+					console.log("Incorrect data");		
+				}
+		}).then((recData) => {
+			console.log(recData);
+			const url = "/user/list/all/" + pageNumber;
+			fetch(url).then(res => res.json()).then(data => {
+				setTableData(data.users);
+				setMaxPagesNumber(data.totalPages);
+				setPageNumber(data.currentPage);
+				console.log(data.users);
+			});
+			console.log(recData);
+		});
 		setAddNewFlag(true);
 		setEditId(null);
 	}
@@ -365,6 +473,7 @@ function AdminPage() {
 							<TableRow>
 								<TableCell>Login</TableCell>
 								<TableCell>Meno</TableCell>
+								<TableCell>Priezvisko</TableCell>
 								<TableCell>Heslo</TableCell>
 								<TableCell>E-mail</TableCell>
 								<TableCell onClick={onAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
@@ -378,6 +487,7 @@ function AdminPage() {
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
+											<TableCell sx={{ borderBottom: '0'}}>{td.surname}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>••••</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>{td.email}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
@@ -394,6 +504,9 @@ function AdminPage() {
 												<TextField value={editFormData.name} name='name' size="small" id="standard-basic" label="Meno" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell>
+												<TextField value={editFormData.surname} name='surname' size="small" id="standard-basic" label="Priezvisko" variant="standard" onChange={handleEditFormChange}/>
+											</TableCell>
+											<TableCell>
 												<TextField type="password" value={editFormData.password} name='password' size="small" id="standard-basic" label="Heslo" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell>
@@ -407,6 +520,13 @@ function AdminPage() {
 								</Fragment>
 							))}
 						</TableBody>
+						<TableFooter>
+							<TableRow>
+								<TableCell colSpan={3}>
+									<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event) => usersPaginationChange(event)}></Pagination>
+								</TableCell>
+							</TableRow>
+						</TableFooter>
 					</Table>
 				</form>
 			</div>
@@ -414,14 +534,14 @@ function AdminPage() {
 			<div>
 				<h1>Sprava miestnosti</h1>
 				<form>
-					<Table sx={{ boxShadow: 2}}	>
+					<Table sx={{ boxShadow: 2}}>
 						<colgroup>
 							<col style={{width:'40%'}}/>
 							<col style={{width:'40%'}}/>
 							<col style={{width:'20%'}}/>
 						</colgroup>
 						<TableHead>
-							<TableRow>
+							<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 								<TableCell>Miestnost</TableCell>
 								<TableCell>Pocet miest</TableCell>
 								<TableCell onClick={onAddRoomButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
@@ -434,7 +554,7 @@ function AdminPage() {
 									editRoomId != td.id ?
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
-											<TableCell sx={{ borderBottom: '0'}}>{td.seats}</TableCell>
+											<TableCell sx={{ borderBottom: '0'}}>{td.building}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
 												<Button onClick={(event) => onRoomEditButton(event, td)}><i className='far fa-edit'></i></Button>
 												<Button onClick={(event) => onRoomDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
@@ -446,7 +566,7 @@ function AdminPage() {
 												<TextField value={editRoomFormData.name} name='name' size="small" placeholder='' id="standard-basic" label="Nazov" variant="standard" onChange={handleRoomEditFormChange}/>
 											</TableCell>
 											<TableCell>
-												<TextField value={editRoomFormData.seats} name='seats' size="small" id="standard-basic" label="Pocet miest" variant="standard" onChange={handleRoomEditFormChange}/>
+												<TextField value={editRoomFormData.building} name='building' size="small" id="standard-basic" label="Budova" variant="standard" onChange={handleRoomEditFormChange}/>
 											</TableCell>
 											<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
 												<Button onClick={onRoomSaveButton}>Ulozit</Button>
@@ -456,6 +576,13 @@ function AdminPage() {
 								</Fragment>
 							))}
 						</TableBody>
+						<TableFooter>
+							<TableRow>
+								<TableCell colSpan={3}>
+									<Pagination count={maxRoomPagesNumber?? 1} defaultPage={pageRoomNumber?? 1} onChange={(event) => roomsPaginationChange(event)}></Pagination>
+								</TableCell>
+							</TableRow>
+						</TableFooter>
 					</Table>
 				</form>
 			</div>

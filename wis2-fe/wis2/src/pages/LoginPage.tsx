@@ -8,7 +8,7 @@ function LoginPage() {
 	const [login, setLogin] = useState("");
   	const [password, setPwd] = useState("");
 
-	  const navigate = useNavigate();
+	const navigate = useNavigate();
 
 	useEffect(() => {console.log("pwd:", password)}, [password])
 	useEffect(() => {console.log("login:", login)}, [login])

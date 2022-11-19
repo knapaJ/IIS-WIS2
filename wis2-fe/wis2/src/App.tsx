@@ -13,30 +13,36 @@ import NoAccPage from './pages/NoAccPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
 import PrivateRoute from './components/ProtectedRoute';
+import LecturedCoursesLectures from './pages/LecturedCoursesLectures';
 
 function App() {
 
-  /* <Route element={<PrivateRoute userType='admin' url='/home'/>}>
-        <Route path="/home" element={<HomePage/>}/>
-      </Route>
-  */
-
-
   return (
     <Routes>
+      <Route element={<PrivateRoute userType='admin' url='/home'/>}>
+        
+      </Route>
+      <Route element={<PrivateRoute userType='admin' url='/home'/>}>
+        
+      </Route>
+      <Route element={<PrivateRoute userType='admin' url='/home'/>}>
+
+      </Route>
+
       <Route path="/home" element={<HomePage/>}/>
       <Route path="/" element={<LoginPage/>}/>
       <Route path="/student" element={<StudentPage/>}/>
       <Route path="/employee" element={<EmployeePage/>}/>
       <Route path="/subjectDetails" element={<SubjectDetailsPage/>}/>
       <Route path="/registeredSubjects" element={<RegisteredSubjectsPage/>}/>
-      <Route path="/registeredSubjectsDetails/:subName/:id" element={<SubjectDetailsPage/>}/>
+      <Route path="/registeredSubjects/registeredSubjectsDetails/:subName/:id" element={<SubjectDetailsPage/>}/>
       <Route path="/termRegistration" element={<SubjectRegistrationPage/>}/>
       <Route path="/lecturedCourses" element={<LecturedCourses/>}/>
       <Route path="/lecturedCourseDetail/:subName/:id" element={<LecturedCourseDetail/>}/>
       <Route path="/userProfile" element={<UserProfile/>}/>
       <Route path="/noAccount" element={<NoAccPage/>}/>
       <Route path="/adminPage" element={<AdminPage/>}/>
+      <Route path="/lecturedCourseLectures/:subName/:id" element={<LecturedCoursesLectures/>}/>
     </Routes>
   );
 }
