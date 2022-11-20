@@ -13,6 +13,7 @@ import NoAccPage from './pages/NoAccPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
 import GarantPage from './pages/GarantPage';
+import SchedulePage from './pages/SchedulePage';
 import PrivateRoute from './components/ProtectedRoute';
 import LecturedCoursesLectures from './pages/LecturedCoursesLectures';
 
@@ -45,6 +46,7 @@ function App() {
       <Route path="/adminPage" element={<AdminPage/>}/>
       <Route path="/garant" element={<GarantPage/>}/>
       <Route path="/lecturedCourseLectures/:subName/:id" element={<LecturedCoursesLectures/>}/>
+      <Route path="/schedule" element={<SchedulePage/>}/>
     </Routes>
   );
 }

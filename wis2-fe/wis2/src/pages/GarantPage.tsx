@@ -22,7 +22,8 @@ function GarantPage() {
 		credits: 0,
 		description: "",
 		studentLimit: 9999,
-		isApproved: false
+		isApproved: false,
+		terms: []
 	});
 	// COURSE TABLE DATA
 
@@ -33,7 +34,6 @@ function GarantPage() {
 	const [editTermId, setEditTermId] = useState<string | null>(null);
 	const [editTermFormData, setEditTermFormData] = useState({
 		title: "",
-		course: "",
 		description: "",
 		startDate: "-",
 		endDate: "-",
@@ -67,7 +67,6 @@ function GarantPage() {
 			
 			const rowValue = {
 				title: termTableData.title,
-				course: termTableData.course,
 				description: termTableData.description,
 				startDate: termTableData.startDate,
 				endDate: termTableData.endDate,
@@ -109,7 +108,6 @@ function GarantPage() {
 				const newRow = {
 					id: nanoid(),
 					title: "",
-					course: courseTableData[0].shortName,
 					description: "",
 					startDate: "-",
 					endDate: "-",
@@ -123,7 +121,6 @@ function GarantPage() {
 
 				const formData = {
 					title: "",
-					course: courseTableData[0].shortName,
 					description: "",
 					startDate: "-",
 					endDate: "-",
@@ -181,7 +178,6 @@ function GarantPage() {
 		const dataToSend = {
 			id: editTermId as any,
 			title: editTermFormData.title as any,
-			course: editTermFormData.course,
 			description: editTermFormData.description,
 			startDate: editTermFormData.startDate,
 			endDate: editTermFormData.endDate,
@@ -257,9 +253,10 @@ function GarantPage() {
 				credits: courseTableData.credits,
 				description: courseTableData.description,
 				studentLimit: courseTableData.studentLimit,
-				isApproved: courseTableData.isApproved
+				isApproved: courseTableData.isApproved,
+				terms: courseTableData.terms
 			}
-
+			setTermTableData(rowValue.terms);
 			setEditCourseFormData(rowValue);
 		}
 	}
@@ -293,7 +290,8 @@ function GarantPage() {
 				credits: 0,
 				description: "",
 				studentLimit: 9999,
-				isApproved: false
+				isApproved: false,
+				terms: []
 			}
 
 			const formData = {
@@ -302,13 +300,15 @@ function GarantPage() {
 				credits: 0,
 				description: "",
 				studentLimit: 9999,
-				isApproved: false
+				isApproved: false,
+				terms: []
 			}
 
 			const newData = [...courseTableData, newRow];
 
 			console.log(newRow);
 			console.log(newData);
+			setTermTableData(formData.terms);
 			setEditCourseFormData(formData);
 			setCourseTableData(newData);
 			setEditCourseId(newRow.id);
@@ -354,7 +354,8 @@ function GarantPage() {
 			credits: editCourseFormData.credits,
 			description: editCourseFormData.description,
 			studentLimit: editCourseFormData.studentLimit,
-			isApproved: editCourseFormData.isApproved
+			isApproved: editCourseFormData.isApproved,
+			terms: termTableData
 		}
 
 		const tableDataCopy = [...courseTableData];
@@ -506,59 +507,6 @@ function GarantPage() {
 						</Table>
 					</form>
 				</div>
-
-				<div id="termTable">
-					<h1>Sprava terminu</h1>
-					<form>
-						<Table sx={{ boxShadow: 2}}	>
-							<colgroup>
-								<col style={{width:'25%'}}/>
-								<col style={{width:'25%'}}/>
-								<col style={{width:'25%'}}/>
-								<col style={{width:'5%'}}/>
-								<col style={{width:'5%'}}/>
-								<col style={{width:'15%'}}/>
-							</colgroup>
-							<TableHead>
-								<TableRow>
-									<TableCell>Nazev</TableCell>
-									<TableCell>Zacatek</TableCell>
-									<TableCell>Konec</TableCell>
-									<TableCell>Registrace</TableCell>
-									<TableCell>Volitelne</TableCell>
-									<TableCell onClick={onTermAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{termTableData.map((td:any) => (
-									<Fragment>
-										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-												<TableCell sx={{ borderBottom: '0'}}>{td.title}</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>{td.startDate}</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>{td.endDate}</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>
-													<Checkbox
-														disabled 
-														checked={td.isRegistrationEnabled} 
-													/>
-												</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>
-													<Checkbox
-														disabled 
-														checked={td.isOptional} 
-													/>
-												</TableCell>
-												<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
-													<Button onClick={(event) => onTermEditButton(event, td)}><i className='far fa-edit'></i></Button>
-													<Button onClick={(event) => onTermDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
-												</TableCell>
-											</TableRow>
-									</Fragment>
-								))}
-							</TableBody>
-						</Table>
-					</form>
-				</div>
 				
 				<div id="courseRegistrationRequests">
 					<h1>Zadosti o registrace na kurzy</h1>
@@ -660,6 +608,58 @@ function GarantPage() {
 							<br/>
 							<Button onClick={onCourseSaveButton}>Ulozit</Button>
 							<Button onClick={onCourseCloseButton}>Zarvit</Button>
+							<div id="termTable">
+					<h2>Sprava terminu {editCourseFormData.shortName}</h2>
+					<form>
+						<Table sx={{ boxShadow: 2}}	>
+							<colgroup>
+								<col style={{width:'25%'}}/>
+								<col style={{width:'25%'}}/>
+								<col style={{width:'25%'}}/>
+								<col style={{width:'5%'}}/>
+								<col style={{width:'5%'}}/>
+								<col style={{width:'15%'}}/>
+							</colgroup>
+							<TableHead>
+								<TableRow>
+									<TableCell>Nazev</TableCell>
+									<TableCell>Zacatek</TableCell>
+									<TableCell>Konec</TableCell>
+									<TableCell>Registrace</TableCell>
+									<TableCell>Volitelne</TableCell>
+									<TableCell onClick={onTermAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
+								</TableRow>
+							</TableHead>
+							<TableBody>
+								{termTableData.map((td:any) => (
+									<Fragment>
+										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+												<TableCell sx={{ borderBottom: '0'}}>{td.title}</TableCell>
+												<TableCell sx={{ borderBottom: '0'}}>{td.startDate}</TableCell>
+												<TableCell sx={{ borderBottom: '0'}}>{td.endDate}</TableCell>
+												<TableCell sx={{ borderBottom: '0'}}>
+													<Checkbox
+														disabled 
+														checked={td.isRegistrationEnabled} 
+													/>
+												</TableCell>
+												<TableCell sx={{ borderBottom: '0'}}>
+													<Checkbox
+														disabled 
+														checked={td.isOptional} 
+													/>
+												</TableCell>
+												<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
+													<Button onClick={(event) => onTermEditButton(event, td)}><i className='far fa-edit'></i></Button>
+													<Button onClick={(event) => onTermDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
+												</TableCell>
+											</TableRow>
+									</Fragment>
+								))}
+							</TableBody>
+						</Table>
+					</form>
+				</div>
 						</Fragment>
 					</div>
 				</Popup>
@@ -667,7 +667,7 @@ function GarantPage() {
 			<div id="termPopup">
 				<Popup triggered={buttonTermPopup} setTrigger={setButtonTermPopup}>
 					<div className='popupScroll'>
-						<h1>Termin</h1>
+						<h1>Termin {editCourseFormData.shortName}</h1>
 						<Fragment>
 							<TextField 
 								value={editTermFormData.title}
