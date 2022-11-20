@@ -12,6 +12,7 @@ import UserProfile from './pages/UserProfile';
 import NoAccPage from './pages/NoAccPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
+import GarantPage from './pages/GarantPage';
 import PrivateRoute from './components/ProtectedRoute';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
       <Route path="/userProfile" element={<UserProfile/>}/>
       <Route path="/noAccount" element={<NoAccPage/>}/>
       <Route path="/adminPage" element={<AdminPage/>}/>
+      <Route path="/garant" element={<GarantPage/>}/>
     </Routes>
   );
 }

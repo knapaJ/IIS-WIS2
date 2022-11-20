@@ -12,6 +12,7 @@ function EmployeePage() {
 			<div id="buttonMenu">
 				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>
 				<LinkButton linkText='Vyucovane kurzy' linkValue='/lecturedCourses'></LinkButton>
+				<LinkButton linkText='Garant home' linkValue='/garant'></LinkButton>
 			</div>
 		</div>
 		<PageFooter></PageFooter>

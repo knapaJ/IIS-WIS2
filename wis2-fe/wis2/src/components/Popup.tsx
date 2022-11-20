@@ -1,3 +1,4 @@
+import { Identifier } from 'typescript';
 import './Popup.css';
 
 type Props = {
