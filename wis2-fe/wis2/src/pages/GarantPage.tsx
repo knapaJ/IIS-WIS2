@@ -8,6 +8,7 @@ import courseData from '../mockData/mockGarantPageCoursesData.json';
 import termData from '../mockData/mockTermsTableData.json';
 import requestData from '../mockData/mockAdminPageRequestData.json';
 import { Popup, onPopupEvent } from '../components/Popup';
+import { format } from "date-fns";
 
 function GarantPage() {
 	// COURSE TABLE DATA
@@ -32,11 +33,12 @@ function GarantPage() {
 	const [editTermId, setEditTermId] = useState<string | null>(null);
 	const [editTermFormData, setEditTermFormData] = useState({
 		title: "",
+		course: "",
 		description: "",
-		startDate: Date(),
-		endDate:  Date(),
-		registrationStartDate:  Date(),
-		registrationEndDate:  Date(),
+		startDate: "-",
+		endDate: "-",
+		registrationStartDate:  "-",
+		registrationEndDate:  "-",
 		maxMark: 0,
 		studentLimit: 9999,
 		isRegistrationEnabled: false,
@@ -65,6 +67,7 @@ function GarantPage() {
 			
 			const rowValue = {
 				title: termTableData.title,
+				course: termTableData.course,
 				description: termTableData.description,
 				startDate: termTableData.startDate,
 				endDate: termTableData.endDate,
@@ -95,47 +98,51 @@ function GarantPage() {
 	}
 
 	const onTermAddButton = (event:any) => {
-		onPopupEvent(event);
-		setButtonTermPopup(true);
-		event.preventDefault();
-		setAddNewTermFlag(false);
-		
-		if (addNewTermFlag) {
+		if(courseTableData.length > 0) {
+			onPopupEvent(event);
+			setButtonTermPopup(true);
+			event.preventDefault();
+			setAddNewTermFlag(false);
+			
+			if (addNewTermFlag) {
 
-			const newRow = {
-				id: nanoid(),
-				title: "",
-				description: "",
-				startDate: Date(),
-				endDate: Date(),
-				registrationStartDate: Date(),
-				registrationEndDate: Date(),
-				maxMark: 0,
-				studentLimit: 9999,
-				isRegistrationEnabled: false,
-				isOptional: false
+				const newRow = {
+					id: nanoid(),
+					title: "",
+					course: courseTableData[0].shortName,
+					description: "",
+					startDate: "-",
+					endDate: "-",
+					registrationStartDate: "-",
+					registrationEndDate: "-",
+					maxMark: 0,
+					studentLimit: 9999,
+					isRegistrationEnabled: false,
+					isOptional: false
+				}
+
+				const formData = {
+					title: "",
+					course: courseTableData[0].shortName,
+					description: "",
+					startDate: "-",
+					endDate: "-",
+					registrationStartDate: "-",
+					registrationEndDate: "-",
+					maxMark: 0,
+					studentLimit: 9999,
+					isRegistrationEnabled: false,
+					isOptional: false
+				}
+
+				const newData = [...termTableData, newRow];
+
+				console.log(newRow);
+				console.log(newData);
+				setEditTermFormData(formData);
+				setTermTableData(newData);
+				setEditTermId(newRow.id);
 			}
-
-			const formData = {
-				title: "",
-				description: "",
-				startDate: Date(),
-				endDate: Date(),
-				registrationStartDate: Date(),
-				registrationEndDate: Date(),
-				maxMark: 0,
-				studentLimit: 9999,
-				isRegistrationEnabled: false,
-				isOptional: false
-			}
-
-			const newData = [...termTableData, newRow];
-
-			console.log(newRow);
-			console.log(newData);
-			setEditTermFormData(formData);
-			setTermTableData(newData);
-			setEditTermId(newRow.id);
 		}
 	}
 
@@ -174,6 +181,7 @@ function GarantPage() {
 		const dataToSend = {
 			id: editTermId as any,
 			title: editTermFormData.title as any,
+			course: editTermFormData.course,
 			description: editTermFormData.description,
 			startDate: editTermFormData.startDate,
 			endDate: editTermFormData.endDate,
