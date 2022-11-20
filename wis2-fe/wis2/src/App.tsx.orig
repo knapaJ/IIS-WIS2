@@ -43,8 +43,11 @@ function App() {
       <Route path="/userProfile" element={<UserProfile/>}/>
       <Route path="/noAccount" element={<NoAccPage/>}/>
       <Route path="/adminPage" element={<AdminPage/>}/>
+<<<<<<< HEAD
       <Route path="/garant" element={<GarantPage/>}/>
+=======
       <Route path="/lecturedCourseLectures/:subName/:id" element={<LecturedCoursesLectures/>}/>
+>>>>>>> a0a1087d2e352e3903b5b2e74789d7955f40daa5
     </Routes>
   );
 }

@@ -30,15 +30,26 @@ function EmployeePage() {
     console.log(oldPwd);
     console.log(newPwd);
 
-    fetch("/setNewPwd", {
+    const dataToSend = {
+      oldPwd:oldPwd,
+      newPwd:newPwd
+    }
+
+    fetch("/user/change-passwd", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
 				"content_type":"application/json",
 			},
-			body:JSON.stringify({oldPwd, newPwd})
+			body:JSON.stringify(dataToSend)
 			}
-		)
+		).then(res => res.json()).then(recData => {
+      if (recData.status == "OK") {
+        alert("Heslo uspesne zmenene.")
+      } else {
+        alert("Problem pri zmene hesla.")
+      }
+    });
   }
 
   return (<div>

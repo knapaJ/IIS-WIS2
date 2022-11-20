@@ -1,3 +1,4 @@
+import { Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
 import { Fragment, useEffect, useState } from 'react';
 import EditableRow from './EditableRow';
 import ReadOnlyRow from './ReadOnlyRow';
@@ -8,6 +9,9 @@ type Props = {
 }
 
 function InputTable({tableData}:Props) {
+  const [pageNumber, setPageNumber] = useState(1);
+	const [maxPagesNumber, setMaxPagesNumber] = useState(1);
+
   const [tabData, setTableData] = useState(tableData);
 
 	const [pointsId, setPointsId] = useState(null);
@@ -79,18 +83,23 @@ function InputTable({tableData}:Props) {
 			}
 		)
   };
+
+  const onPaginationChange = (event:any) => {
+		//fetchData(event.target.textContent);
+	};
   
   return (
     <form onSubmit={handleEditFormSubmit}>
-      <table id="registrationTable" className='wisTable'>
-        <thead>
-          <tr>
-            <th>Meno studenta</th>
-            <th>Hodnotenie studenta</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
+      <Table id="inputTable" sx={{ boxShadow: 2}}>
+        <TableHead>
+          <TableRow>
+            <TableCell>Meno studenta</TableCell>
+            <TableCell>Hodnotenie studenta</TableCell>
+            <TableCell>Max pocet bodov</TableCell>
+            <TableCell></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {tabData.map((td:any) => (
             <Fragment>
               {pointsId == td.id ? <EditableRow tableData={td} editFormData={editFormData} handleEditFormChange={handleEditFormChange}/> 
@@ -98,8 +107,15 @@ function InputTable({tableData}:Props) {
               <ReadOnlyRow tableData={td} onClickHandle={onEdit}></ReadOnlyRow>}
             </Fragment>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+        <TableFooter>
+            <TableRow>
+              <TableCell colSpan={3}>
+                <Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event) => onPaginationChange(event)}></Pagination>
+              </TableCell>
+            </TableRow>
+        </TableFooter>
+      </Table>
     </form>
   );
 }

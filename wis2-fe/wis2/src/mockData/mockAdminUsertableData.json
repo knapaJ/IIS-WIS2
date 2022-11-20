@@ -1,50 +1,56 @@
-[
-    {
-      "id": "0",
-      "login": "xjano",
-      "name": "Jano",
-      "email":"jano@jano.cz"
-    },
-    {
-      "id": "1",
-      "login": "xdano",
-      "name": "Dano",
-      "email":"dano@dano.cz"
-    },
-    {
-      "id": "2",
-      "login": "xhana",
-      "name": "Hana",
-      "email":"hana@hana.cz"
-    },
-    {
-      "id": "3",
-      "login": "xhehe",
-      "name": "Hehik",
-      "email":"e@e.cz"
-    },
-    {
-      "id": "4",
-      "login": "eeee",
-      "name": "EEE",
-      "email":"EEE@e.cz"
-    },
-    {
-      "id": "5",
-      "login": "xplagiat",
-      "name": "ukrdolsom",
-      "email":"e@ddd.cz"
-    },
-    {
-      "id": "6",
-      "login": "nemamxlogin",
-      "name": "Nemam xlogin",
-      "email":"e@dd.cz"
-    },
-    {
-      "id": "7",
-      "login": "xDytrych01",
-      "name": "neboj",
-      "email":"3@3.cz"
-    }
-]
+{
+  "totalPages":"1",
+  "currentPage":"1",
+  
+  "users":
+  [
+      {
+        "id": "0",
+        "login": "xjano",
+        "name": "Jano",
+        "email":"jano@jano.cz"
+      },
+      {
+        "id": "1",
+        "login": "xdano",
+        "name": "Dano",
+        "email":"dano@dano.cz"
+      },
+      {
+        "id": "2",
+        "login": "xhana",
+        "name": "Hana",
+        "email":"hana@hana.cz"
+      },
+      {
+        "id": "3",
+        "login": "xhehe",
+        "name": "Hehik",
+        "email":"e@e.cz"
+      },
+      {
+        "id": "4",
+        "login": "eeee",
+        "name": "EEE",
+        "email":"EEE@e.cz"
+      },
+      {
+        "id": "5",
+        "login": "xplagiat",
+        "name": "ukrdolsom",
+        "email":"e@ddd.cz"
+      },
+      {
+        "id": "6",
+        "login": "nemamxlogin",
+        "name": "Nemam xlogin",
+        "email":"e@dd.cz"
+      },
+      {
+        "id": "7",
+        "login": "xDytrych01",
+        "name": "neboj",
+        "email":"3@3.cz"
+      }
+  ]
+}
