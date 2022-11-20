@@ -53,11 +53,13 @@ function AdminPage() {
 	function fetchData(number:number) {
 		const url = "/user/list/all/" + number;
 		fetch(url).then(res => res.json()).then(data => {
-			setTableData(data.users);
-			console.log(data.users);
-			
-			setPageNumber(data.currentPage);
-			setMaxPagesNumber(data.totalPages);
+			if (data.users != undefined) {
+				setTableData(data.users);
+				console.log(data.users);
+				
+				setPageNumber(data.currentPage);
+				setMaxPagesNumber(data.totalPages);
+			}
 		});
 	}
 	// USER DATA FETCH
@@ -66,11 +68,13 @@ function AdminPage() {
 	function fetchRoomData(number:number) {
 		const url = "/classroom/list/" + number;
 		fetch(url).then(res => res.json()).then(data => {
-			setRoomTableData(data.rooms);
-			console.log("ROOMS:", data.rooms);
-			
-			setRoomPageNumber(data.currentPage);
-			setRoomMaxPagesNumber(data.totalPages);
+			if (data.rooms != undefined) {
+				setRoomTableData(data.rooms);
+				console.log("ROOMS:", data.rooms);
+				
+				setRoomPageNumber(data.currentPage);
+				setRoomMaxPagesNumber(data.totalPages);
+			}
 		});
 	}
 	// ROOM DATA FETCH
@@ -131,7 +135,7 @@ function AdminPage() {
 				building: ""
 			}
 
-			const newData = [...roomTableData, newRow];
+			const newData:any = [...roomTableData, newRow];
 
 			console.log(newRow);
 			console.log(newData);
@@ -190,7 +194,7 @@ function AdminPage() {
 			building: editRoomFormData.building
 		}
 
-		const tableDataCopy = [...roomTableData];
+		const tableDataCopy:any = [...roomTableData];
 		const index = roomTableData.findIndex((td:any) => td.id === editRoomId);
 		tableDataCopy[index] = dataToSend;
 		setRoomTableData(tableDataCopy);
@@ -216,10 +220,12 @@ function AdminPage() {
 		}).then((recData) => {
 			const url = "/classroom/list/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
-				console.log(data.rooms);
-				setRoomTableData(data.rooms);
-				setRoomMaxPagesNumber(data.totalPages);
-				setRoomPageNumber(data.currentPage);
+				if (data.rooms != undefined) {
+					console.log(data.rooms);
+					setRoomTableData(data.rooms);
+					setRoomMaxPagesNumber(data.totalPages);
+					setRoomPageNumber(data.currentPage);
+				}
 				
 			});
 			console.log(recData);
@@ -284,7 +290,7 @@ function AdminPage() {
 				email: "",
 			}
 
-			const newData = [...tableData, newRow];
+			const newData:any = [...tableData, newRow];
 
 			console.log(newRow);
 			console.log(newData);
@@ -302,7 +308,7 @@ function AdminPage() {
 				id: tableRowData.id
 			}
 
-			const tableDataCopy = [...tableData];
+			const tableDataCopy:any = [...tableData];
 			const index = tableData.findIndex((td:any) => td.id === tableRowData.id);
 			tableDataCopy.splice(index, 1);
 			setTableData(tableDataCopy);
@@ -343,7 +349,7 @@ function AdminPage() {
 			email: editFormData.email
 		}
 		
-		const tableDataCopy = [...tableData];
+		const tableDataCopy:any = [...tableData];
 		const index = tableData.findIndex((td:any) => td.id === editId);
 		tableDataCopy[index] = dataToSend;
 		setTableData(tableDataCopy);
@@ -367,17 +373,19 @@ function AdminPage() {
 			body:JSON.stringify(dataToSend)
 			}
 		).then((response) => {
-				if (!response.ok) {
-					console.log("Incorrect data");		
-				}
+			if (!response.ok) {
+				console.log("Incorrect data");		
+			}
 		}).then((recData) => {
 			console.log(recData);
 			const url = "/user/list/all/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
-				setTableData(data.users);
-				setMaxPagesNumber(data.totalPages);
-				setPageNumber(data.currentPage);
-				console.log(data.users);
+				if (data.users != undefined) {
+					setTableData(data.users);
+					setMaxPagesNumber(data.totalPages);
+					setPageNumber(data.currentPage);
+					console.log(data.users);
+				}
 			});
 			console.log(recData);
 		});
@@ -405,7 +413,7 @@ function AdminPage() {
 		}
 		console.log("COURSE ", tableData.courseId, "HAS BEEN ACCEPTED");
 
-		const tableDataCopy = [...requestTableData];
+		const tableDataCopy:any = [...requestTableData];
 		const index = requestTableData.findIndex((td:any) => td.id === tableData.id);
 		
 		tableDataCopy.splice(index, 1);

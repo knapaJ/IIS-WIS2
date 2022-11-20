@@ -1,17 +1,13 @@
-[
-    {
-      "id": 0,
-      "name": "Jano",
-      "points": "0"
-    },
-    {
-      "id": 1,
-      "name": "Fero",
-      "points": "111"
-    },
-    {
-      "id": 2,
-      "name": "Peter",
-      "points": "33"
-    }
-]
+{
+  "totalPages":10,
+  "currentPage":3,
+  "marks":
+  [
+      {
+        "mark_id": 0,
+        "name": "loading",
+        "surname": "loading",
+        "points": "loading"
+      }
+  ]
+}

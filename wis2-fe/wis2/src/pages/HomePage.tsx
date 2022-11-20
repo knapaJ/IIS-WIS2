@@ -13,7 +13,6 @@ function HomePage() {
         <div id="buttonMenu">
             <LinkButton linkText='Student 🧑‍🎓' linkValue='/student'></LinkButton>
             <LinkButton linkText='Zamestnanec 👷' linkValue='/employee'></LinkButton>
-            <LinkButton linkText='Nemam ucet 😢' linkValue='/noAccount'></LinkButton>
             <LinkButton linkText='Admin B-)' linkValue='/adminPage'></LinkButton>
         </div>
     </div>

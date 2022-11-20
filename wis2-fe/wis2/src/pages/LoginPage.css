@@ -1,6 +1,6 @@
 #loginPageMainContent {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
     max-width: 1500px;
     min-width: 300px;
     margin: 0 auto;

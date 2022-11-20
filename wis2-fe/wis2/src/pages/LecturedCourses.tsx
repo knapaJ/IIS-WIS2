@@ -43,7 +43,7 @@ function LecturedCourses() {
 									<TableCell sx={{ borderBottom: '0'}}>{td.shortcut}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}}>{td.fullname}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}}>{td.garant}</TableCell>
-									<td><Link to={'/lecturedCourseLectures/' + td.courseId + '/' + td.id}>detail</Link></td>
+									<td><Link to={'/lecturedCourseLectures/' + td.id}>detail</Link></td>
 								</TableRow>
 							))}
 						</TableBody>

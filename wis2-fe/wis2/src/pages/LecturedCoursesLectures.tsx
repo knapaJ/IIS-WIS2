@@ -5,30 +5,23 @@ import data from '../mockData/mockLecturerClassesTable.json';
 import dropDownData from '../mockData/mockDropDownData.json';
 import { useEffect, useState } from 'react';
 import { Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function LecturedCourses() {
 	//<DropDown onChange={onDropDownChange} dropDownData={dropDownValue}></DropDown>
 
 	const [tableData, setTableData] = useState(data.classes);
-
-	const [pageNumber, setPageNumber] = useState(1);
-	const [maxPagesNumber, setmMaxPagesNumber] = useState(1);
+	const {id} = useParams();
 	
 	
 	useEffect(() => {
-		fetch('/getSubjectData').then(res => res.json()).then(recData => {
-			setPageNumber(recData.currentPage);
-			setmMaxPagesNumber(recData.totalPages);
-			setTableData(recData.classes);
+		var url = "/term/teacher/list/bycourse/" + id;
+		fetch(url).then(res => res.json()).then(recData => {
+			setTableData(recData);
 		});
 	}, []);
 
 	useEffect(() => {console.log("change", tableData)}, [tableData]);
-
-	const onPaginationChange = (event:any) => {
-		console.log(event)
-	}
 
 	return (
 		<div>
@@ -46,29 +39,22 @@ function LecturedCourses() {
 						</colgroup>
 						<TableHead>
 							<TableRow>
-								<TableCell>Skratka predmetu</TableCell>
-								<TableCell>Typ vyuky</TableCell>
+								<TableCell>Nazov terminu</TableCell>
 								<TableCell>Pocet studentov</TableCell>
+								<TableCell>Max pocet studentov</TableCell>
 								<TableCell>Detaily</TableCell>
 							</TableRow>
 						</TableHead>
 						<TableBody>
 							{tableData.map((td:any) => (
 								<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-									<TableCell sx={{ borderBottom: '0'}}>{td.shortcut}</TableCell>
-									<TableCell sx={{ borderBottom: '0'}}>{td.lecture}</TableCell>
-									<TableCell sx={{ borderBottom: '0'}}>{td.studentCount}</TableCell>
-									<td><Link to={'/lecturedCourseDetail/' + td.courseId + '/' + td.id}>detail</Link></td>
+									<TableCell sx={{ borderBottom: '0'}}>{td.classname}</TableCell>
+									<TableCell sx={{ borderBottom: '0'}}>{td.students}</TableCell>
+									<TableCell sx={{ borderBottom: '0'}}>{td.maxstudents}</TableCell>
+									<td><Link to={'/lecturedCourseDetail/' + td.id}>detail</Link></td>
 								</TableRow>
 							))}
 						</TableBody>
-						<TableFooter>
-							<TableRow>
-								<TableCell colSpan={3}>
-									<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event) => onPaginationChange(event)}></Pagination>
-								</TableCell>
-							</TableRow>
-						</TableFooter>
 					</Table>
 				</form>
 

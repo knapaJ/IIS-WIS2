@@ -5,9 +5,9 @@
   [
     {
         "id": 1,
-        "shortcut": "IPK",
-        "className": "cviko",
-        "studentCount": "20"
+        "shortcut": "loading",
+        "className": "loading",
+        "studentCount": "loading"
     }
   ]
 }
