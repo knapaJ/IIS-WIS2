@@ -16,11 +16,9 @@ const onPopupEvent = (event:any) => {
 }
 
 function Popup({triggered, setTrigger, children}:Props) {
-    console.log(triggered);
     return (triggered) ? (
         <div className="popup">
             <div className="popup-inner">
-                <button className="popup-close-btn" onClick={(event) => {setTrigger(false); onPopupEvent(event)}}>Close</button>
                 {children}
             </div>
         </div>

@@ -1,22 +1,28 @@
-#adminPageMainContent {
+#garantPageMainContent {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 1fr 1fr;
     column-gap: 5%;
     row-gap: 5%;
-    max-width: 1500px;
+    max-width: 1700px;
     min-width: 300px;
     margin: 0 auto;
     margin-bottom: 100px;
 }
 
-#adminPageMainContent > div:nth-child(1) {
+#garantPageMainContent > div:nth-child(1) {
     grid-row: 1 / span 2;
 }
 
-#adminPageMainContent > div:nth-child(4) {
+#garantPageMainContent > div:nth-child(4) {
     grid-column-start: 2;
 }
 
+textarea {
+    width: 100%;
+}
 
-
+.popupScroll {
+    height: 80vh;
+    overflow: auto;
+}
