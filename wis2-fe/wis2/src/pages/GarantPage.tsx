@@ -5,7 +5,6 @@ import PageFooter from '../components/PageFooter';
 import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
 import { Fragment, useState } from 'react';
 import courseData from '../mockData/mockGarantPageCoursesData.json';
-import termData from '../mockData/mockTermsTableData.json';
 import requestData from '../mockData/mockAdminPageRequestData.json';
 import { Popup, onPopupEvent } from '../components/Popup';
 import { format } from "date-fns";
@@ -28,7 +27,19 @@ function GarantPage() {
 	// COURSE TABLE DATA
 
 	// TERMS TABLE DATA	
-	const [termTableData, setTermTableData] = useState(termData);
+	const [termTableData, setTermTableData] = useState([{
+		id: "",
+		title: "",
+		description: "",
+		startDate: "",
+		endDate: "",
+		registrationStartDate: "",
+		registrationEndDate: "",
+		maxMark: 0,
+		studentLimit: 9999,
+		isRegistrationEnabled: true,
+		isOptional: true
+	}]);
 	const [addNewTermFlag, setAddNewTermFlag] = useState(true);
 
 	const [editTermId, setEditTermId] = useState<string | null>(null);
