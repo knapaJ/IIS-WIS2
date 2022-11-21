@@ -13,8 +13,6 @@ import NoAccPage from './pages/NoAccPage';
 import AdminPage from './pages/AdminPage';
 import LoginPage from './pages/LoginPage';
 import GarantPage from './pages/GarantPage';
-import SchedulePage from './pages/SchedulePage';
-import PrivateRoute from './components/ProtectedRoute';
 import LecturedCoursesLectures from './pages/LecturedCoursesLectures';
 import PrivateRouteUser from './components/ProtectedRouteUser';
 import PrivateRouteAdmin from './components/ProtectedRouteAdmin';
@@ -39,14 +37,11 @@ function App() {
         <Route path="/lecturedCourseDetail/:id" element={<LecturedCourseDetail/>}/>
         <Route path="/userProfile" element={<UserProfile/>}/>
         <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures/>}/>
+        <Route path="/garant" element={<GarantPage/>}/>
       </Route>
 
 
       <Route path="/noAccount" element={<NoAccPage/>}/>
-      <Route path="/adminPage" element={<AdminPage/>}/>
-      <Route path="/garant" element={<GarantPage/>}/>
-      <Route path="/lecturedCourseLectures/:subName/:id" element={<LecturedCoursesLectures/>}/>
-      <Route path="/schedule" element={<SchedulePage/>}/>
       <Route path="/" element={<LoginPage/>}/>
     </Routes>
   );

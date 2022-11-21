@@ -12,7 +12,6 @@ function StudentPage() {
 				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>
 				<LinkButton linkText='Registracie terminov 📅' linkValue='/termRegistration'></LinkButton>
 				<LinkButton linkText='Aktualne predmety 😩' linkValue='/registeredSubjects'></LinkButton>
-				<LinkButton linkText='Rozvrh 📅' linkValue='/schedule'></LinkButton>
 			</div>
 		</div>
 	<PageFooter></PageFooter>
