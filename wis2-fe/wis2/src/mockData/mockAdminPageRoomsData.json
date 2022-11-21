@@ -1,22 +1,7 @@
 {
-  "totalPages":10,
-  "currentPage":3,
+  "totalPages":1,
+  "currentPage":1,
   "rooms":
   [
-      {
-        "id": "0",
-        "name": "Debil",
-        "building": "245"
-      },
-      {
-        "id": "2",
-        "name": "GogoManTV",
-        "building": "24"
-      },
-      {
-        "id": "3",
-        "name": "AleBoa",
-        "building": "12"
-      }
   ]
   }

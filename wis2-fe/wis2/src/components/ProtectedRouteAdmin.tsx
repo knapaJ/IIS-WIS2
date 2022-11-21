@@ -1,23 +1,14 @@
 import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 
-type Props = {
-  userType:string
-  url:string
-}
-
-const PrivateRoute = ({userType, url}: Props) => {
+const PrivateRouteAdmin = () => {
   const [eauth, setAuth] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const dataToSend = {
-    url:{url}
-  }
-
-  const [statusAuth, setStatusAuth] = useState(false);
+  
+  
   useEffect(() => {
     var tmp = "/user/auth/admin";
-    //var fetchUrl = tmp.concat(userType);
+    console.log(tmp)
 
     fetch(tmp, {
       method:"GET",
@@ -40,8 +31,8 @@ const PrivateRoute = ({userType, url}: Props) => {
   }, []);
 
   return (
-    loading ? <div></div> : eauth ? <Outlet/> : <Navigate to="/"/>
+    loading ? <div></div> : eauth ? <Outlet/> : <Navigate to='/home'/>
   );
 }
 
-export default PrivateRoute;
+export default PrivateRouteAdmin;

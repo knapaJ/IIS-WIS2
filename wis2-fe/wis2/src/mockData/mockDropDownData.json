@@ -1,17 +1,7 @@
 [
     {
       "id": 0,
-      "value": "All",
-      "text": "All"
-    },
-    {
-      "id": 1,
-      "value": "IPK",
-      "text": "IPK"
-    },
-    {
-      "id": 2,
-      "value": "ISA",
-      "text": "ISA"
+      "value": "loading",
+      "text": "loading"
     }
 ]

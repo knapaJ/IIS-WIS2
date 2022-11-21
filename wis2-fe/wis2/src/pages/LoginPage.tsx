@@ -3,16 +3,13 @@ import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
+import LinkButton from '../components/LinkButton';
 
 function LoginPage() {
 	const [login, setLogin] = useState("");
   	const [password, setPwd] = useState("");
 
 	const navigate = useNavigate();
-
-	useEffect(() => {console.log("pwd:", password)}, [password])
-	useEffect(() => {console.log("login:", login)}, [login])
-
 	
 	const onChangeLogin = (event:any) => {
 		event.preventDefault();
@@ -68,6 +65,7 @@ function LoginPage() {
 				</div>
 				<button type="submit" onClick={sendPwd} className="btn btn-primary">Potvrdit</button>
 			</form>
+            <LinkButton linkText='Nemam ucet 😢' linkValue='/noAccount'></LinkButton>
 		</div>
 		<PageFooter></PageFooter>
 	</div>

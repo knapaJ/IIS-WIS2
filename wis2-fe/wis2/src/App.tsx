@@ -16,37 +16,38 @@ import GarantPage from './pages/GarantPage';
 import SchedulePage from './pages/SchedulePage';
 import PrivateRoute from './components/ProtectedRoute';
 import LecturedCoursesLectures from './pages/LecturedCoursesLectures';
+import PrivateRouteUser from './components/ProtectedRouteUser';
+import PrivateRouteAdmin from './components/ProtectedRouteAdmin';
 
 function App() {
 
   return (
     <Routes>
-      <Route element={<PrivateRoute userType='admin' url='/home'/>}>
-        
-      </Route>
-      <Route element={<PrivateRoute userType='admin' url='/home'/>}>
-        
-      </Route>
-      <Route element={<PrivateRoute userType='admin' url='/home'/>}>
-
+      <Route element={<PrivateRouteAdmin/>}>
+        <Route path="/adminPage" element={<AdminPage/>}/>
       </Route>
 
-      <Route path="/home" element={<HomePage/>}/>
-      <Route path="/" element={<LoginPage/>}/>
-      <Route path="/student" element={<StudentPage/>}/>
-      <Route path="/employee" element={<EmployeePage/>}/>
-      <Route path="/subjectDetails" element={<SubjectDetailsPage/>}/>
-      <Route path="/registeredSubjects" element={<RegisteredSubjectsPage/>}/>
-      <Route path="/registeredSubjects/registeredSubjectsDetails/:subName/:id" element={<SubjectDetailsPage/>}/>
-      <Route path="/termRegistration" element={<SubjectRegistrationPage/>}/>
-      <Route path="/lecturedCourses" element={<LecturedCourses/>}/>
-      <Route path="/lecturedCourseDetail/:subName/:id" element={<LecturedCourseDetail/>}/>
-      <Route path="/userProfile" element={<UserProfile/>}/>
+      <Route element={<PrivateRouteUser/>}>
+        <Route path="/student" element={<StudentPage/>}/>
+        <Route path="/termRegistration" element={<SubjectRegistrationPage/>}/>
+        <Route path="/subjectDetails" element={<SubjectDetailsPage/>}/>
+        <Route path="/home" element={<HomePage/>}/>
+        <Route path="/employee" element={<EmployeePage/>}/>
+        <Route path="/registeredSubjects" element={<RegisteredSubjectsPage/>}/>
+        <Route path="/registeredSubjects/registeredSubjectsDetails/:subName/:id" element={<SubjectDetailsPage/>}/>
+        <Route path="/lecturedCourses" element={<LecturedCourses/>}/>
+        <Route path="/lecturedCourseDetail/:id" element={<LecturedCourseDetail/>}/>
+        <Route path="/userProfile" element={<UserProfile/>}/>
+        <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures/>}/>
+      </Route>
+
+
       <Route path="/noAccount" element={<NoAccPage/>}/>
       <Route path="/adminPage" element={<AdminPage/>}/>
       <Route path="/garant" element={<GarantPage/>}/>
       <Route path="/lecturedCourseLectures/:subName/:id" element={<LecturedCoursesLectures/>}/>
       <Route path="/schedule" element={<SchedulePage/>}/>
+      <Route path="/" element={<LoginPage/>}/>
     </Routes>
   );
 }
