@@ -2,41 +2,48 @@ import './GarantPage.css';
 import { nanoid } from "nanoid";
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
-import { Button, Checkbox, FormControlLabel, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
-import { Fragment, useState } from 'react';
-import courseData from '../mockData/mockGarantPageCoursesData.json';
+import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableRow, TextField, Select, MenuItem, InputLabel} from '@mui/material';
+import { Fragment, useEffect, useState } from 'react';
+import { format } from 'date-fns';
 import requestData from '../mockData/mockAdminPageRequestData.json';
 import { Popup, onPopupEvent } from '../components/Popup';
-import { format } from "date-fns";
 
 function GarantPage() {
 	// COURSE TABLE DATA
-	const [courseTableData, setCourseTableData] = useState(courseData);
+	const [courseTableData, setCourseTableData] = useState([{
+		id: "",
+		shortcut: "",
+		name: "",
+		description: "",
+		credits: 0,
+		studentLimit: 0,
+		isApproved: false
+	}]);
 	const [addNewCourseFlag, setAddNewCourseFlag] = useState(true);
 
 	const [editCourseId, setEditCourseId] = useState<string | null>(null);
 	const [editCourseFormData, setEditCourseFormData] = useState({
-		shortName: "",
+		shortcut: "",
 		name: "",
 		credits: 0,
 		description: "",
 		studentLimit: 9999,
-		isApproved: false,
-		terms: []
+		isApproved: false
 	});
 	// COURSE TABLE DATA
 
 	// TERMS TABLE DATA	
 	const [termTableData, setTermTableData] = useState([{
 		id: "",
-		title: "",
+		classname: "",
 		description: "",
-		startDate: "",
-		endDate: "",
-		registrationStartDate: "",
-		registrationEndDate: "",
+		startDate: new Date().toISOString(),
+		endDate: new Date().toISOString(),
+		registrationStartDate: new Date().toISOString(),
+		registrationEndDate: new Date().toISOString(),
 		maxMark: 0,
 		studentLimit: 9999,
+		students: 0,
 		isRegistrationEnabled: true,
 		isOptional: true
 	}]);
@@ -44,18 +51,44 @@ function GarantPage() {
 
 	const [editTermId, setEditTermId] = useState<string | null>(null);
 	const [editTermFormData, setEditTermFormData] = useState({
-		title: "",
+		classname: "",
 		description: "",
-		startDate: "-",
-		endDate: "-",
-		registrationStartDate:  "-",
-		registrationEndDate:  "-",
+		startDate: new Date().toISOString(),
+		endDate: new Date().toISOString(),
+		registrationStartDate: new Date().toISOString(),
+		registrationEndDate: new Date().toISOString(),
 		maxMark: 0,
 		studentLimit: 9999,
+		students: 0,
 		isRegistrationEnabled: false,
 		isOptional: false
 	});
 	// TERMS TABLE DATA
+
+	// COURSE LECTURERS TABLE DATA
+
+	const [addNewLecturerFlag, setAddNewLecturerFlag] = useState(false);
+
+
+	const [lecturerTableData, setLecturerTableData] = useState([{
+		id: "",
+		login: "",
+		name: "",
+    	surname: ""
+	}]);
+
+	const [userTableData, setUserTableData] = useState([{
+		id: "",
+		login: "",
+		name: "",
+		surname: ""
+	}]);
+
+	const [addLecturerFormData, setAddLecturerFormData] = useState({
+		id: "",
+		login: ""
+	});
+	// COURSE LECTURERS TABLE DATA
 	
 
 	// REQEST TABLE DATA
@@ -67,6 +100,45 @@ function GarantPage() {
 	const [buttonTermPopup, setButtonTermPopup] = useState(false);
 	// POPUP OPEN/CLOSE STATES
 
+	function fetchCourseData() {
+		const url = "/course/list/garanted";
+		fetch(url).then(res => res.json()).then(data => {
+			setCourseTableData(data);
+		});
+	}
+
+	function fetchLecturerData(courseid: string) {
+		const url = "/course/list/lecturers/" + courseid;
+		fetch(url).then(res => res.json()).then(data => {
+			setLecturerTableData(data);
+		});
+	}
+
+	function fetchUserData() {
+		const url = "/user/list/all";
+		fetch(url).then(res => res.json()).then(data => {
+			setUserTableData(data);
+		});
+	}
+
+	function fetchRegistrationData(courseid: string) {
+		const url = "/user/list/all";
+		fetch(url).then(res => res.json()).then(data => {
+			setRequestTableData(data);
+		});
+	}
+
+	function fetchTermData(courseid: string) {
+		const url = "/term/teacher/list/bycourse/" + courseid;
+		fetch(url).then(res => res.json()).then(data => {
+			setTermTableData(data);
+		});
+	}
+
+	useEffect(() => {
+		fetchCourseData();
+	}, [])
+
 	// ROOMS TABLE LOGIC
 	const onTermEditButton = (event:any, termTableData:any) => {
 		onPopupEvent(event);
@@ -77,7 +149,7 @@ function GarantPage() {
 			setEditTermId(termTableData.id);
 			
 			const rowValue = {
-				title: termTableData.title,
+				classname: termTableData.classname,
 				description: termTableData.description,
 				startDate: termTableData.startDate,
 				endDate: termTableData.endDate,
@@ -85,6 +157,7 @@ function GarantPage() {
 				registrationEndDate: termTableData.registrationEndDate,
 				maxMark: termTableData.maxMark,
 				studentLimit: termTableData.studentLimit,
+				students: termTableData.students,
 				isRegistrationEnabled: termTableData.isRegistrationEnabled,
 				isOptional: termTableData.isOptional
 			}
@@ -118,27 +191,29 @@ function GarantPage() {
 
 				const newRow = {
 					id: nanoid(),
-					title: "",
+					classname: "",
 					description: "",
-					startDate: "-",
-					endDate: "-",
-					registrationStartDate: "-",
-					registrationEndDate: "-",
+					startDate: new Date().toISOString(),
+					endDate: new Date().toISOString(),
+					registrationStartDate: new Date().toISOString(),
+					registrationEndDate: new Date().toISOString(),
 					maxMark: 0,
 					studentLimit: 9999,
+					students: 0,
 					isRegistrationEnabled: false,
 					isOptional: false
 				}
 
 				const formData = {
-					title: "",
+					classname: "",
 					description: "",
-					startDate: "-",
-					endDate: "-",
-					registrationStartDate: "-",
-					registrationEndDate: "-",
+					startDate: new Date().toISOString(),
+					endDate: new Date().toISOString(),
+					registrationStartDate: new Date().toISOString(),
+					registrationEndDate: new Date().toISOString(),
 					maxMark: 0,
 					studentLimit: 9999,
+					students: 0,
 					isRegistrationEnabled: false,
 					isOptional: false
 				}
@@ -188,7 +263,7 @@ function GarantPage() {
 
 		const dataToSend = {
 			id: editTermId as any,
-			title: editTermFormData.title as any,
+			classname: editTermFormData.classname as any,
 			description: editTermFormData.description,
 			startDate: editTermFormData.startDate,
 			endDate: editTermFormData.endDate,
@@ -196,6 +271,7 @@ function GarantPage() {
 			registrationEndDate: editTermFormData.registrationEndDate,
 			maxMark: editTermFormData.maxMark,
 			studentLimit: editTermFormData.studentLimit,
+			students: editTermFormData.students,
 			isRegistrationEnabled: editTermFormData.isRegistrationEnabled,
 			isOptional: editTermFormData.isOptional,
 		}
@@ -203,7 +279,7 @@ function GarantPage() {
 		const tableDataCopy = [...termTableData];
 		const index = termTableData.findIndex((td:any) => td.id === editTermId);
 
-		if (editTermId != "" && dataToSend.title != "") {
+		if (editTermId != "" && dataToSend.classname != "") {
 			console.log(dataToSend);
 
 			fetch("/printData", {
@@ -232,11 +308,18 @@ function GarantPage() {
 
 	const handleTermFormChange = (event:any, fieldName:string) => {
 		event.preventDefault();
-
 		const fieldValue = event.target.value;
-		const newTermFormData = { ...editTermFormData, [fieldName]: fieldValue };
+		if (fieldName.includes("Date"))
+		{
+			const newTermFormData = { ...editTermFormData, [fieldName]: new Date(fieldValue) };
+			setEditTermFormData(newTermFormData);
+		}
+		else 
+		{
+			const newTermFormData = { ...editTermFormData, [fieldName]: fieldValue };
+			setEditTermFormData(newTermFormData);
+		}
 		
-		setEditTermFormData(newTermFormData);
 	}
 
 	// Checkboxes have their value in different parameter
@@ -250,6 +333,88 @@ function GarantPage() {
 	}
 	// TERMS TABLE LOGIC
 
+	// LECTURERS OF COURSE LOGIC
+	const onLecturerAddButton = (event:any) => {
+		event.preventDefault();
+
+		const formData = {
+			id: "",
+			login: ""
+		}
+
+		fetchUserData()
+		setAddNewLecturerFlag(true);
+		setAddLecturerFormData(formData);
+	}
+
+	const onLecturerSaveButton = (event:any) => {
+
+		event.preventDefault();
+
+		const data = lecturerTableData.filter(
+			(data) => 
+				data.id === addLecturerFormData.id
+			);
+		
+		if (data.length == 0 && addLecturerFormData.id != "") {
+
+			const newLecturer = userTableData.filter(
+				(data) => 
+					data.id === addLecturerFormData.id
+				)[0];
+
+			const dataToSend = {
+				id: addLecturerFormData.id,
+				login: addLecturerFormData.login,
+				name: newLecturer.name,
+				surname: newLecturer.surname
+			}
+	
+			const tableDataCopy = [...lecturerTableData];
+			const index = lecturerTableData.length;
+	
+			tableDataCopy[index] = dataToSend;
+			setLecturerTableData(tableDataCopy);
+		}
+
+		setAddNewLecturerFlag(false);
+		setAddLecturerFormData({
+			id: "",
+			login: ""
+		});
+	}
+
+	const onLecturerDeleteButton = (event:any, tableRowData:any) => {
+		event.preventDefault();
+		
+		if (!addNewLecturerFlag) {
+			const tableDataCopy = [...lecturerTableData];
+			const index = lecturerTableData.findIndex((td:any) => td.id === tableRowData.id);
+			
+			tableDataCopy.splice(index, 1);
+
+			setLecturerTableData(tableDataCopy);
+		}
+	}
+
+	const handleLecturerFormChange = (event:any) => {
+		event.preventDefault();
+
+		const userid = event.target.value;
+		const userlogin = userTableData.filter(
+			(data) => 
+				data.id === userid
+			)[0].login;
+
+		const newFormData = {
+			id: userid,
+			login: userlogin
+		}
+		
+		setAddLecturerFormData(newFormData);
+	}
+	// LECTURERS OF COURSE LOGIC
+
 	// COURSE TABLE LOGIC
 	const onCourseEditButton = (event:any, courseTableData:any) => {
 		onPopupEvent(event);
@@ -259,15 +424,18 @@ function GarantPage() {
 			setEditCourseId(courseTableData.id);
 			
 			const rowValue = {
-				shortName: courseTableData.shortName,
+				shortcut: courseTableData.shortcut,
 				name: courseTableData.name,
 				credits: courseTableData.credits,
 				description: courseTableData.description,
 				studentLimit: courseTableData.studentLimit,
-				isApproved: courseTableData.isApproved,
-				terms: courseTableData.terms
+				isApproved: courseTableData.isApproved
 			}
-			setTermTableData(rowValue.terms);
+			//fetch terms
+			fetchTermData(courseTableData.id)
+			fetchLecturerData(courseTableData.id)
+			fetchRegistrationData(courseTableData.id)
+			setLecturerTableData([]);
 			setEditCourseFormData(rowValue);
 		}
 	}
@@ -296,30 +464,28 @@ function GarantPage() {
 
 			const newRow = {
 				id: nanoid(),
-				shortName: "",
+				shortcut: "",
 				name: "",
 				credits: 0,
 				description: "",
 				studentLimit: 9999,
-				isApproved: false,
-				terms: []
+				isApproved: false
 			}
 
 			const formData = {
-				shortName: "",
+				shortcut: "",
 				name: "",
 				credits: 0,
 				description: "",
 				studentLimit: 9999,
-				isApproved: false,
-				terms: []
+				isApproved: false
 			}
 
 			const newData = [...courseTableData, newRow];
 
 			console.log(newRow);
 			console.log(newData);
-			setTermTableData(formData.terms);
+			setTermTableData([]);
 			setEditCourseFormData(formData);
 			setCourseTableData(newData);
 			setEditCourseId(newRow.id);
@@ -360,19 +526,18 @@ function GarantPage() {
 
 		const dataToSend = {
 			id: editCourseId as any,
-			shortName: editCourseFormData.shortName,
+			shortcut: editCourseFormData.shortcut,
 			name: editCourseFormData.name,
 			credits: editCourseFormData.credits,
 			description: editCourseFormData.description,
 			studentLimit: editCourseFormData.studentLimit,
-			isApproved: editCourseFormData.isApproved,
-			terms: termTableData
+			isApproved: editCourseFormData.isApproved
 		}
 
 		const tableDataCopy = [...courseTableData];
 		const index = courseTableData.findIndex((td:any) => td.id === editCourseId);
 
-		if (editCourseId != "" && dataToSend.shortName != "" && dataToSend.name != "") {
+		if (editCourseId != "" && dataToSend.shortcut != "" && dataToSend.name != "") {
 			console.log(dataToSend);
 
 			fetch("/printData", {
@@ -464,8 +629,6 @@ function GarantPage() {
 	}
 	// REQUEST TABLE LOGIC
 
-
-
 	return (
 	<div>	
 		<div className="blurable">
@@ -497,7 +660,7 @@ function GarantPage() {
 								{courseTableData.map((td:any) => (
 									<Fragment>
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-												<TableCell sx={{ borderBottom: '0'}}>{td.shortName}</TableCell>
+												<TableCell sx={{ borderBottom: '0'}}>{td.shortcut}</TableCell>
 												<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
 												<TableCell sx={{ borderBottom: '0'}}>{td.credits}</TableCell>
 												<TableCell sx={{ borderBottom: '0'}}>{td.studentLimit}</TableCell>
@@ -562,115 +725,186 @@ function GarantPage() {
 			<div id="coursePopup">
 				<Popup triggered={buttonCoursePopup} setTrigger={setButtonCoursePopup}>
 					<div className='popupScroll'>
-						<h1>Kurz {editCourseFormData.shortName}</h1>
+						<h1>Kurz {editCourseFormData.shortcut}</h1>
 						<Fragment>
-							<TextField 
-								value={editCourseFormData.shortName}
-								size="small" 
-								placeholder='Zkratka' 
-								id="standard-basic" 
-								label="Zkratka" 
-								variant="standard" 
-								onChange={(event) => handleCourseFormChange(event, "shortName")}
-							/>
-							<br/><br/>
-							<TextField 
-								value={editCourseFormData.name}
-								size="medium" 
-								placeholder='Nazev' 
-								id="standard-basic" 
-								label="Nazev" 
-								variant="standard" 
-								onChange={(event) => handleCourseFormChange(event, "name")}
-							/>
-							<br/><br/>
-							<textarea 
-								value={editCourseFormData.description}
-								rows={9}
-								placeholder = "Popis"
-								onChange={(event) => handleCourseFormChange(event, "description")}
-							/>
-							<br/><br/>
-							<TextField 
-								value={editCourseFormData.studentLimit}
-								size="small" 
-								placeholder= "Limit studentu" 
-								id="standard-basic" 
-								label="Pocet studentu" 
-								variant="standard" 
-								onChange={(event) => handleCourseFormChange(event, "studentLimit")}
-							/>
-							<br/><br/>
-							<TextField 
-								value={editCourseFormData.credits}
-								size="small" 
-								placeholder= "Pocet kreditu" 
-								id="standard-basic" 
-								label="Pocet kreditu" 
-								variant="standard" 
-								onChange={(event) => handleCourseFormChange(event, "credits")}
-							/>
-							<br/><br/>
-							<label>Schvaleno:</label>
-							<Checkbox
-								disabled 
-								checked={editCourseFormData.isApproved}
-							/>
-							<br/>
-							<Button onClick={onCourseSaveButton}>Ulozit</Button>
-							<Button onClick={onCourseCloseButton}>Zarvit</Button>
-							<div id="termTable">
-					<h2>Sprava terminu {editCourseFormData.shortName}</h2>
-					<form>
-						<Table sx={{ boxShadow: 2}}	>
-							<colgroup>
-								<col style={{width:'25%'}}/>
-								<col style={{width:'25%'}}/>
-								<col style={{width:'25%'}}/>
-								<col style={{width:'5%'}}/>
-								<col style={{width:'5%'}}/>
-								<col style={{width:'15%'}}/>
-							</colgroup>
-							<TableHead>
-								<TableRow>
-									<TableCell>Nazev</TableCell>
-									<TableCell>Zacatek</TableCell>
-									<TableCell>Konec</TableCell>
-									<TableCell>Registrace</TableCell>
-									<TableCell>Volitelne</TableCell>
-									<TableCell onClick={onTermAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{termTableData.map((td:any) => (
-									<Fragment>
-										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-												<TableCell sx={{ borderBottom: '0'}}>{td.title}</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>{td.startDate}</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>{td.endDate}</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>
-													<Checkbox
-														disabled 
-														checked={td.isRegistrationEnabled} 
-													/>
-												</TableCell>
-												<TableCell sx={{ borderBottom: '0'}}>
-													<Checkbox
-														disabled 
-														checked={td.isOptional} 
-													/>
-												</TableCell>
-												<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
-													<Button onClick={(event) => onTermEditButton(event, td)}><i className='far fa-edit'></i></Button>
-													<Button onClick={(event) => onTermDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
-												</TableCell>
+							<div id="courseEditSpace">
+								<TextField 
+									value={editCourseFormData.shortcut}
+									size="small" 
+									placeholder='Zkratka' 
+									id="standard-basic" 
+									label="Zkratka" 
+									variant="standard" 
+									onChange={(event) => handleCourseFormChange(event, "shortcut")}
+								/>
+								<br/><br/>
+								<TextField 
+									value={editCourseFormData.name}
+									size="medium" 
+									placeholder='Nazev' 
+									id="standard-basic" 
+									label="Nazev" 
+									variant="standard" 
+									onChange={(event) => handleCourseFormChange(event, "name")}
+								/>
+								<br/><br/>
+								<textarea 
+									value={editCourseFormData.description}
+									rows={9}
+									placeholder = "Popis"
+									onChange={(event) => handleCourseFormChange(event, "description")}
+								/>
+								<br/><br/>
+								<TextField 
+									value={editCourseFormData.studentLimit}
+									size="small" 
+									placeholder= "Limit studentu" 
+									id="standard-basic" 
+									label="Pocet studentu" 
+									variant="standard" 
+									onChange={(event) => handleCourseFormChange(event, "studentLimit")}
+								/>
+								<br/><br/>
+								<TextField 
+									value={editCourseFormData.credits}
+									size="small" 
+									placeholder= "Pocet kreditu" 
+									id="standard-basic" 
+									label="Pocet kreditu" 
+									variant="standard" 
+									onChange={(event) => handleCourseFormChange(event, "credits")}
+								/>
+								<br/><br/>
+								<label>Schvaleno:</label>
+								<Checkbox
+									disabled 
+									checked={editCourseFormData.isApproved}
+								/>
+								<br/>
+								<Button onClick={onCourseSaveButton}>Ulozit</Button>
+								<Button onClick={onCourseCloseButton}>Zarvit</Button>
+							</div>
+							<div id="lecturersOfCourse">
+								<h2>Prednasejici</h2>
+								<form>
+									<Table sx={{ boxShadow: 2}}>
+										<colgroup>
+											<col style={{width:'30%'}}/>
+											<col style={{width:'30%'}}/>
+											<col style={{width:'30%'}}/>
+											<col style={{width:'10%'}}/>
+										</colgroup>
+										<TableHead>
+											<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+												<TableCell>Login</TableCell>
+												<TableCell>Jmeno</TableCell>
+												<TableCell>Prijmeni</TableCell>
+												<TableCell onClick={onLecturerAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 											</TableRow>
-									</Fragment>
-								))}
-							</TableBody>
-						</Table>
-					</form>
-				</div>
+										</TableHead>
+										<TableBody>
+											{lecturerTableData.map((td:any) => (
+												<Fragment>
+													{
+													<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+														<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
+														<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
+														<TableCell sx={{ borderBottom: '0'}}>{td.surname}</TableCell>
+														<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
+															<Button onClick={(event) => onLecturerDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
+														</TableCell>
+													</TableRow>
+													}
+												</Fragment>
+											))}
+											{
+												<Fragment>
+													{
+														(addNewLecturerFlag && userTableData.length > 0) ?
+														<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+															<TableCell>
+																	<InputLabel id="lectureLogin">Login uzivatele</InputLabel>
+																	<Select
+																		labelId="lectureLogin"
+																		name='login'
+																		id="standard-basic"
+																		value={addLecturerFormData.id}
+																		label="Login uzivatele"
+																		placeholder='xlogin00' 
+																		onChange={(event) => handleLecturerFormChange(event)}
+																	>
+																		{
+																		userTableData.map((td:any) => (
+																			<MenuItem value={td.id}>{td.login}</MenuItem>
+																		))
+																		}
+																	</Select>
+															</TableCell>
+															<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
+																<Button onClick={onLecturerSaveButton}>Ulozit</Button>
+															</TableCell>
+														</TableRow>
+														:
+														<></>
+													}
+												</Fragment>
+											}
+										</TableBody>
+									</Table>
+								</form>
+							</div>
+							<div id="termTable">
+								<h2>Sprava terminu {editCourseFormData.shortcut}</h2>
+								<form>
+									<Table sx={{ boxShadow: 2}}	>
+										<colgroup>
+											<col style={{width:'25%'}}/>
+											<col style={{width:'25%'}}/>
+											<col style={{width:'25%'}}/>
+											<col style={{width:'5%'}}/>
+											<col style={{width:'5%'}}/>
+											<col style={{width:'15%'}}/>
+										</colgroup>
+										<TableHead>
+											<TableRow>
+												<TableCell>Nazev</TableCell>
+												<TableCell>Zacatek</TableCell>
+												<TableCell>Konec</TableCell>
+												<TableCell>Registrace</TableCell>
+												<TableCell>Volitelne</TableCell>
+												<TableCell onClick={onTermAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
+											</TableRow>
+										</TableHead>
+										<TableBody>
+											{termTableData.map((td:any) => (
+												<Fragment>
+													<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+															<TableCell sx={{ borderBottom: '0'}}>{td.classname}</TableCell>
+															<TableCell sx={{ borderBottom: '0'}}>{format(new Date(td.startDate), "dd/mm/yyyy")}</TableCell>
+															<TableCell sx={{ borderBottom: '0'}}>{format(new Date(td.endDate), "dd/mm/yyyy")}</TableCell>
+															<TableCell sx={{ borderBottom: '0'}}>
+																<Checkbox
+																	disabled 
+																	checked={td.isRegistrationEnabled} 
+																/>
+															</TableCell>
+															<TableCell sx={{ borderBottom: '0'}}>
+																<Checkbox
+																	disabled 
+																	checked={td.isOptional} 
+																/>
+															</TableCell>
+															<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
+																<Button onClick={(event) => onTermEditButton(event, td)}><i className='far fa-edit'></i></Button>
+																<Button onClick={(event) => onTermDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
+															</TableCell>
+														</TableRow>
+												</Fragment>
+											))}
+										</TableBody>
+									</Table>
+								</form>
+							</div>
 						</Fragment>
 					</div>
 				</Popup>
@@ -678,16 +912,16 @@ function GarantPage() {
 			<div id="termPopup">
 				<Popup triggered={buttonTermPopup} setTrigger={setButtonTermPopup}>
 					<div className='popupScroll'>
-						<h1>Termin {editCourseFormData.shortName}</h1>
+						<h1>Termin {editCourseFormData.shortcut}</h1>
 						<Fragment>
 							<TextField 
-								value={editTermFormData.title}
+								value={editTermFormData.classname}
 								size="small" 
 								placeholder='Nazev' 
 								id="standard-basic" 
 								label="Nazev" 
 								variant="standard" 
-								onChange={(event) => handleTermFormChange(event, "title")}
+								onChange={(event) => handleTermFormChange(event, "classname")}
 							/>
 							<br/><br/>
 							<textarea 
@@ -697,23 +931,23 @@ function GarantPage() {
 								onChange={(event) => handleTermFormChange(event, "description")}
 							/>
 							<br/><br/>
+							<InputLabel id="startdate">Zacatek</InputLabel>
 							<TextField 
-								value={editTermFormData.startDate}
-								type="date"
+								value={(new Date(editTermFormData.startDate)).toISOString().substring(0, 16)}
+								type="datetime-local"
 								size="small" 
 								placeholder='' 
 								id="standard-basic" 
-								label="Zacatek" 
 								variant="standard" 
 								onChange={(event) => handleTermFormChange(event, "startDate")}
 							/>
+							<InputLabel id="enddate">Konec</InputLabel>
 							<TextField 
-								value={editTermFormData.endDate}
-								type="date"
+								value={(new Date(editTermFormData.endDate)).toISOString().substring(0, 16)}
+								type="datetime-local"
 								size="small" 
 								placeholder='' 
 								id="standard-basic" 
-								label="Konec" 
 								variant="standard" 
 								onChange={(event) => handleTermFormChange(event, "endDate")}
 							/>
@@ -722,23 +956,21 @@ function GarantPage() {
 								{
 									editTermFormData.isRegistrationEnabled? 
 									<div>
+										<InputLabel id="rstartdate">Zacatek registrace</InputLabel>
 										<TextField 
-											value={editTermFormData.registrationStartDate}
-											type="date"
+											value={(new Date(editTermFormData.registrationStartDate)).toISOString().substring(0, 16)}
+											type="datetime-local"
 											size="small" 
-											placeholder='' 
 											id="standard-basic" 
-											label="Zacatek registrace" 
 											variant="standard" 
 											onChange={(event) => handleTermFormChange(event, "registrationStartDate")}
 										/>
+										<InputLabel id="renddate">Konec registrace</InputLabel>
 										<TextField 
-											value={editTermFormData.registrationEndDate}
-											type="date"
+											value={(new Date(editTermFormData.registrationEndDate)).toISOString().substring(0, 16)}
+											type="datetime-local"
 											size="small" 
-											placeholder='' 
 											id="standard-basic" 
-											label="Konec registrace" 
 											variant="standard" 
 											onChange={(event) => handleTermFormChange(event, "registrationEndDate")}
 										/>
@@ -791,6 +1023,7 @@ function GarantPage() {
 		</div>
 	</div>
 	);
+	
 }
 
 export default GarantPage;

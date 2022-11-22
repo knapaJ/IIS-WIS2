@@ -40,7 +40,6 @@ function App() {
         <Route path="/garant" element={<GarantPage/>}/>
       </Route>
 
-
       <Route path="/noAccount" element={<NoAccPage/>}/>
       <Route path="/" element={<LoginPage/>}/>
     </Routes>
