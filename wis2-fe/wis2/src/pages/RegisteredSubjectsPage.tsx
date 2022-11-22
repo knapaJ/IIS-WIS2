@@ -10,9 +10,7 @@ function RegisteredSubjectsPage() {
 	//const [year, setYear] = useState("ziadenrok");
 	
 	useEffect(() => {
-		window.location.reload();
 		fetch('/course/list/registered').then(res => res.json()).then(recData => {
-			console.log(recData);
 			setTableData(recData);
 		});
 	}, []);
