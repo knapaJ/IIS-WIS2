@@ -15,7 +15,7 @@ function LogoutButton({}: Props) {
         method:"GET",
         cache: "no-cache",
         headers:{
-          "content_type":"application/json"
+          "content-type":"application/json"
         }
 			}
 		).then((response) => {

@@ -14,7 +14,7 @@ const PrivateRouteUser = () => {
       method:"GET",
       cache: "no-cache",
       headers:{
-        "content_type":"application/json",
+        "content-type":"application/json",
       }})
     .then(res => res.json()).then(recData => {
       console.log("DATA:",recData.level);

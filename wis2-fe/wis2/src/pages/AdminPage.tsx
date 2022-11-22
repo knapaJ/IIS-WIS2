@@ -79,6 +79,17 @@ function AdminPage() {
 	}
 	// ROOM DATA FETCH
 
+	// COURSE DATA FETCH
+	function fetchCourseData() {
+		const url = "/course/list/notapproved";
+		fetch(url).then(res => res.json()).then(data => {
+			if (data != undefined) {
+				setRequestTableData(data);
+			}
+		});
+	}
+	// COURSE DATA FETCH
+
 
 	useEffect(() => {
 		fetchData(1);
@@ -87,6 +98,10 @@ function AdminPage() {
 	
 	useEffect(() => {
 		fetchRoomData(1);
+	}, [])
+
+	useEffect(() => {
+		fetchCourseData();
 	}, [])
 
 
@@ -162,7 +177,7 @@ function AdminPage() {
 				method:"DELETE",
 				cache: "no-cache",
 				headers:{
-					"content_type":"application/json",
+					"content-type":"application/json",
 				},
 				body:JSON.stringify(dataToSend)
 				}
@@ -209,7 +224,7 @@ function AdminPage() {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
@@ -317,7 +332,7 @@ function AdminPage() {
 				method:"DELETE",
 				cache: "no-cache",
 				headers:{
-					"content_type":"application/json",
+					"content-type":"application/json",
 				},
 				body:JSON.stringify(dataToSend)
 				}
@@ -368,7 +383,7 @@ function AdminPage() {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
@@ -411,52 +426,54 @@ function AdminPage() {
 		const dataToSend = {
 			id:tableData.id
 		}
-		console.log("COURSE ", tableData.courseId, "HAS BEEN ACCEPTED");
 
 		const tableDataCopy:any = [...requestTableData];
 		const index = requestTableData.findIndex((td:any) => td.id === tableData.id);
-		
 		tableDataCopy.splice(index, 1);
+		setRequestTableData(tableDataCopy);
 
-		fetch("/printData", {
+		fetch("/course/approve", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
-		).then(res => res.json()).then(recData => {
-			console.log(recData);
+		).then((response) => {
+			if (!response.ok) {
+				alert("Incorrect data");		
+			}
+		}).then((recData) => {
+			fetchCourseData();
 		});
-
-		setRequestTableData(tableDataCopy);
 	}
 
 	const onDeclineClicked = (event:any, tableData:any) => {
 		const dataToSend = {
 			id:tableData.id
 		}
-		console.log("COURSE ", tableData.courseId, "HAS BEEN DECLINED");
 		
 		const tableDataCopy = [...requestTableData];
 		const index = requestTableData.findIndex((td:any) => td.id === tableData.id);
-		
 		tableDataCopy.splice(index, 1);
+		setRequestTableData(tableDataCopy);
 
-		fetch("/printData", {
-			method:"POST",
+		fetch("/course/delete", {
+			method:"DELETE",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
-		).then(res => res.json()).then(recData => {
-			console.log(recData);
+		).then((response) => {
+			if (!response.ok) {
+				alert("Incorrect data");		
+			}
+		}).then((recData) => {
+			fetchCourseData();
 		});
-
-		setRequestTableData(tableDataCopy);
 	}
 	// REQUEST TABLE LOGIC
 
@@ -609,6 +626,7 @@ function AdminPage() {
 							<TableRow>
 								<TableCell>Login</TableCell>
 								<TableCell>Meno</TableCell>
+								<TableCell>Priezvisko</TableCell>
 								<TableCell>Skr. predmetu</TableCell>
 								<TableCell>Predmet</TableCell>
 								<TableCell></TableCell>
@@ -619,7 +637,8 @@ function AdminPage() {
 								<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 									<TableCell sx={{ borderBottom: '0'}}>{td.userLogin}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}}>{td.userName}</TableCell>
-									<TableCell sx={{ borderBottom: '0'}}>{td.courseId}</TableCell>
+									<TableCell sx={{ borderBottom: '0'}}>{td.userSurname}</TableCell>
+									<TableCell sx={{ borderBottom: '0'}}>{td.courseShortcut}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}}>{td.courseName}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
 										<Button onClick={(event) => onAcceptClicked(event, td)}><i className="fa-solid fa-thumbs-up"></i></Button>

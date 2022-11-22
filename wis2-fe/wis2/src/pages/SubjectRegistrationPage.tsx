@@ -21,7 +21,7 @@ function SubjectRegistrationPage() {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(tableData)
 			}
