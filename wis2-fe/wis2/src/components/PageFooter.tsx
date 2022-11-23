@@ -1,9 +1,6 @@
 import './PageFooter.css';
 
-type Props = {
-}
-
-function PageFooter({}: Props) {
+function PageFooter() {
   return (
     <div id="footer">
 			<div id="copyrightFooter">

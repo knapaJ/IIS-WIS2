@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import './PageHeader.css';
-import { Link } from 'react-router-dom';
 import LogoutButton from './LogoutButton';
 
 type Props = {

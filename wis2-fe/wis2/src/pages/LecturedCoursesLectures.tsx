@@ -2,9 +2,8 @@ import './LecturedCourses.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import data from '../mockData/mockLecturerClassesTable.json';
-import dropDownData from '../mockData/mockDropDownData.json';
 import { useEffect, useState } from 'react';
-import { Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
+import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 
 function LecturedCourses() {

@@ -3,7 +3,6 @@ import './HomePage.css';
 import LinkButton from '../components/LinkButton';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
-import { useEffect } from 'react';
 
 function HomePage() {
     return (

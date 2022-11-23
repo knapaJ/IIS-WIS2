@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './LinkButton.css';
 import { Link } from 'react-router-dom';
 

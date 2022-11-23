@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './LecturedCourses.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
@@ -29,7 +28,7 @@ function LecturedCourses() {
 		var url = "/term/teacher/detail/" + id + "/" + currentPage;
 		fetch(url).then(res => res.json()).then(recData => {
 			console.log("data", recData);
-			if (recData.marks != undefined) {
+			if (recData.marks !== undefined) {
 				setTableData(recData.marks);
 			}
 			setCurrentPage(recData.currentPage);
@@ -146,7 +145,7 @@ function LecturedCourses() {
 						<TableBody>
 							{tableData.map((td:any) => (
 								<Fragment>
-									{pointsId == td.mark_id ? 
+									{pointsId === td.mark_id ? 
 										<TableRow key={td.mark_id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>
 												{td.name}

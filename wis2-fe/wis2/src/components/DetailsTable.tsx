@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 type Props = {

@@ -1,8 +1,8 @@
 import './LoginPage.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LinkButton from '../components/LinkButton';
 
 function LoginPage() {
@@ -41,7 +41,7 @@ function LoginPage() {
 		).then(res => res.json()).then(recData => {
 			
 			console.log("recData", recData);
-			if (recData.status == "OK") {
+			if (recData.status === "OK") {
 				navigate("/home", {replace:true})
 			} else {
 				alert("Zle heslo alebo meno :(");

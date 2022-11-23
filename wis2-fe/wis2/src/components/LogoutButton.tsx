@@ -1,11 +1,8 @@
 import './LogoutButton.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-type Props = {
-}
-
-function LogoutButton({}: Props) {
+function LogoutButton() {
 
   let navigate = useNavigate();
 

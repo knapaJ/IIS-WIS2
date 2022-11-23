@@ -51,9 +51,9 @@ function AdminPage() {
 
 	// USER DATA FETCH
 	function fetchData(number:number) {
-		const url = "/user/list/all/" + number;
+		const url = "/user/list/admin/all/" + number;
 		fetch(url).then(res => res.json()).then(data => {
-			if (data.users != undefined) {
+			if (data.users !== undefined) {
 				setTableData(data.users);
 				console.log(data.users);
 				
@@ -68,7 +68,7 @@ function AdminPage() {
 	function fetchRoomData(number:number) {
 		const url = "/classroom/list/" + number;
 		fetch(url).then(res => res.json()).then(data => {
-			if (data.rooms != undefined) {
+			if (data.rooms !== undefined) {
 				setRoomTableData(data.rooms);
 				console.log("ROOMS:", data.rooms);
 				
@@ -83,7 +83,7 @@ function AdminPage() {
 	function fetchCourseData() {
 		const url = "/course/list/notapproved";
 		fetch(url).then(res => res.json()).then(data => {
-			if (data != undefined) {
+			if (data !== undefined) {
 				setRequestTableData(data);
 			}
 		});
@@ -235,7 +235,7 @@ function AdminPage() {
 		}).then((recData) => {
 			const url = "/classroom/list/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
-				if (data.rooms != undefined) {
+				if (data.rooms !== undefined) {
 					console.log(data.rooms);
 					setRoomTableData(data.rooms);
 					setRoomMaxPagesNumber(data.totalPages);
@@ -395,7 +395,7 @@ function AdminPage() {
 			console.log(recData);
 			const url = "/user/list/all/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
-				if (data.users != undefined) {
+				if (data.users !== undefined) {
 					setTableData(data.users);
 					setMaxPagesNumber(data.totalPages);
 					setPageNumber(data.currentPage);
@@ -508,7 +508,7 @@ function AdminPage() {
 							{tableData.map((td:any) => (
 								<Fragment>
 									{
-									editId != td.id ?
+									editId !== td.id ?
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
@@ -576,7 +576,7 @@ function AdminPage() {
 							{roomTableData.map((td:any) => (
 								<Fragment>
 									{
-									editRoomId != td.id ?
+									editRoomId !== td.id ?
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>{td.building}</TableCell>

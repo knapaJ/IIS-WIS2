@@ -28,6 +28,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "predeploy": "npm run build",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -51,5 +52,8 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "http://147.229.183.0:5000/"
+  "proxy": "http://147.229.183.0:5000/",
+  "devDependencies": {
+    "gh-pages": "^4.0.0"
+  }
 }

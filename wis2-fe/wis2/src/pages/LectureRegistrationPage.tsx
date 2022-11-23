@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import './SubjectRegistrationPage.css';
+import './LectureRegistrationPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
 import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-function SubjectRegistrationPage() {
+function LectureRegistrationPage() {
 	const [tableData, setTableData] = useState(data);
 	
 	useEffect(() => {
@@ -74,4 +74,4 @@ function SubjectRegistrationPage() {
 	);
 }
 
-export default SubjectRegistrationPage;
+export default LectureRegistrationPage;

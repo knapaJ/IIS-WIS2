@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './EmployeePage.css';
 import LinkButton from '../components/LinkButton';
 import PageHeader from '../components/PageHeader';

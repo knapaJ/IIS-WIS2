@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import logo from './logo.svg';
 import './SubjectDetailsPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';

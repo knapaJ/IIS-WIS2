@@ -15,6 +15,7 @@ import LoginPage from './pages/LoginPage';
 import LecturedCoursesLectures from './pages/LecturedCoursesLectures';
 import PrivateRouteUser from './components/ProtectedRouteUser';
 import PrivateRouteAdmin from './components/ProtectedRouteAdmin';
+import LectureRegistrationPage from './pages/LectureRegistrationPage';
 
 function App() {
 
@@ -36,9 +37,10 @@ function App() {
         <Route path="/lecturedCourseDetail/:id" element={<LecturedCourseDetail/>}/>
         <Route path="/userProfile" element={<UserProfile/>}/>
         <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures/>}/>
+        <Route path="/lecureRegistrationPage/:course" element={<LectureRegistrationPage/>}/>
       </Route>
 
-
+      
       <Route path="/noAccount" element={<NoAccPage/>}/>
       <Route path="/" element={<LoginPage/>}/>
     </Routes>

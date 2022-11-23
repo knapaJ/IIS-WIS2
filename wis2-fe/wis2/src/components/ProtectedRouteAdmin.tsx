@@ -1,5 +1,5 @@
-import { Navigate, Outlet, Route, Routes } from 'react-router-dom';
-import { useEffect, useMemo, useState } from 'react';
+import { Navigate, Outlet } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 const PrivateRouteAdmin = () => {
   const [eauth, setAuth] = useState(false);
@@ -18,7 +18,7 @@ const PrivateRouteAdmin = () => {
       }})
     .then(res => res.json()).then(recData => {
       console.log("DATA:",recData.level);
-      if (recData.level == true) {
+      if (recData.level === true) {
         console.log("hej");
         setLoading(false)
         setAuth(true)
