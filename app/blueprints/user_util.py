@@ -1,6 +1,7 @@
 from app.models.User import User, UserType
 from functools import wraps
 from flask import abort, session
+from sys import stderr
 
 
 def user_auth(level: UserType):
@@ -23,6 +24,8 @@ def need_user_logged(func):
     def wrapped(*args, **kwargs):
         if "user" not in session:
             abort(403, description="No user logged in")
-        logged_user = User.query.filter_by(uuid=session["user"]).first_or_404()
+        logged_user = User.query.filter_by(uuid=session["user"]).first()
+        if logged_user is None:
+            abort(403, description="Unknown user")
         return func(logged_user, *args, **kwargs)
     return wrapped

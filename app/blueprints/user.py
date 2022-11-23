@@ -34,7 +34,7 @@ def register_user():
     """
     data = request.get_json()
     try:
-        new_user = User(data["login"], data["name"], data["surname"], data["e_mail"],
+        new_user = User(data["login"], data["name"], data["surname"], data["email"],
                         UserType.USER, data["password"])
         db.session.add(new_user)
         db.session.commit()
@@ -64,7 +64,6 @@ def login():
         abort(400, description="Missing keys in JSON data")
 
 
-@user_endpoint.route("/auth", defaults={'level': UserType.USER})
 @user_endpoint.route("/auth/<string:level>", methods=["GET"])
 def check_auth(level: str):
     if "user" not in session:
@@ -73,7 +72,7 @@ def check_auth(level: str):
     try:
         req_level = UserType[level.upper()]
         if not user.user_type.value >= req_level.value:
-            return jsonify(level=False), 200
+            return jsonify(level=False), 403
         else:
             return jsonify(level=True), 200
     except KeyError:
@@ -103,10 +102,10 @@ def change_passwd(user):
     return jsonify(status="OK"), 200
 
 
-@user_endpoint.route("/list/all/<int:page>", methods=["GET"])
+@user_endpoint.route("/list/admin/all/<int:page>", methods=["GET"])
 @user_auth(UserType.ADMIN)
 def list_all_users(page):
-    users_paged = db.paginate(db.select(User).order_by(User.surname), page=page, per_page=20)
+    users_paged = db.paginate(db.select(User).order_by(User.surname), page=page, per_page=10)
     ret = {
         "totalPages": users_paged.pages,
         "currentPage": users_paged.page,
@@ -116,7 +115,8 @@ def list_all_users(page):
         ret["users"].append({
             "id": user.uuid,
             "login": user.login,
-            "name": f"{user.name} {user.surname}",
+            "name": user.name,
+            "surname": user.surname,
             "email": user.e_mail
         })
     return jsonify(ret), 200
@@ -128,8 +128,8 @@ def admin_edit_user():
     data = request.get_json()
     try:
         target_user: User = User.query.filter_by(uuid=data["id"]).first_or_404(description="Target user not found")
-        target_user.name, *surname = data["name"].split(' ')
-        target_user.surname = ' '.join(surname)
+        target_user.name = data["name"]
+        target_user.surname = data["surname"]
         target_user.login = data["login"]
         target_user.e_mail = data["email"]
         if not data["password"] == "":
@@ -159,3 +159,20 @@ def remove_user(user):
         return jsonify(status='OK'), 200
     except KeyError:
         abort_bad_json()
+
+
+@user_endpoint.route('/list/all', methods=["GET"])
+@user_auth(UserType.USER)
+@need_user_logged
+def list_users(user):
+    ret = []
+    for other_user in User.query.all():
+        if user.uuid == other_user.uuid:
+            continue
+        ret.append({
+            'id': other_user.uuid,
+            'name': other_user.name,
+            'surname': other_user.surname,
+            'login': other_user.login
+        })
+    return jsonify(ret), 200
