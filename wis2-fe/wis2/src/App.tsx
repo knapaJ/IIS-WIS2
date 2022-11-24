@@ -37,7 +37,7 @@ function App() {
         <Route path="/lecturedCourseDetail/:id" element={<LecturedCourseDetail/>}/>
         <Route path="/userProfile" element={<UserProfile/>}/>
         <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures/>}/>
-        <Route path="/garant" element={<GarantPage/>}/>
+        <Route path="/garant" element={<GarantPage apiPath=''/>}/>
       </Route>
 
       <Route path="/noAccount" element={<NoAccPage/>}/>
