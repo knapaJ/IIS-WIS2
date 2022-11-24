@@ -3,7 +3,8 @@
       "id": "0",
       "userLogin": "loading",
       "userName": "loading",
-      "courseId": "loading",
+      "userSurname": "loading",
+      "courseShortcut": "loading",
       "courseName": "loading"
     }
 ]

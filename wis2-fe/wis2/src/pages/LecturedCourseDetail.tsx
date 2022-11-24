@@ -6,7 +6,11 @@ import data from '../mockData/mockInputTableData.json'
 import { useParams } from 'react-router-dom';
 import { Button, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
 
-function LecturedCourses() {
+type Props = {
+	apiPath:string
+}
+
+function LecturedCourses({apiPath}:Props) {
 	const [tableData, setTableData] = useState(data.marks);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [maxPages, setMaxPages] = useState(1);
@@ -25,7 +29,7 @@ function LecturedCourses() {
 	useEffect(() => {console.log("edit:", pointsId)}, [pointsId])
 
 	function loadData(currentPage:number) {
-		var url = "/term/teacher/detail/" + id + "/" + currentPage;
+		var url = apiPath + "/term/teacher/detail/" + id + "/" + currentPage;
 		fetch(url).then(res => res.json()).then(recData => {
 			console.log("data", recData);
 			if (recData.marks !== undefined) {
@@ -100,10 +104,10 @@ function LecturedCourses() {
 
 		console.log(editPoints)
 		
-		var url = "/term/teacher/detail/" + id + "/" + currentPage;
+		var url = apiPath + "/term/teacher/detail/" + id + "/" + currentPage;
 		
 		console.log("send data");
-		fetch("/term/teacher/edit", {
+		fetch(apiPath + "/term/teacher/edit", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
@@ -129,7 +133,7 @@ function LecturedCourses() {
 
 	return (
 		<div>
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
+			<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
 				<div id="lecturedCoursesMainContent">
 				<form onSubmit={handleEditFormSubmit}>
 					<Table id="inputTable" sx={{ boxShadow: 2}}>

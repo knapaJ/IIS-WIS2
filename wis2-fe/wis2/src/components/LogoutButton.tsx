@@ -2,13 +2,17 @@ import './LogoutButton.css';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
-function LogoutButton() {
+type Props = {
+  apiPath:string
+}
+
+function LogoutButton({apiPath}:Props) {
 
   let navigate = useNavigate();
 
   const logoutUser = (event:any) => {
 		event.preventDefault();
-		fetch("/user/logout", {
+		fetch(apiPath + "/user/logout", {
         method:"GET",
         cache: "no-cache",
         headers:{

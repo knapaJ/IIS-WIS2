@@ -1,13 +1,17 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-const PrivateRouteUser = () => {
+type Props = {
+  apiPath:string
+}
+
+const PrivateRouteUser = ({apiPath}:Props) => {
   const [eauth, setAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   
   
   useEffect(() => {
-    var tmp = "/user/auth/user";
+    var tmp = apiPath + "/user/auth/user";
     console.log(tmp);
 
     fetch(tmp, {

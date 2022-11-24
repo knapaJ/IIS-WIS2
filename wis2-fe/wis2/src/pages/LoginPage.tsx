@@ -5,7 +5,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LinkButton from '../components/LinkButton';
 
-function LoginPage() {
+type Props = {
+	apiPath:string
+}
+
+function LoginPage({apiPath}:Props) {
 	const [login, setLogin] = useState("");
   	const [password, setPwd] = useState("");
 
@@ -30,7 +34,7 @@ function LoginPage() {
 		console.log('pwd:', password);
 		console.log('login:', login);
 
-		fetch("/user/login", {
+		fetch(apiPath + "/user/login", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
@@ -52,7 +56,7 @@ function LoginPage() {
 
   return (
 	<div>
-		<PageHeader homePage='/home' useLogout={false}></PageHeader>
+		<PageHeader apiPath={apiPath} homePage='/home' useLogout={false}></PageHeader>
 		<div id="loginPageMainContent">
 			<form>
 				<div className="form-group">

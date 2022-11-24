@@ -3,10 +3,14 @@ import LinkButton from '../components/LinkButton';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 
-function EmployeePage() {
+type Props = {
+	apiPath:string
+}
+
+function EmployeePage({apiPath}:Props) {
   return (
 	<div>
-		<PageHeader homePage='/home' useLogout={true}></PageHeader>
+		<PageHeader apiPath={apiPath} homePage='/home' useLogout={true}></PageHeader>
 		<div id="employeeMainContent">
 			<div id="buttonMenu">
 				<LinkButton linkText='Profil 🤓' linkValue='/userProfile'></LinkButton>

@@ -8,7 +8,11 @@ import data from '../mockData/mockAdminUsertableData.json'
 import roomData from '../mockData/mockAdminPageRoomsData.json'
 import requestData from '../mockData/mockAdminPageRequestData.json'
 
-function AdminPage() {
+type Props = {
+	apiPath:string
+}
+
+function AdminPage({apiPath}:Props) {
 	const [pageNumber, setPageNumber] = useState(1);
 	const [maxPagesNumber, setMaxPagesNumber] = useState(1);
 
@@ -51,7 +55,7 @@ function AdminPage() {
 
 	// USER DATA FETCH
 	function fetchData(number:number) {
-		const url = "/user/list/admin/all/" + number;
+		const url = apiPath + "/user/list/admin/all/" + number;
 		fetch(url).then(res => res.json()).then(data => {
 			if (data.users !== undefined) {
 				setTableData(data.users);
@@ -66,7 +70,7 @@ function AdminPage() {
 
 	// ROOM DATA FETCH
 	function fetchRoomData(number:number) {
-		const url = "/classroom/list/" + number;
+		const url = apiPath + "/classroom/list/" + number;
 		fetch(url).then(res => res.json()).then(data => {
 			if (data.rooms !== undefined) {
 				setRoomTableData(data.rooms);
@@ -81,7 +85,7 @@ function AdminPage() {
 
 	// COURSE DATA FETCH
 	function fetchCourseData() {
-		const url = "/course/list/notapproved";
+		const url = apiPath + "/course/list/notapproved";
 		fetch(url).then(res => res.json()).then(data => {
 			if (data !== undefined) {
 				setRequestTableData(data);
@@ -173,7 +177,7 @@ function AdminPage() {
 			roomTableDataCopy.splice(index, 1);
 			setRoomTableData(roomTableDataCopy);
 
-			fetch("/classroom/delete", {
+			fetch(apiPath + "/classroom/delete", {
 				method:"DELETE",
 				cache: "no-cache",
 				headers:{
@@ -188,7 +192,7 @@ function AdminPage() {
 			}).then((recData) => {
 				console.log(recData);
 			
-				const url = "/classroom/list/" + pageNumber;
+				const url = apiPath + "/classroom/list/" + pageNumber;
 				fetch(url).then(res => res.json()).then(data => {
 					setRoomTableData(data.rooms);
 					console.log(data.rooms);
@@ -215,9 +219,9 @@ function AdminPage() {
 		setRoomTableData(tableDataCopy);
 
 
-		var url = "/classroom/create";
+		var url = apiPath + "/classroom/create";
 		if (addNewRoomFlag) {
-			url = "/classroom/edit";
+			url = apiPath + "/classroom/edit";
 		}
 
 		fetch(url, {
@@ -233,7 +237,7 @@ function AdminPage() {
 				console.log("Incorrect data");		
 			}
 		}).then((recData) => {
-			const url = "/classroom/list/" + pageNumber;
+			const url = apiPath + "/classroom/list/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
 				if (data.rooms !== undefined) {
 					console.log(data.rooms);
@@ -328,7 +332,7 @@ function AdminPage() {
 			tableDataCopy.splice(index, 1);
 			setTableData(tableDataCopy);
 
-			fetch("/user/remove", {
+			fetch(apiPath + "/user/remove", {
 				method:"DELETE",
 				cache: "no-cache",
 				headers:{
@@ -343,7 +347,7 @@ function AdminPage() {
 			}).then((recData) => {
 				console.log(recData);
 			
-				const url = "/user/list/all/" + pageNumber;
+				const url = apiPath + "/user/list/all/" + pageNumber;
 				fetch(url).then(res => res.json()).then(data => {
 					setTableData(data.users);
 					console.log(data.users);
@@ -374,9 +378,9 @@ function AdminPage() {
 
 		setAddNewFlag(false);
 
-		var url = "/user/register";
+		var url = apiPath +  "/user/register";
 		if (addNewFlag) {
-			url = "/user/edit/admin";
+			url = apiPath + "/user/edit/admin";
 		}
 
 		fetch(url, {
@@ -393,7 +397,7 @@ function AdminPage() {
 			}
 		}).then((recData) => {
 			console.log(recData);
-			const url = "/user/list/all/" + pageNumber;
+			const url = apiPath + "/user/list/all/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
 				if (data.users !== undefined) {
 					setTableData(data.users);
@@ -432,7 +436,7 @@ function AdminPage() {
 		tableDataCopy.splice(index, 1);
 		setRequestTableData(tableDataCopy);
 
-		fetch("/course/approve", {
+		fetch(apiPath + "/course/approve", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
@@ -459,7 +463,7 @@ function AdminPage() {
 		tableDataCopy.splice(index, 1);
 		setRequestTableData(tableDataCopy);
 
-		fetch("/course/delete", {
+		fetch(apiPath + "/course/delete", {
 			method:"DELETE",
 			cache: "no-cache",
 			headers:{
@@ -481,7 +485,7 @@ function AdminPage() {
 
 	return (
 	<div>	
-		<PageHeader homePage='/home' useLogout={true}></PageHeader>
+		<PageHeader apiPath={apiPath} homePage='/home' useLogout={true}></PageHeader>
 		<div id="adminPageMainContent">
 			<div>
 				<h1>Prehlad uzivatelov</h1>

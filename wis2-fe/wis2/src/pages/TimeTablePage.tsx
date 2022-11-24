@@ -1,46 +1,27 @@
 import { useEffect, useState } from 'react';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import './LectureRegistrationPage.css';
+import './SubjectRegistrationPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
 import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-function LectureRegistrationPage() {
+type Props = {
+	apiPath:string
+}
+
+function SubjectRegistrationPage({apiPath}:Props) {
 	const [tableData, setTableData] = useState(data);
 	
 	useEffect(() => {
-	  fetch('/course/list/notregistered').then(res => res.json()).then(recData => {
+	  fetch(apiPath + '/term/listupcoming').then(res => res.json()).then(recData => {
 		console.log(recData);
-		setTableData(recData);
 	  });
 	}, []);
 	
-	const onButtonClick = (event:any, tableData:any) => {
-		fetch("/course/register", {
-			method:"POST",
-			cache: "no-cache",
-			headers:{
-				"content-type":"application/json",
-			},
-			body:JSON.stringify(tableData)
-			}
-		).then((response) => {
-			if (!response.ok) {
-				alert("Incorrect data");		
-			}
-		}).then((recData) => {
-			console.log(recData);
-			fetch('/course/list/notregistered').then(res => res.json()).then(recData => {
-				setTableData(recData);
-			});
-		});
-	}
-		
-	
 	return (
 		<div>
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
-			<div id="subjectRegistrationMainContent">
+			<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
+			<div id="mainContent">
 				<div>
 					<Table id="registrationTable" sx={{ boxShadow: 2}}>
 						<colgroup>
@@ -62,7 +43,7 @@ function LectureRegistrationPage() {
 								<TableCell>{td.shortcut}</TableCell>
 								<TableCell>{td.fullname}</TableCell>
 								<TableCell>{td.credits}</TableCell>
-								<TableCell><Button onClick={(event) => onButtonClick(event, td)}>Registrovat</Button></TableCell>
+								
 							</TableRow>
 							))}
 						</TableBody>
@@ -74,4 +55,4 @@ function LectureRegistrationPage() {
 	);
 }
 
-export default LectureRegistrationPage;
+export default SubjectRegistrationPage;

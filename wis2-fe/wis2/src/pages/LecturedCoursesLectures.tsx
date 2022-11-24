@@ -6,7 +6,11 @@ import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Link, useParams } from 'react-router-dom';
 
-function LecturedCourses() {
+type Props = {
+	apiPath:string
+}
+
+function LecturedCourses({apiPath}:Props) {
 	//<DropDown onChange={onDropDownChange} dropDownData={dropDownValue}></DropDown>
 
 	const [tableData, setTableData] = useState(data.classes);
@@ -14,7 +18,7 @@ function LecturedCourses() {
 	
 	
 	useEffect(() => {
-		var url = "/term/teacher/list/bycourse/" + id;
+		var url = apiPath + "/term/teacher/list/bycourse/" + id;
 		fetch(url).then(res => res.json()).then(recData => {
 			setTableData(recData);
 		});
@@ -24,7 +28,7 @@ function LecturedCourses() {
 
 	return (
 		<div>
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
+			<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
 				<div id="lecturedCoursesMainContent">
 					
 

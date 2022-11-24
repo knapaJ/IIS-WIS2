@@ -5,12 +5,16 @@ import PageHeader from '../components/PageHeader';
 import './RegisteredSubjectsPage.css';
 import data from '../mockData/mockRegistrationtableData.json';
 
-function RegisteredSubjectsPage() {
+type Props = {
+	apiPath:string
+}
+
+function RegisteredSubjectsPage({apiPath}:Props) {
 	const [tableData, setTableData] = useState(data);
 	//const [year, setYear] = useState("ziadenrok");
 	
 	useEffect(() => {
-		fetch('/course/list/registered').then(res => res.json()).then(recData => {
+		fetch(apiPath + '/course/list/registered').then(res => res.json()).then(recData => {
 			setTableData(recData);
 		});
 	}, []);
@@ -23,7 +27,7 @@ function RegisteredSubjectsPage() {
 
 	return (
 	<div>
-		<PageHeader homePage='/home' useLogout={true}></PageHeader>
+		<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
 			<div id="registeredSubjectsMainContent">
 				<DetailsTable tableData={tableData}></DetailsTable>
 			</div>

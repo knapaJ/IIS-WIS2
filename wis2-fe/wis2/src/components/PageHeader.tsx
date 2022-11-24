@@ -4,9 +4,10 @@ import LogoutButton from './LogoutButton';
 type Props = {
   homePage:string
   useLogout:boolean
+  apiPath:string
 }
 
-function PageHeader({homePage, useLogout}: Props) {
+function PageHeader({homePage, useLogout, apiPath}: Props) {
   return (
     <div id="header">
       <div id="headerLogo">
@@ -19,7 +20,7 @@ function PageHeader({homePage, useLogout}: Props) {
       {
       useLogout ?
         <div id="headerLogOut">
-          <LogoutButton></LogoutButton>
+          <LogoutButton apiPath={apiPath}></LogoutButton>
         </div> 
         :
         <div></div>

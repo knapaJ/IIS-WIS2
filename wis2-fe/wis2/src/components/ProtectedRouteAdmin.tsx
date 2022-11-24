@@ -1,13 +1,17 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-const PrivateRouteAdmin = () => {
+type Props = {
+  apiPath:string
+}
+
+const PrivateRouteAdmin = ({apiPath}:Props) => {
   const [eauth, setAuth] = useState(false);
   const [loading, setLoading] = useState(true);
   
   
   useEffect(() => {
-    var tmp = "/user/auth/admin";
+    var tmp = apiPath + "/user/auth/admin";
     console.log(tmp)
 
     fetch(tmp, {
