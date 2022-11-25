@@ -146,8 +146,7 @@ function GarantPage({apiPath}:Props) {
 			}
 			return res.json();
 		}).then(data => {
-			setCoursesTableData([]);
-			//setCoursesTableData(data);
+			setCoursesTableData(data);
 			setCoursesFetchInProgressFlag(false);
 		});
 	}
