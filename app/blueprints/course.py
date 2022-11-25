@@ -31,17 +31,25 @@ def forbidden(e):
     return jsonify(message=f"{e.description}"), 403
 
 
-@course_endpoint.route('/list/notregistered', methods=["GET"])
+@course_endpoint.route('/list/available', methods=["GET"])
 @need_user_logged
-def list_not_registered(user):
+def list_available(user):
     ret = []
-    for course in Course.query.filter(Course.uuid.not_in([course.uuid for course in user.registered_courses]),
-                                      Course.isApproved==True).all():
+    for course in Course.query.filter_by(isApproved=True).filter(Course.registered_students.contains(user)).all():
         ret.append({
             "id": course.uuid,
             "shortcut": course.short_name,
             "fullname": course.name,
-            "credist": course.credits
+            "credist": course.credits,
+            'registered': True
+        })
+    for course in Course.query.filter_by(isApproved=True).filter(~Course.registered_students.contains(user)).all():
+        ret.append({
+            "id": course.uuid,
+            "shortcut": course.short_name,
+            "fullname": course.name,
+            "credist": course.credits,
+            'registered': False
         })
     return jsonify(ret), 200
 
@@ -84,7 +92,9 @@ def register_course(user):
     data = request.get_json()
     try:
         course = Course.query.filter_by(uuid=data["id"]).first()
-        if len(course.registered_students) == course.student_limit:
+        if CourseRegistration.query.filter(CourseRegistration.course.has(uuid=course.uuid),
+                                           CourseRegistration.student.has(uuid=user.uuid)
+                                           ).count() >= course.student_limit:
             abort(409, description="Student limit reached")
         registration = CourseRegistration(user, course)
         registration.isApproved = False
@@ -93,6 +103,8 @@ def register_course(user):
         return jsonify(status='OK'), 200
     except KeyError:
         abort_bad_json()
+    except IntegrityError:
+        abort(409, description='Already registered')
 
 
 @course_endpoint.route('/detail/terms/<course_id>', methods=["GET"])
@@ -304,5 +316,24 @@ def set_course_description(user):
         db.session.add(course)
         db.session.commit()
         return jsonify(status='OK'), 200
+    except KeyError:
+        abort_bad_json()
+
+
+@course_endpoint.route('/unregister', methods=['POST'])
+@need_user_logged
+def unregister_course(user):
+    data = request.get_json()
+    try:
+        course = Course.query.filter_by(uuid=data['id']).first_or_404()
+        for term in course.terms:
+            marks = TermMark.query.filter(TermMark.student.has(uuid=user.uuid), TermMark.term.has(uuid=term.uuid)).all()
+            for mark in marks:
+                db.session.delete(mark)
+        for registration in CourseRegistration.query.filter(CourseRegistration.course.has(uuid=course.uuid),
+                                                            CourseRegistration.student.has(uuid=user.uuid)).all():
+            db.session.delete(registration)
+        db.session.commit()
+        return jsonify(status='OK'),200
     except KeyError:
         abort_bad_json()

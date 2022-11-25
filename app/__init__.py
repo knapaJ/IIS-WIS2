@@ -1,8 +1,11 @@
 import os
 import datetime
+
+import flask
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from dateutil import relativedelta
 
 # SQLite ForeignKey constraints enforcement enable, as per: https://stackoverflow.com/a/15542046
 # from sqlalchemy import event
@@ -76,16 +79,18 @@ def create_app(test_config=None):
         student = models.User.User("tstude00", "test", "student", "student@test.wis", models.User.UserType.USER,
                                    "dev")
         student2 = models.User.User("tstude01", "test", "student2", "student@test.wis", models.User.UserType.USER,
-                                   "dev")
+                                    "dev")
         coursereg = models.CourseRegistration.CourseRegistration(student, course)
         coursereg2 = models.CourseRegistration.CourseRegistration(student2, course)
         term = models.Term.Term("Test term", "10", 99, course)
-        term.start_date = datetime.datetime.utcnow()
+        term.start_date = datetime.datetime.utcnow() + datetime.timedelta(days=3)
+        term.end_date = term.start_date + datetime.timedelta(hours=3)
         termmark = models.TermMark.TermMark(student, term)
-        termmark2 = models.TermMark.TermMark(student2,term)
+        termmark2 = models.TermMark.TermMark(student2, term)
         termmark.modify(9, teacher)
         classroom = models.Classroom.Classroom("D105")
         classroom.building = "bOzEtEcHoVa 220PIC0"
+        term.classroom = classroom
         db.session.add(termmark2)
         db.session.add(coursereg2)
         db.session.add(classroom)
@@ -106,7 +111,8 @@ def create_app(test_config=None):
     # hello world just for testing
     @app.route('/hello-world')
     def hello_world():
-        return "Hello world!", 200
+        return f"Hello world!<br/> Application root is: {app.config['APPLICATION_ROOT']}<br/> URL for this page is: " \
+               f"{flask.url_for('hello_world')}", 200
 
     app.register_blueprint(bp.user.user_endpoint, url_prefix='/user')
     app.register_blueprint(bp.course.course_endpoint, url_prefix='/course')
