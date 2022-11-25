@@ -1,6 +1,6 @@
 import { nanoid } from "nanoid";
 import { Fragment, useEffect, useState } from 'react';
-import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableRow, TextField, Select, MenuItem, InputLabel } from '@mui/material';
+import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableRow, TextField, Select, MenuItem, InputLabel, TableFooter, Pagination} from '@mui/material';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import CannotLoadError from '../components/CannotLoadError';
@@ -15,6 +15,8 @@ type Props = {
 function GarantPage({apiPath}:Props) {
 /*--------------------------------------------HOOK DEFINITIONS-----------------------------------------------------*/
 	/*=======================================COMMON PAGE HOOKS==================================================*/
+	const [pageNumber, setPageNumber] = useState(1);
+	const [maxPagesNumber, setMaxPagesNumber] = useState(1);
 	const [buttonTermPopup, setButtonTermPopup] = useState(false);
 	const [editMode, setEditMode] = useState(false);
 	const [editCourseId, setEditCourseId] = useState<string | null>(null);
@@ -174,7 +176,7 @@ function GarantPage({apiPath}:Props) {
 	/*===================================COURSE REGISTRATIONS DATA FETCH=========================================*/
 	const [courseRegistrationsFetchInProgressFlag, setCourseRegistrationsFetchInProgressFlag] = useState(false);
 
-	function fetchCourseRegistrationsData(courseid: string) {
+	function fetchCourseRegistrationsData(courseid: string,  number:number) {
 		setCourseRegistrationsFetchInProgressFlag(true);
 		const url = apiPath + "/course/list/unapproverregistrations/" + courseid;
 		fetch(url).then(res => {
@@ -188,6 +190,12 @@ function GarantPage({apiPath}:Props) {
 			setCourseRegistrationsFetchInProgressFlag(false);
 		});
 	}
+
+	const usersPaginationChange = (event:any, value:any) => {
+		if(editCourseId != null) {
+			fetchCourseRegistrationsData(editCourseId, value);
+		}
+	};
 	/*=================================COURSE REGISTRATIONS DATA FETCH END=======================================*/
 
 	/*========================================COURSE TERMS DATA FETCH============================================*/
@@ -284,7 +292,7 @@ function GarantPage({apiPath}:Props) {
 			//fetch terms
 			fetchCourseTermsData(courseTableData.id);
 			fetchCourseLecturersData(courseTableData.id);
-			fetchCourseRegistrationsData(courseTableData.id);
+			fetchCourseRegistrationsData(courseTableData.id, pageNumber);
 			setEditCourseFormData(rowValue);
 		}
 	}
@@ -889,20 +897,24 @@ function GarantPage({apiPath}:Props) {
 									<TextField 
 										value={editCourseFormData.shortcut}
 										size="small" 
-										placeholder='Zkratka' 
+										placeholder='Skratka' 
 										id="standard-basic" 
-										label="Zkratka" 
+										label="Skratka" 
 										variant="standard" 
+										disabled={!addNewCourseFlag}
+										required
 										onChange={(event) => handleCourseFormChange(event, "shortcut")}
 									/>
 									<br/><br/>
 									<TextField 
 										value={editCourseFormData.name}
 										size="medium" 
-										placeholder='Název' 
+										placeholder='Názov' 
 										id="standard-basic" 
-										label="Název" 
+										label="Názov" 
 										variant="standard" 
+										disabled={!addNewCourseFlag}
+										required
 										onChange={(event) => handleCourseFormChange(event, "name")}
 									/>
 									<br/><br/>
@@ -916,20 +928,24 @@ function GarantPage({apiPath}:Props) {
 									<TextField 
 										value={editCourseFormData.studentLimit}
 										size="small" 
-										placeholder= "Limit studentů" 
+										placeholder= "Limit študentov" 
 										id="standard-basic" 
-										label="Limit studentů" 
+										label="Limit študentov" 
 										variant="standard" 
+										disabled={!addNewCourseFlag}
+										required
 										onChange={(event) => handleCourseFormChange(event, "studentLimit")}
 									/>
 									<br/><br/>
 									<TextField 
 										value={editCourseFormData.credits}
 										size="small" 
-										placeholder= "Počet kreditů" 
+										placeholder= "Počet kreditov" 
 										id="standard-basic" 
-										label="Počet kreditů" 
+										label="Počet kreditov" 
 										variant="standard" 
+										disabled={!addNewCourseFlag}
+										required
 										onChange={(event) => handleCourseFormChange(event, "credits")}
 									/>
 									<br/><br/>
@@ -939,12 +955,12 @@ function GarantPage({apiPath}:Props) {
 										checked={editCourseFormData.isApproved}
 									/>
 									<br/>
-									<Button onClick={onCourseSaveButton}>Uložit</Button>
-									<Button onClick={onCourseCloseButton}>Zavřít</Button>
+									<Button onClick={onCourseSaveButton}>Uložiť</Button>
+									<Button onClick={onCourseCloseButton}>Zavrieť</Button>
 								</div>
 								<div id="courseRelated">
 									<div id="courseRegistrationRequests">
-										<h3>Žádosti o registrace na kurz</h3>
+										<h3>Žiadosti o registráciu na kurz</h3>
 										<form>
 											<Fragment>
 												{
@@ -958,8 +974,8 @@ function GarantPage({apiPath}:Props) {
 															<TableHead>
 																<TableRow>
 																	<TableCell>Login</TableCell>
-																	<TableCell>Jméno</TableCell>
-																	<TableCell>Příjmení</TableCell>
+																	<TableCell>Meno</TableCell>
+																	<TableCell>Priezvisko</TableCell>
 																	<TableCell></TableCell>
 																</TableRow>
 															</TableHead>
@@ -976,12 +992,19 @@ function GarantPage({apiPath}:Props) {
 																	</TableRow>
 																))}
 															</TableBody>
+															<TableFooter>
+																<TableRow>
+																	<TableCell colSpan={6}>
+																		<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event, value) => usersPaginationChange(event, value)}></Pagination>
+																	</TableCell>
+																</TableRow>
+															</TableFooter>
 														</Table>
 													:
 														<Fragment>
 															{
 																(courseRegistrationsFetchInProgressFlag == false)?
-																	<CannotLoadError text="registrace na kurz"></CannotLoadError>
+																	<CannotLoadError text="registrácie na kurz"></CannotLoadError>
 																:
 																	<LoadingSign></LoadingSign>
 															}
@@ -991,7 +1014,7 @@ function GarantPage({apiPath}:Props) {
 										</form>
 									</div>
 									<div id="lecturersOfCourse">
-										<h3>Přednášející</h3>
+										<h3>Prednášajúci</h3>
 										<form>
 											<Fragment>
 												{
@@ -1006,8 +1029,8 @@ function GarantPage({apiPath}:Props) {
 															<TableHead>
 																<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 																	<TableCell>Login</TableCell>
-																	<TableCell>Jméno</TableCell>
-																	<TableCell>Příjmení</TableCell>
+																	<TableCell>Meno</TableCell>
+																	<TableCell>Priezvisko</TableCell>
 																	<TableCell onClick={onCourseLecturerAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 																</TableRow>
 															</TableHead>
@@ -1032,13 +1055,13 @@ function GarantPage({apiPath}:Props) {
 																			(addNewCourseLecturerFlag && (otherUsersTableData != null && otherUsersTableData.length > 0)) ?
 																				<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 																					<TableCell>
-																						<InputLabel id="lectureLogin">Login uživatele</InputLabel>
+																						<InputLabel id="lectureLogin">Login uživateľa</InputLabel>
 																						<Select
 																							labelId="lectureLogin"
 																							name='login'
 																							id="standard-basic"
 																							value={addCourseLecturerFormData.id}
-																							label="Login uživatele"
+																							label="Login uživateľa"
 																							placeholder='xlogin00' 
 																							onChange={(event) => handleCourseLecturerFormChange(event)}
 																						>
@@ -1064,7 +1087,7 @@ function GarantPage({apiPath}:Props) {
 														<Fragment>
 															{
 																(courseLecturersFetchInProgressFlag == false)?
-																	<CannotLoadError text="učitele kurzu"></CannotLoadError>
+																	<CannotLoadError text="prednášajúci kurzu"></CannotLoadError>
 																:
 																	<LoadingSign></LoadingSign>
 															}
@@ -1074,7 +1097,7 @@ function GarantPage({apiPath}:Props) {
 										</form>
 									</div>
 									<div id="termTable">
-										<h3>Správa termínů</h3>
+										<h3>Správa termínu</h3>
 										<form>
 											<Fragment>
 												{
@@ -1090,11 +1113,11 @@ function GarantPage({apiPath}:Props) {
 															</colgroup>
 															<TableHead>
 																<TableRow>
-																	<TableCell>Název</TableCell>
-																	<TableCell>Začátek</TableCell>
-																	<TableCell>Konec</TableCell>
-																	<TableCell>Registrace</TableCell>
-																	<TableCell>Volitelné</TableCell>
+																	<TableCell>Názov</TableCell>
+																	<TableCell>Začiatok</TableCell>
+																	<TableCell>Koniec</TableCell>
+																	<TableCell>Registrácia</TableCell>
+																	<TableCell>Voliteľné</TableCell>
 																	<TableCell
 																		onClick={(event) => {
 																			onPopupEvent(event);
@@ -1164,10 +1187,11 @@ function GarantPage({apiPath}:Props) {
 										<TextField 
 											value={editCourseTermFormData.classname}
 											size="small" 
-											placeholder='Název' 
+											placeholder='Názov' 
 											id="standard-basic" 
-											label="Název" 
+											label="Názov" 
 											variant="standard" 
+											required
 											onChange={(event) => handleCourseTermFormChange(event, "classname")}
 										/>
 										<br/><br/>
@@ -1178,7 +1202,7 @@ function GarantPage({apiPath}:Props) {
 											onChange={(event) => handleCourseTermFormChange(event, "description")}
 										/>
 										<br/><br/>
-										<InputLabel id="startdate">Začátek</InputLabel>
+										<InputLabel id="startdate">Začiatok</InputLabel>
 										<TextField 
 											value={((editCourseTermFormData.startDate != null)? new Date(editCourseTermFormData.startDate) : new Date()).toISOString().substring(0, 16)}
 											type="datetime-local"
@@ -1186,9 +1210,10 @@ function GarantPage({apiPath}:Props) {
 											placeholder='' 
 											id="standard-basic" 
 											variant="standard" 
+											required
 											onChange={(event) => handleCourseTermFormChange(event, "startDate")}
 										/>
-										<InputLabel id="enddate">Konec</InputLabel>
+										<InputLabel id="enddate">Koniec</InputLabel>
 										<TextField 
 											value={((editCourseTermFormData.endDate != null)? new Date(editCourseTermFormData.endDate) : new Date()).toISOString().substring(0, 16)}
 											type="datetime-local"
@@ -1196,6 +1221,7 @@ function GarantPage({apiPath}:Props) {
 											placeholder='' 
 											id="standard-basic" 
 											variant="standard" 
+											required
 											onChange={(event) => handleCourseTermFormChange(event, "endDate")}
 										/>
 										<br/><br/>
@@ -1203,22 +1229,24 @@ function GarantPage({apiPath}:Props) {
 											{
 												editCourseTermFormData.isRegistrationEnabled? 
 												<div>
-													<InputLabel id="rstartdate">Začátek registrace</InputLabel>
+													<InputLabel id="rstartdate">Začiatok registrácie</InputLabel>
 													<TextField 
 														value={((editCourseTermFormData.registrationStartDate != null)? new Date(editCourseTermFormData.registrationStartDate) : new Date()).toISOString().substring(0, 16)}
 														type="datetime-local"
 														size="small" 
 														id="standard-basic" 
 														variant="standard" 
+														required={editCourseTermFormData.isRegistrationEnabled}
 														onChange={(event) => handleCourseTermFormChange(event, "registrationStartDate")}
 													/>
-													<InputLabel id="renddate">Konec registrace</InputLabel>
+													<InputLabel id="renddate">Koniec registrácie</InputLabel>
 													<TextField 
 														value={((editCourseTermFormData.registrationEndDate != null)? new Date(editCourseTermFormData.registrationEndDate) : new Date()).toISOString().substring(0, 16)}
 														type="datetime-local"
 														size="small" 
 														id="standard-basic" 
 														variant="standard" 
+														required={editCourseTermFormData.isRegistrationEnabled}
 														onChange={(event) => handleCourseTermFormChange(event, "registrationEndDate")}
 													/>
 													<br/><br/>
@@ -1230,9 +1258,9 @@ function GarantPage({apiPath}:Props) {
 										<TextField
 											value={editCourseTermFormData.maxMark}
 											size="small"
-											placeholder='Max bodů'
+											placeholder='Max bodov'
 											id="standard-basic"
-											label="Max bodů"
+											label="Max bodov"
 											variant="standard"
 											onChange={(event) => handleCourseTermFormChange(event, "maxMark")}
 										/>
@@ -1240,21 +1268,21 @@ function GarantPage({apiPath}:Props) {
 										<TextField
 											value={editCourseTermFormData.studentLimit}
 											size="small"
-											placeholder='Limit studentů'
+											placeholder='Limit študentov'
 											id="standard-basic"
-											label="Limit studentů"
+											label="Limit študentov"
 											variant="standard"
 											onChange={(event) => handleCourseTermFormChange(event, "studentLimit")}
 										/>
 										<br/><br/>
-										<label>Registrace:</label>
+										<label>Registrácia:</label>
 										<Checkbox
 											checked={editCourseTermFormData.isRegistrationEnabled} 
 											onChange={(event) => handleCourseTermCheckboxFormChange(event, "isRegistrationEnabled")}
 											inputProps={{ 'aria-label': 'Registration' }}
 										/>
 										<br/>
-										<label>Volitelné:</label>
+										<label>Voliteľné:</label>
 										<Checkbox
 											checked={editCourseTermFormData.isOptional}
 											onChange={(event) => handleCourseTermCheckboxFormChange(event, "isOptional")}
@@ -1267,14 +1295,14 @@ function GarantPage({apiPath}:Props) {
 												setButtonTermPopup(false);
 												onCourseTermSaveButton(event);
 											}}
-										>Ulozit</Button>
+										>Uložiť</Button>
 										<Button 
 											onClick={(event) => {
 											onPopupEvent(event);
 											setButtonTermPopup(false);
 											onCourseTermCloseButton(event);
 										}}
-										>Zavřít</Button>
+										>Zavrieť</Button>
 										
 									</Fragment>
 								</div>
@@ -1300,11 +1328,11 @@ function GarantPage({apiPath}:Props) {
 												</colgroup>
 												<TableHead>
 													<TableRow>
-														<TableCell>Zkratka</TableCell>
-														<TableCell>Název</TableCell>
-														<TableCell>Počet kreditů</TableCell>
-														<TableCell>Limit studentů</TableCell>
-														<TableCell>Schváleno</TableCell>
+														<TableCell>Skratka</TableCell>
+														<TableCell>Názov</TableCell>
+														<TableCell>Počet kreditov</TableCell>
+														<TableCell>Limit študentov</TableCell>
+														<TableCell>Schválené</TableCell>
 														<TableCell onClick={onCourseAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 													</TableRow>
 												</TableHead>
