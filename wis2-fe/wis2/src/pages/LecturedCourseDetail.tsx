@@ -185,7 +185,7 @@ function LecturedCourses({apiPath}:Props) {
 						</TableBody>
 						<TableFooter>
 							<TableRow>
-							<TableCell colSpan={3}>
+							<TableCell colSpan={5}>
 								<Pagination count={maxPages?? 1} defaultPage={currentPage?? 1} onChange={(event, value) => onPageChange(event, value)}></Pagination>
 							</TableCell>
 							</TableRow>
