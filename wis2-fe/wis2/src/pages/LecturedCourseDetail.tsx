@@ -44,8 +44,8 @@ function LecturedCourses({apiPath}:Props) {
 		loadData(1);
 	}, []);
 
-	const onPageChange = (event:any) => {
-		loadData(event.target.textContent)
+	const onPageChange = (event:any, value:any) => {
+		loadData(value)
 	}
 
 	const onEdit = (event:any, tableData:any) => {
@@ -186,7 +186,7 @@ function LecturedCourses({apiPath}:Props) {
 						<TableFooter>
 							<TableRow>
 							<TableCell colSpan={3}>
-								<Pagination count={maxPages?? 1} defaultPage={currentPage?? 1} onChange={(event) => onPageChange(event)}></Pagination>
+								<Pagination count={maxPages?? 1} defaultPage={currentPage?? 1} onChange={(event, value) => onPageChange(event, value)}></Pagination>
 							</TableCell>
 							</TableRow>
 						</TableFooter>

@@ -24,11 +24,15 @@ function App() {
   return (
     <Routes>
       <Route element={<PrivateRouteAdmin apiPath={apiPath}/>}>
-        <Route path="/adminPage" element={<AdminPage apiPath={apiPath}/>}/>
+        
       </Route>
 
       <Route element={<PrivateRouteUser apiPath={apiPath}/>}>
-        <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
+        
+      </Route>
+      <Route path="/adminPage" element={<AdminPage apiPath={apiPath}/>}/>
+
+      <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
         <Route path="/termRegistration" element={<SubjectRegistrationPage apiPath={apiPath}/>}/>
         <Route path="/subjectDetails" element={<SubjectDetailsPage apiPath={apiPath}/>}/>
         <Route path="/home" element={<HomePage apiPath={apiPath}/>}/>
@@ -40,9 +44,6 @@ function App() {
         <Route path="/userProfile" element={<UserProfile apiPath={apiPath}/>}/>
         <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures apiPath={apiPath}/>}/>
         <Route path="/timeTable" element={<TimeTablePage apiPath={apiPath}/>}/>
-      </Route>
-
-      
       <Route path="/noAccount" element={<NoAccPage apiPath={apiPath}/>}/>
       <Route path="/" element={<LoginPage apiPath={apiPath}/>}/>
     </Routes>
