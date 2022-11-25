@@ -28,7 +28,7 @@ function LogoutButton({apiPath}:Props) {
 	}
 
   return (
-    <Button onClick={logoutUser}>ODHLASIT</Button>
+    <Button onClick={logoutUser}><i className="fa-solid fa-power-off"></i></Button>
   );
 }
 

@@ -1,4 +1,4 @@
-import './AdminPage.css';
+import '../App.css';
 import { nanoid } from "nanoid";
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
@@ -194,8 +194,10 @@ function AdminPage({apiPath}:Props) {
 			
 				const url = apiPath + "/classroom/list/" + pageNumber;
 				fetch(url).then(res => res.json()).then(data => {
-					setRoomTableData(data.rooms);
-					console.log(data.rooms);
+					if (data.rooms != undefined) {
+						setRoomTableData(data.rooms);
+						console.log(data.rooms);
+					}
 				});
 				console.log(recData);
 			});
@@ -347,10 +349,12 @@ function AdminPage({apiPath}:Props) {
 			}).then((recData) => {
 				console.log(recData);
 			
-				const url = apiPath + "/user/list/all/" + pageNumber;
+				const url = apiPath + "/user/list/admin/all/" + pageNumber;
 				fetch(url).then(res => res.json()).then(data => {
-					setTableData(data.users);
-					console.log(data.users);
+					if (data.users != undefined) {
+						setTableData(data.users);
+						console.log(data.users);
+					}
 				});
 			});
 		}
@@ -397,7 +401,7 @@ function AdminPage({apiPath}:Props) {
 			}
 		}).then((recData) => {
 			console.log(recData);
-			const url = apiPath + "/user/list/all/" + pageNumber;
+			const url = apiPath + "/user/list/admin/all/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
 				if (data.users !== undefined) {
 					setTableData(data.users);
@@ -551,7 +555,7 @@ function AdminPage({apiPath}:Props) {
 						</TableBody>
 						<TableFooter>
 							<TableRow>
-								<TableCell colSpan={3}>
+								<TableCell colSpan={6}>
 									<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event) => usersPaginationChange(event)}></Pagination>
 								</TableCell>
 							</TableRow>
@@ -572,7 +576,7 @@ function AdminPage({apiPath}:Props) {
 						<TableHead>
 							<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 								<TableCell>Miestnost</TableCell>
-								<TableCell>Pocet miest</TableCell>
+								<TableCell>Budova</TableCell>
 								<TableCell onClick={onAddRoomButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 							</TableRow>
 						</TableHead>

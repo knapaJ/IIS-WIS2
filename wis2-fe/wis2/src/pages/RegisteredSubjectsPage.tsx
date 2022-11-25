@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import DetailsTable from '../components/DetailsTable';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import './RegisteredSubjectsPage.css';
+import '../App.css';
 import data from '../mockData/mockRegistrationtableData.json';
 
 type Props = {

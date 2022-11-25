@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import './SubjectRegistrationPage.css';
+import '../App.css';
 import data from '../mockData/mockRegistrationtableData.json';
 import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 

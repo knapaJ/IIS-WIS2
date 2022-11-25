@@ -19,7 +19,7 @@ import TimeTablePage from './pages/TimeTablePage';
 
 function App() {
 
-  var apiPath = "";
+  var apiPath = "/api";
 
   return (
     <Routes>

@@ -21,7 +21,7 @@ header {
 
 #headerImage {
   display: inline-block;
-  background-image: url('../img/headerIcon.png');
+  /*background-image: url('../img/headerIcon.png');*/
   position: relative;
   background-repeat: no-repeat;
   background-size: cover;
@@ -32,9 +32,10 @@ header {
   #headerLogo {
   position: relative;
   height: 100%;
-  font-size: 60px;
+  font-size: 70px;
   display: inline-block;
   display: flex;
+  font-weight: bolder;
   padding-left: 15px;
   }
   

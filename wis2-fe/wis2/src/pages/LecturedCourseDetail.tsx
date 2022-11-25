@@ -1,4 +1,4 @@
-import './LecturedCourses.css';
+import '../App.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import { useEffect, useState, Fragment } from 'react';

@@ -3,7 +3,7 @@ import PageFooter from '../components/PageFooter';
 import { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import data from '../mockData/mockAccordionData.json';
-import './NoAccPage.css';
+import '../App.css';
 
 type Props = {
 	apiPath:string

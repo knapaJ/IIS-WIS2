@@ -1,4 +1,4 @@
-import './LoginPage.css';
+import '../App.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import { useState } from 'react';
@@ -69,7 +69,7 @@ function LoginPage({apiPath}:Props) {
 				</div>
 				<button type="submit" onClick={sendPwd} className="btn btn-primary">Potvrdit</button>
 			</form>
-            <LinkButton linkText='Nemam ucet 😢' linkValue='/noAccount'></LinkButton>
+            <LinkButton linkText='Prehľad kurzov' linkValue='/noAccount'></LinkButton>
 		</div>
 		<PageFooter></PageFooter>
 	</div>
