@@ -16,7 +16,8 @@ function SubjectRegistrationPage({apiPath}:Props) {
 	
 	
 	useEffect(() => {
-	  fetch(apiPath + '/term/listupcoming').then(res => res.json()).then(recData => {
+	  fetch(apiPath + '/term/listupcoming/monked').then(res => res.json()).then(recData => {
+		console.log(recData);
 		setCalendarData(recData);
 	  });
 	}, []);

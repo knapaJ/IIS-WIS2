@@ -178,7 +178,7 @@ function GarantPage({apiPath}:Props) {
 
 	function fetchCourseRegistrationsData(courseid: string,  number:number) {
 		setCourseRegistrationsFetchInProgressFlag(true);
-		const url = apiPath + "/course/list/unapproverregistrations/" + courseid;
+		const url = apiPath + "/course/list/unapproverregistrations/" + courseid + "/" + number;
 		fetch(url).then(res => {
 			if(res.status != 200)
 			{
@@ -186,7 +186,12 @@ function GarantPage({apiPath}:Props) {
 			}
 			return res.json();
 		}).then(data => {
-			setCourseRegistrationsTableData(data);
+			if (data != null && data.registrations !== undefined) {
+				setCourseRegistrationsTableData(data.registrations);
+				
+				setPageNumber(data.currentPage);
+				setMaxPagesNumber(data.totalPages);
+			}
 			setCourseRegistrationsFetchInProgressFlag(false);
 		});
 	}
@@ -319,7 +324,7 @@ function GarantPage({apiPath}:Props) {
 			{
 				const dataToSend = {
 					id: editCourseId as any,
-					description: editCourseFormData.description
+					description: (editCourseFormData.description !== undefined)?? ""
 				}
 				
 				fetch(apiPath + "/course/setdescription", {
@@ -336,6 +341,7 @@ function GarantPage({apiPath}:Props) {
 						return null;
 					}
 					tableDataCopy[index] = dataToPrepare;
+					setCoursesTableData(tableDataCopy);
 					return res.json();
 				}).then(recData => {
 					console.log(recData);
@@ -364,6 +370,7 @@ function GarantPage({apiPath}:Props) {
 						return null;
 					}
 					tableDataCopy[index] = dataToPrepare;
+					setCoursesTableData(tableDataCopy);
 					return res.json();
 				}).then(recData => {
 					console.log(recData);
@@ -375,7 +382,7 @@ function GarantPage({apiPath}:Props) {
 			}
 		}
 
-		setCoursesTableData(tableDataCopy);
+		fetchCoursesData();
 		setAddNewCourseFlag(false);
 		setEditCourseId(null);
 		setEditMode(false);
@@ -419,12 +426,11 @@ function GarantPage({apiPath}:Props) {
 					return null;
 				}
 				tableDataCopy.splice(index, 1);
+				setCoursesTableData(tableDataCopy);
 				return res.json();
 			}).then(recData => {
 				console.log(recData);
 			});
-
-			setCoursesTableData(tableDataCopy);
 		}
 	}
 
@@ -498,11 +504,11 @@ function GarantPage({apiPath}:Props) {
 					return null;
 				}
 				tableDataCopy[index] =  dataPrepare;
+				setCourseLecturersTableData(tableDataCopy);
 				return res.json();
 			}).then(recData => {
 				console.log(recData);
 			});
-			setCourseLecturersTableData(tableDataCopy);
 		}
 
 		setAddNewCourseLecturerFlag(false);
@@ -538,12 +544,11 @@ function GarantPage({apiPath}:Props) {
 					return null;
 				}
 				tableDataCopy.splice(index, 1);
+				setCourseLecturersTableData(tableDataCopy);
 				return res.json();
 			}).then(recData => {
 				console.log(recData);
 			});
-
-			setCourseLecturersTableData(tableDataCopy);
 		}
 	}
 
@@ -588,12 +593,11 @@ function GarantPage({apiPath}:Props) {
 				return null;
 			}
 			tableDataCopy.splice(index, 1);
+			setCourseRegistrationsTableData(tableDataCopy);
 			return res.json();
 		}).then(recData => {
 			console.log(recData);
 		});
-	
-		setCourseRegistrationsTableData(tableDataCopy);
 	}
 	
 	const onCourseRegistrationDeclineClicked = (event:any, tableData:any) => {
@@ -618,12 +622,11 @@ function GarantPage({apiPath}:Props) {
 				return null;
 			}
 			tableDataCopy.splice(index, 1);
+			setCourseRegistrationsTableData(tableDataCopy);
 			return res.json();
 		}).then(recData => {
 			console.log(recData);
 		});
-	
-		setCourseRegistrationsTableData(tableDataCopy);
 	}
 	/*==============================COURSE REGISTRATIONS ON BUTTON ACTIONS END==================================*/
 
@@ -746,10 +749,12 @@ function GarantPage({apiPath}:Props) {
 				).then(res => {
 					if(res.status != 200)
 					{
-						tableDataCopy.pop();
+						tableDataCopy.splice(index, 1);
+						setCourseTermsTableData(tableDataCopy);
 						return null;
 					}
 					tableDataCopy[index] =  dataToPrepare;
+					setCourseTermsTableData(tableDataCopy);
 					return res.json();
 				}).then(recData => {
 					console.log(recData);
@@ -759,9 +764,8 @@ function GarantPage({apiPath}:Props) {
 			{
 				const dataToSend = {
 					id: editCourseTermId as any,
-					courseid: editCourseId,
 					classname: editCourseTermFormData.classname as any,
-					description: editCourseTermFormData.description,
+					description: editCourseTermFormData.description?? "",
 					startDate: editCourseTermFormData.startDate,
 					endDate: editCourseTermFormData.endDate,
 					registrationStartDate: editCourseTermFormData.registrationStartDate,
@@ -771,7 +775,8 @@ function GarantPage({apiPath}:Props) {
 					isRegistrationEnabled: editCourseTermFormData.isRegistrationEnabled,
 					isOptional: editCourseTermFormData.isOptional,
 				}
-				//  /term/edit -> same data
+
+				console.log(dataToSend);
 
 				fetch(apiPath + "/term/edit", {
 					method:"POST",
@@ -787,6 +792,7 @@ function GarantPage({apiPath}:Props) {
 						return null;
 					}
 					tableDataCopy[index] =  dataToPrepare;
+					setCourseTermsTableData(tableDataCopy);
 					return res.json();
 				}).then(recData => {
 					console.log(recData);
@@ -799,8 +805,9 @@ function GarantPage({apiPath}:Props) {
 				tableDataCopy.splice(index, 1);
 			}
 		}
-
-		setCourseTermsTableData(tableDataCopy);
+		if(editCourseId != null) {
+			fetchCourseTermsData(editCourseId);
+		}
 		setAddNewCourseTermFlag(false);
 		setEditCourseTermId(null);
 	}
@@ -829,7 +836,7 @@ function GarantPage({apiPath}:Props) {
 			const index = courseTermsTableData.findIndex((td:any) => td.id === tableRowData.id);
 
 			fetch(apiPath + "/term/delete", {
-				method:"POST",
+				method:"DELETE",
 				cache: "no-cache",
 				headers:{
 					"Content-Type":"application/json",
@@ -842,12 +849,11 @@ function GarantPage({apiPath}:Props) {
 					return null;
 				}
 				tableDataCopy.splice(index, 1);
+				setCourseTermsTableData(tableDataCopy);
 				return res.json();
 			}).then(recData => {
 				console.log(recData);
 			});
-
-			setCourseTermsTableData(tableDataCopy);
 		}
 	}
 
@@ -1072,6 +1078,8 @@ function GarantPage({apiPath}:Props) {
 																							}
 																						</Select>
 																					</TableCell>
+																					<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}></TableCell>
+																					<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}></TableCell>
 																					<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
 																						<Button onClick={onCourseLecturerSaveButton}>Uložit</Button>
 																					</TableCell>
