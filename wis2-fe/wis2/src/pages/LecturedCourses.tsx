@@ -1,4 +1,4 @@
-import './LecturedCourses.css';
+import '../App.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import data from '../mockData/mockLecturerClassesTable.json';
@@ -6,11 +6,15 @@ import { useEffect, useState } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-function LecturedCourses() {
+type Props = {
+	apiPath:string
+}
+
+function LecturedCourses({apiPath}:Props) {
 	const [tableData, setTableData] = useState(data.classes);
 	
 	useEffect(() => {
-		fetch('/course/list/taught').then(res => res.json()).then(recData => {
+		fetch(apiPath + '/course/list/taught').then(res => res.json()).then(recData => {
 			setTableData(recData);
 		});
 	}, []);
@@ -19,7 +23,7 @@ function LecturedCourses() {
 	
 	return (
 		<div>
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
+			<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
 				<div id="lecturedCoursesMainContent">
 				<form>
 					<Table sx={{ boxShadow: 2}}	>

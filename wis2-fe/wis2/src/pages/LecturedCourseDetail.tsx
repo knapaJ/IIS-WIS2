@@ -1,5 +1,4 @@
-import logo from './logo.svg';
-import './LecturedCourses.css';
+import '../App.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import { useEffect, useState, Fragment } from 'react';
@@ -7,7 +6,11 @@ import data from '../mockData/mockInputTableData.json'
 import { useParams } from 'react-router-dom';
 import { Button, Pagination, Table, TableBody, TableCell, TableFooter, TableHead, TableRow } from '@mui/material';
 
-function LecturedCourses() {
+type Props = {
+	apiPath:string
+}
+
+function LecturedCourses({apiPath}:Props) {
 	const [tableData, setTableData] = useState(data.marks);
 	const [currentPage, setCurrentPage] = useState(1);
 	const [maxPages, setMaxPages] = useState(1);
@@ -26,10 +29,10 @@ function LecturedCourses() {
 	useEffect(() => {console.log("edit:", pointsId)}, [pointsId])
 
 	function loadData(currentPage:number) {
-		var url = "/term/teacher/detail/" + id + "/" + currentPage;
+		var url = apiPath + "/term/teacher/detail/" + id + "/" + currentPage;
 		fetch(url).then(res => res.json()).then(recData => {
 			console.log("data", recData);
-			if (recData.marks != undefined) {
+			if (recData.marks !== undefined) {
 				setTableData(recData.marks);
 			}
 			setCurrentPage(recData.currentPage);
@@ -101,14 +104,14 @@ function LecturedCourses() {
 
 		console.log(editPoints)
 		
-		var url = "/term/teacher/detail/" + id + "/" + currentPage;
+		var url = apiPath + "/term/teacher/detail/" + id + "/" + currentPage;
 		
 		console.log("send data");
-		fetch("/term/teacher/edit", {
+		fetch(apiPath + "/term/teacher/edit", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
@@ -130,7 +133,7 @@ function LecturedCourses() {
 
 	return (
 		<div>
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
+			<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
 				<div id="lecturedCoursesMainContent">
 				<form onSubmit={handleEditFormSubmit}>
 					<Table id="inputTable" sx={{ boxShadow: 2}}>
@@ -146,7 +149,7 @@ function LecturedCourses() {
 						<TableBody>
 							{tableData.map((td:any) => (
 								<Fragment>
-									{pointsId == td.mark_id ? 
+									{pointsId === td.mark_id ? 
 										<TableRow key={td.mark_id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>
 												{td.name}

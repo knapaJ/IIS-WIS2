@@ -1,4 +1,4 @@
-import './AdminPage.css';
+import '../App.css';
 import { nanoid } from "nanoid";
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
@@ -8,7 +8,11 @@ import data from '../mockData/mockAdminUsertableData.json'
 import roomData from '../mockData/mockAdminPageRoomsData.json'
 import requestData from '../mockData/mockAdminPageRequestData.json'
 
-function AdminPage() {
+type Props = {
+	apiPath:string
+}
+
+function AdminPage({apiPath}:Props) {
 	const [pageNumber, setPageNumber] = useState(1);
 	const [maxPagesNumber, setMaxPagesNumber] = useState(1);
 
@@ -51,9 +55,9 @@ function AdminPage() {
 
 	// USER DATA FETCH
 	function fetchData(number:number) {
-		const url = "/user/list/all/" + number;
+		const url = apiPath + "/user/list/admin/all/" + number;
 		fetch(url).then(res => res.json()).then(data => {
-			if (data.users != undefined) {
+			if (data.users !== undefined) {
 				setTableData(data.users);
 				console.log(data.users);
 				
@@ -66,9 +70,9 @@ function AdminPage() {
 
 	// ROOM DATA FETCH
 	function fetchRoomData(number:number) {
-		const url = "/classroom/list/" + number;
+		const url = apiPath + "/classroom/list/" + number;
 		fetch(url).then(res => res.json()).then(data => {
-			if (data.rooms != undefined) {
+			if (data.rooms !== undefined) {
 				setRoomTableData(data.rooms);
 				console.log("ROOMS:", data.rooms);
 				
@@ -79,6 +83,17 @@ function AdminPage() {
 	}
 	// ROOM DATA FETCH
 
+	// COURSE DATA FETCH
+	function fetchCourseData() {
+		const url = apiPath + "/course/list/notapproved";
+		fetch(url).then(res => res.json()).then(data => {
+			if (data !== undefined) {
+				setRequestTableData(data);
+			}
+		});
+	}
+	// COURSE DATA FETCH
+
 
 	useEffect(() => {
 		fetchData(1);
@@ -87,6 +102,10 @@ function AdminPage() {
 	
 	useEffect(() => {
 		fetchRoomData(1);
+	}, [])
+
+	useEffect(() => {
+		fetchCourseData();
 	}, [])
 
 
@@ -158,11 +177,11 @@ function AdminPage() {
 			roomTableDataCopy.splice(index, 1);
 			setRoomTableData(roomTableDataCopy);
 
-			fetch("/classroom/delete", {
+			fetch(apiPath + "/classroom/delete", {
 				method:"DELETE",
 				cache: "no-cache",
 				headers:{
-					"content_type":"application/json",
+					"content-type":"application/json",
 				},
 				body:JSON.stringify(dataToSend)
 				}
@@ -173,10 +192,12 @@ function AdminPage() {
 			}).then((recData) => {
 				console.log(recData);
 			
-				const url = "/classroom/list/" + pageNumber;
+				const url = apiPath + "/classroom/list/" + pageNumber;
 				fetch(url).then(res => res.json()).then(data => {
-					setRoomTableData(data.rooms);
-					console.log(data.rooms);
+					if (data.rooms != undefined) {
+						setRoomTableData(data.rooms);
+						console.log(data.rooms);
+					}
 				});
 				console.log(recData);
 			});
@@ -200,16 +221,16 @@ function AdminPage() {
 		setRoomTableData(tableDataCopy);
 
 
-		var url = "/classroom/create";
+		var url = apiPath + "/classroom/create";
 		if (addNewRoomFlag) {
-			url = "/classroom/edit";
+			url = apiPath + "/classroom/edit";
 		}
 
 		fetch(url, {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
@@ -218,9 +239,9 @@ function AdminPage() {
 				console.log("Incorrect data");		
 			}
 		}).then((recData) => {
-			const url = "/classroom/list/" + pageNumber;
+			const url = apiPath + "/classroom/list/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
-				if (data.rooms != undefined) {
+				if (data.rooms !== undefined) {
 					console.log(data.rooms);
 					setRoomTableData(data.rooms);
 					setRoomMaxPagesNumber(data.totalPages);
@@ -313,11 +334,11 @@ function AdminPage() {
 			tableDataCopy.splice(index, 1);
 			setTableData(tableDataCopy);
 
-			fetch("/user/remove", {
+			fetch(apiPath + "/user/remove", {
 				method:"DELETE",
 				cache: "no-cache",
 				headers:{
-					"content_type":"application/json",
+					"content-type":"application/json",
 				},
 				body:JSON.stringify(dataToSend)
 				}
@@ -328,10 +349,12 @@ function AdminPage() {
 			}).then((recData) => {
 				console.log(recData);
 			
-				const url = "/user/list/all/" + pageNumber;
+				const url = apiPath + "/user/list/admin/all/" + pageNumber;
 				fetch(url).then(res => res.json()).then(data => {
-					setTableData(data.users);
-					console.log(data.users);
+					if (data.users != undefined) {
+						setTableData(data.users);
+						console.log(data.users);
+					}
 				});
 			});
 		}
@@ -359,16 +382,16 @@ function AdminPage() {
 
 		setAddNewFlag(false);
 
-		var url = "/user/register";
+		var url = apiPath +  "/user/register";
 		if (addNewFlag) {
-			url = "/user/edit/admin";
+			url = apiPath + "/user/edit/admin";
 		}
 
 		fetch(url, {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
@@ -378,9 +401,9 @@ function AdminPage() {
 			}
 		}).then((recData) => {
 			console.log(recData);
-			const url = "/user/list/all/" + pageNumber;
+			const url = apiPath + "/user/list/admin/all/" + pageNumber;
 			fetch(url).then(res => res.json()).then(data => {
-				if (data.users != undefined) {
+				if (data.users !== undefined) {
 					setTableData(data.users);
 					setMaxPagesNumber(data.totalPages);
 					setPageNumber(data.currentPage);
@@ -411,52 +434,54 @@ function AdminPage() {
 		const dataToSend = {
 			id:tableData.id
 		}
-		console.log("COURSE ", tableData.courseId, "HAS BEEN ACCEPTED");
 
 		const tableDataCopy:any = [...requestTableData];
 		const index = requestTableData.findIndex((td:any) => td.id === tableData.id);
-		
 		tableDataCopy.splice(index, 1);
+		setRequestTableData(tableDataCopy);
 
-		fetch("/printData", {
+		fetch(apiPath + "/course/approve", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
-		).then(res => res.json()).then(recData => {
-			console.log(recData);
+		).then((response) => {
+			if (!response.ok) {
+				alert("Incorrect data");		
+			}
+		}).then((recData) => {
+			fetchCourseData();
 		});
-
-		setRequestTableData(tableDataCopy);
 	}
 
 	const onDeclineClicked = (event:any, tableData:any) => {
 		const dataToSend = {
 			id:tableData.id
 		}
-		console.log("COURSE ", tableData.courseId, "HAS BEEN DECLINED");
 		
 		const tableDataCopy = [...requestTableData];
 		const index = requestTableData.findIndex((td:any) => td.id === tableData.id);
-		
 		tableDataCopy.splice(index, 1);
+		setRequestTableData(tableDataCopy);
 
-		fetch("/printData", {
-			method:"POST",
+		fetch(apiPath + "/course/delete", {
+			method:"DELETE",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
-		).then(res => res.json()).then(recData => {
-			console.log(recData);
+		).then((response) => {
+			if (!response.ok) {
+				alert("Incorrect data");		
+			}
+		}).then((recData) => {
+			fetchCourseData();
 		});
-
-		setRequestTableData(tableDataCopy);
 	}
 	// REQUEST TABLE LOGIC
 
@@ -464,7 +489,7 @@ function AdminPage() {
 
 	return (
 	<div>	
-		<PageHeader homePage='/home' useLogout={true}></PageHeader>
+		<PageHeader apiPath={apiPath} homePage='/home' useLogout={true}></PageHeader>
 		<div id="adminPageMainContent">
 			<div>
 				<h1>Prehlad uzivatelov</h1>
@@ -491,7 +516,7 @@ function AdminPage() {
 							{tableData.map((td:any) => (
 								<Fragment>
 									{
-									editId != td.id ?
+									editId !== td.id ?
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
@@ -530,7 +555,7 @@ function AdminPage() {
 						</TableBody>
 						<TableFooter>
 							<TableRow>
-								<TableCell colSpan={3}>
+								<TableCell colSpan={6}>
 									<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event) => usersPaginationChange(event)}></Pagination>
 								</TableCell>
 							</TableRow>
@@ -551,7 +576,7 @@ function AdminPage() {
 						<TableHead>
 							<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 								<TableCell>Miestnost</TableCell>
-								<TableCell>Pocet miest</TableCell>
+								<TableCell>Budova</TableCell>
 								<TableCell onClick={onAddRoomButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 							</TableRow>
 						</TableHead>
@@ -559,7 +584,7 @@ function AdminPage() {
 							{roomTableData.map((td:any) => (
 								<Fragment>
 									{
-									editRoomId != td.id ?
+									editRoomId !== td.id ?
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>{td.building}</TableCell>
@@ -609,6 +634,7 @@ function AdminPage() {
 							<TableRow>
 								<TableCell>Login</TableCell>
 								<TableCell>Meno</TableCell>
+								<TableCell>Priezvisko</TableCell>
 								<TableCell>Skr. predmetu</TableCell>
 								<TableCell>Predmet</TableCell>
 								<TableCell></TableCell>
@@ -619,7 +645,8 @@ function AdminPage() {
 								<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 									<TableCell sx={{ borderBottom: '0'}}>{td.userLogin}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}}>{td.userName}</TableCell>
-									<TableCell sx={{ borderBottom: '0'}}>{td.courseId}</TableCell>
+									<TableCell sx={{ borderBottom: '0'}}>{td.userSurname}</TableCell>
+									<TableCell sx={{ borderBottom: '0'}}>{td.courseShortcut}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}}>{td.courseName}</TableCell>
 									<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
 										<Button onClick={(event) => onAcceptClicked(event, td)}><i className="fa-solid fa-thumbs-up"></i></Button>

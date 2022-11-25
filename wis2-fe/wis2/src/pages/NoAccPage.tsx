@@ -3,21 +3,24 @@ import PageFooter from '../components/PageFooter';
 import { useEffect, useState } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import data from '../mockData/mockAccordionData.json';
-import './NoAccPage.css';
+import '../App.css';
 
+type Props = {
+	apiPath:string
+}
 
-function EmployeePage() {
+function EmployeePage({apiPath}:Props) {
 	const [acordionData, setAcordionData] = useState(data);
 
 	useEffect(() => {
-		fetch('/course/list').then(res => res.json()).then(recData => {
+		fetch(apiPath + '/course/list').then(res => res.json()).then(recData => {
 		  setAcordionData(recData);
 		});
 	  }, []);
 
 	return (
 	<div>
-		<PageHeader homePage='/home' useLogout={true}></PageHeader>
+		<PageHeader apiPath={apiPath} homePage='/home' useLogout={false}></PageHeader>
 			<div id="noAccMainContent">
 				<h1>Prehlad kurzov</h1>
 				<Accordion defaultActiveKey="0">

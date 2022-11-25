@@ -1,11 +1,15 @@
-import './LoginPage.css';
+import '../App.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
-import { useEffect, useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import LinkButton from '../components/LinkButton';
 
-function LoginPage() {
+type Props = {
+	apiPath:string
+}
+
+function LoginPage({apiPath}:Props) {
 	const [login, setLogin] = useState("");
   	const [password, setPwd] = useState("");
 
@@ -30,7 +34,7 @@ function LoginPage() {
 		console.log('pwd:', password);
 		console.log('login:', login);
 
-		fetch("/user/login", {
+		fetch(apiPath + "/user/login", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
@@ -41,7 +45,7 @@ function LoginPage() {
 		).then(res => res.json()).then(recData => {
 			
 			console.log("recData", recData);
-			if (recData.status == "OK") {
+			if (recData.status === "OK") {
 				navigate("/home", {replace:true})
 			} else {
 				alert("Zle heslo alebo meno :(");
@@ -52,7 +56,7 @@ function LoginPage() {
 
   return (
 	<div>
-		<PageHeader homePage='/home' useLogout={false}></PageHeader>
+		<PageHeader apiPath={apiPath} homePage='/home' useLogout={false}></PageHeader>
 		<div id="loginPageMainContent">
 			<form>
 				<div className="form-group">
@@ -65,7 +69,7 @@ function LoginPage() {
 				</div>
 				<button type="submit" onClick={sendPwd} className="btn btn-primary">Potvrdit</button>
 			</form>
-            <LinkButton linkText='Nemam ucet 😢' linkValue='/noAccount'></LinkButton>
+            <LinkButton linkText='Prehľad kurzov' linkValue='/noAccount'></LinkButton>
 		</div>
 		<PageFooter></PageFooter>
 	</div>

@@ -1,27 +1,36 @@
 import { useEffect, useState } from 'react';
-import EventButton from '../components/EventButton';
 import PageFooter from '../components/PageFooter';
 import PageHeader from '../components/PageHeader';
-import './SubjectRegistrationPage.css';
+import '../App.css';
 import data from '../mockData/mockRegistrationtableData.json';
-import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Button, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
-function SubjectRegistrationPage() {
+type Props = {
+	apiPath:string
+}
+
+function SubjectRegistrationPage({apiPath}:Props) {
 	const [tableData, setTableData] = useState(data);
 	
 	useEffect(() => {
-	  fetch('/course/list/notregistered').then(res => res.json()).then(recData => {
+	  fetch(apiPath + '/course/list/available').then(res => res.json()).then(recData => {
 		console.log(recData);
 		setTableData(recData);
 	  });
 	}, []);
 	
 	const onButtonClick = (event:any, tableData:any) => {
-		fetch("/course/register", {
+		var url = apiPath + "/course/register";
+
+		if (tableData.registered === true) {
+			url = apiPath + "/course/unregister";
+		}
+
+		fetch(url, {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(tableData)
 			}
@@ -31,7 +40,7 @@ function SubjectRegistrationPage() {
 			}
 		}).then((recData) => {
 			console.log(recData);
-			fetch('/course/list/notregistered').then(res => res.json()).then(recData => {
+			fetch(apiPath + '/course/list/available').then(res => res.json()).then(recData => {
 				setTableData(recData);
 			});
 		});
@@ -40,7 +49,7 @@ function SubjectRegistrationPage() {
 	
 	return (
 		<div>
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
+			<PageHeader apiPath={apiPath}  homePage='/home' useLogout={true}></PageHeader>
 			<div id="subjectRegistrationMainContent">
 				<div>
 					<Table id="registrationTable" sx={{ boxShadow: 2}}>
@@ -63,7 +72,7 @@ function SubjectRegistrationPage() {
 								<TableCell>{td.shortcut}</TableCell>
 								<TableCell>{td.fullname}</TableCell>
 								<TableCell>{td.credits}</TableCell>
-								<TableCell><Button onClick={(event) => onButtonClick(event, td)}>Registrovat</Button></TableCell>
+								<TableCell><Button onClick={(event) => onButtonClick(event, td)}>{td.registered? "Odhlasit" : "Registrovat"}</Button></TableCell>
 							</TableRow>
 							))}
 						</TableBody>

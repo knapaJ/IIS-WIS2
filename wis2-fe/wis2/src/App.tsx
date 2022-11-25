@@ -16,32 +16,36 @@ import GarantPage from './pages/GarantPage';
 import LecturedCoursesLectures from './pages/LecturedCoursesLectures';
 import PrivateRouteUser from './components/ProtectedRouteUser';
 import PrivateRouteAdmin from './components/ProtectedRouteAdmin';
+import TimeTablePage from './pages/TimeTablePage';
 
 function App() {
 
+  var apiPath = "/api";
+
   return (
     <Routes>
-      <Route element={<PrivateRouteAdmin/>}>
-        <Route path="/adminPage" element={<AdminPage/>}/>
+      <Route element={<PrivateRouteAdmin apiPath={apiPath}/>}>
+        <Route path="/adminPage" element={<AdminPage apiPath={apiPath}/>}/>
       </Route>
 
-      <Route element={<PrivateRouteUser/>}>
-        <Route path="/student" element={<StudentPage/>}/>
-        <Route path="/termRegistration" element={<SubjectRegistrationPage/>}/>
-        <Route path="/subjectDetails" element={<SubjectDetailsPage/>}/>
-        <Route path="/home" element={<HomePage/>}/>
-        <Route path="/employee" element={<EmployeePage/>}/>
-        <Route path="/registeredSubjects" element={<RegisteredSubjectsPage/>}/>
-        <Route path="/registeredSubjects/registeredSubjectsDetails/:subName/:id" element={<SubjectDetailsPage/>}/>
-        <Route path="/lecturedCourses" element={<LecturedCourses/>}/>
-        <Route path="/lecturedCourseDetail/:id" element={<LecturedCourseDetail/>}/>
-        <Route path="/userProfile" element={<UserProfile/>}/>
-        <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures/>}/>
-        <Route path="/garant" element={<GarantPage apiPath=''/>}/>
+      <Route element={<PrivateRouteUser apiPath={apiPath}/>}>
+        <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
+        <Route path="/termRegistration" element={<SubjectRegistrationPage apiPath={apiPath}/>}/>
+        <Route path="/subjectDetails" element={<SubjectDetailsPage apiPath={apiPath}/>}/>
+        <Route path="/home" element={<HomePage apiPath={apiPath}/>}/>
+        <Route path="/employee" element={<EmployeePage apiPath={apiPath}/>}/>
+        <Route path="/registeredSubjects" element={<RegisteredSubjectsPage apiPath={apiPath}/>}/>
+        <Route path="/registeredSubjects/registeredSubjectsDetails/:subName/:id" element={<SubjectDetailsPage apiPath={apiPath}/>}/>
+        <Route path="/lecturedCourses" element={<LecturedCourses apiPath={apiPath}/>}/>
+        <Route path="/lecturedCourseDetail/:id" element={<LecturedCourseDetail apiPath={apiPath}/>}/>
+        <Route path="/userProfile" element={<UserProfile apiPath={apiPath}/>}/>
+        <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures apiPath={apiPath}/>}/>
+        <Route path="/timeTable" element={<TimeTablePage apiPath={apiPath}/>}/>
+	<Route path="/garant" element={<GarantPage apiPath={apiPath}/>}
       </Route>
 
-      <Route path="/noAccount" element={<NoAccPage/>}/>
-      <Route path="/" element={<LoginPage/>}/>
+      <Route path="/noAccount" element={<NoAccPage apiPath={apiPath}/>}/>
+      <Route path="/" element={<LoginPage apiPath={apiPath}/>}/>
     </Routes>
   );
 }

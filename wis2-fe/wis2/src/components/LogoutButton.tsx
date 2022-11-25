@@ -1,21 +1,22 @@
 import './LogoutButton.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 
 type Props = {
+  apiPath:string
 }
 
-function LogoutButton({}: Props) {
+function LogoutButton({apiPath}:Props) {
 
   let navigate = useNavigate();
 
   const logoutUser = (event:any) => {
 		event.preventDefault();
-		fetch("/user/logout", {
+		fetch(apiPath + "/user/logout", {
         method:"GET",
         cache: "no-cache",
         headers:{
-          "content_type":"application/json"
+          "content-type":"application/json"
         }
 			}
 		).then((response) => {
@@ -27,7 +28,7 @@ function LogoutButton({}: Props) {
 	}
 
   return (
-    <Button onClick={logoutUser}>ODHLASIT</Button>
+    <Button onClick={logoutUser}><i className="fa-solid fa-power-off"></i></Button>
   );
 }
 

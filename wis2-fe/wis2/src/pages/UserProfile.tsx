@@ -1,10 +1,13 @@
-import './UserProfile.css';
+import '../App.css';
 import PageHeader from '../components/PageHeader';
 import PageFooter from '../components/PageFooter';
 import { useEffect, useState } from 'react';
 
+type Props = {
+	apiPath:string
+}
 
-function EmployeePage() {
+function EmployeePage({apiPath}:Props) {
   const [oldPwd, setOldPwd] = useState("");
   const [newPwd, setNewPwd] = useState("");
 
@@ -35,11 +38,11 @@ function EmployeePage() {
       newPwd:newPwd
     }
 
-    fetch("/user/change-passwd", {
+    fetch(apiPath + "/user/change-passwd", {
 			method:"POST",
 			cache: "no-cache",
 			headers:{
-				"content_type":"application/json",
+				"content-type":"application/json",
 			},
 			body:JSON.stringify(dataToSend)
 			}
@@ -53,7 +56,7 @@ function EmployeePage() {
   }
 
   return (<div>
-    <PageHeader homePage='/home' useLogout={true}></PageHeader>
+    <PageHeader apiPath={apiPath} homePage='/home' useLogout={true}></PageHeader>
       <div id="userProfileMainContent">
       <form>
         <div className="form-group">
