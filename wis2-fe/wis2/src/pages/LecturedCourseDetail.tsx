@@ -158,7 +158,7 @@ function LecturedCourses({apiPath}:Props) {
 												{td.surname}
 											</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>
-												<input type="text" placeholder="zadaj body" value={editFormData.points} name="points" onChange={handleEditFormChange}></input>
+												<input type="text" required placeholder="zadaj body" value={editFormData.points} name="points" onChange={handleEditFormChange}></input>
 											</TableCell>
 											<TableCell sx={{ borderBottom: '0'}}>
 												{td.maxpoints}

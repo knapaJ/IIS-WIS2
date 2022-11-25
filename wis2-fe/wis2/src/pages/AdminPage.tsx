@@ -531,19 +531,19 @@ function AdminPage({apiPath}:Props) {
 									: 
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell>
-												<TextField value={editFormData.login} name='login' size="small" placeholder='' id="standard-basic" label="Login" variant="standard" onChange={handleEditFormChange}/>
+												<TextField value={editFormData.login} required name='login' size="small" placeholder='' id="standard-basic" label="Login" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell>
-												<TextField value={editFormData.name} name='name' size="small" id="standard-basic" label="Meno" variant="standard" onChange={handleEditFormChange}/>
+												<TextField value={editFormData.name} required name='name' size="small" id="standard-basic" label="Meno" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell>
-												<TextField value={editFormData.surname} name='surname' size="small" id="standard-basic" label="Priezvisko" variant="standard" onChange={handleEditFormChange}/>
+												<TextField value={editFormData.surname} required name='surname' size="small" id="standard-basic" label="Priezvisko" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell>
-												<TextField type="password" value={editFormData.password} name='password' size="small" id="standard-basic" label="Heslo" variant="standard" onChange={handleEditFormChange}/>
+												<TextField type="password" value={editFormData.password} required name='password' size="small" id="standard-basic" label="Heslo" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell>
-												<TextField value={editFormData.email} name='email' size="small" id="standard-basic" label="E-mail" variant="standard" onChange={handleEditFormChange}/>
+												<TextField value={editFormData.email} required name='email' size="small" id="standard-basic" label="E-mail" variant="standard" onChange={handleEditFormChange}/>
 											</TableCell>
 											<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
 												<Button onClick={onSaveButton}>Ulozit</Button>
@@ -596,10 +596,10 @@ function AdminPage({apiPath}:Props) {
 									: 
 										<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
 											<TableCell>
-												<TextField value={editRoomFormData.name} name='name' size="small" placeholder='' id="standard-basic" label="Nazov" variant="standard" onChange={handleRoomEditFormChange}/>
+												<TextField value={editRoomFormData.name} required name='name' size="small" placeholder='' id="standard-basic" label="Nazov" variant="standard" onChange={handleRoomEditFormChange}/>
 											</TableCell>
 											<TableCell>
-												<TextField value={editRoomFormData.building} name='building' size="small" id="standard-basic" label="Budova" variant="standard" onChange={handleRoomEditFormChange}/>
+												<TextField value={editRoomFormData.building} required name='building' size="small" id="standard-basic" label="Budova" variant="standard" onChange={handleRoomEditFormChange}/>
 											</TableCell>
 											<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
 												<Button onClick={onRoomSaveButton}>Ulozit</Button>

@@ -61,11 +61,11 @@ function EmployeePage({apiPath}:Props) {
       <form>
         <div className="form-group">
           <label htmlFor="oldPassword">Stare heslo</label>
-          <input onChange={(event) => onChangeOldPwd(event)} type="password" className="form-control" id="oldPassword" placeholder="Old password"/>
+          <input required onChange={(event) => onChangeOldPwd(event)} type="password" className="form-control" id="oldPassword" placeholder="Old password"/>
         </div>
         <div className="form-group">
           <label htmlFor="newPassword">Nove heslo</label>
-          <input onChange={(event) => onChangeNewPwd(event)} type="password" className="form-control" id="newPassword" placeholder="New password"/>
+          <input required onChange={(event) => onChangeNewPwd(event)} type="password" className="form-control" id="newPassword" placeholder="New password"/>
         </div>
         <button type="submit" onClick={sendPwd} className="btn btn-primary">Submit</button>
       </form>
