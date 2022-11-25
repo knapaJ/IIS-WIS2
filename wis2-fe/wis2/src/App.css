@@ -115,7 +115,9 @@ body {
 #subjectRegistrationMainContent,
 #userProfileMainContent,
 #adminPageMainContent,
-#employeeMainContent {
+#employeeMainContent,
+#courseEditPageContent,
+#garantPageMainContent {
     max-width: 1500px;
     min-width: 300px;
     margin: 0 auto;
@@ -181,4 +183,27 @@ table > tfoot > tr {
 
 .fc-timegrid-event {
     background-color: #3498db !important;
+}
+
+#courseEditSpace {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
+    column-gap: 5%;
+    row-gap: 5%;
+}
+
+#courseRelated,
+#courseParams {
+    overflow: auto;
+    max-height: 82vh;
+}
+
+textarea {
+    width: 100%;
+}
+
+.popupScroll {
+    height: 80vh;
+    overflow: auto;
 }

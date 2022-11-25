@@ -2,7 +2,7 @@
 function LoadingSign() {
     return (
         <div id="loadingSign">
-            <h4>Loading...</h4>
+            <h4>Načítání...</h4>
         </div>
     );
 }

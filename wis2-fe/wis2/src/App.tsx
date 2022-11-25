@@ -20,7 +20,8 @@ import TimeTablePage from './pages/TimeTablePage';
 
 function App() {
 
-  var apiPath = "/api";
+  //var apiPath = "/api";
+  var apiPath = "";
 
   return (
     <Routes>
@@ -41,9 +42,9 @@ function App() {
         <Route path="/userProfile" element={<UserProfile apiPath={apiPath}/>}/>
         <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures apiPath={apiPath}/>}/>
         <Route path="/timeTable" element={<TimeTablePage apiPath={apiPath}/>}/>
-	<Route path="/garant" element={<GarantPage apiPath={apiPath}/>}
       </Route>
 
+      <Route path="/garant" element={<GarantPage apiPath={apiPath}/>}/>
       <Route path="/noAccount" element={<NoAccPage apiPath={apiPath}/>}/>
       <Route path="/" element={<LoginPage apiPath={apiPath}/>}/>
     </Routes>

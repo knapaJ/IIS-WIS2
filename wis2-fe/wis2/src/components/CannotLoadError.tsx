@@ -6,7 +6,7 @@ type Props = {
 function CannotLoadError({text}: Props) {
   return (
     <div id="loadError">
-      <h4>Chyba: nemuzu nacist {text}</h4>
+      <h4>Chyba: nelze načíst {text}</h4>
 	  </div>
   );
 }

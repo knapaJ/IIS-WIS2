@@ -1,4 +1,3 @@
-import './GarantPage.css';
 import { nanoid } from "nanoid";
 import { Fragment, useEffect, useState } from 'react';
 import { Button, Checkbox, Table, TableBody, TableCell, TableHead, TableRow, TextField, Select, MenuItem, InputLabel } from '@mui/material';
@@ -147,7 +146,8 @@ function GarantPage({apiPath}:Props) {
 			}
 			return res.json();
 		}).then(data => {
-			setCoursesTableData(data);
+			setCoursesTableData([]);
+			//setCoursesTableData(data);
 			setCoursesFetchInProgressFlag(false);
 		});
 	}
@@ -375,7 +375,7 @@ function GarantPage({apiPath}:Props) {
 	}
 
 	const onCourseCloseButton = (event:any) => {
-		if(!addNewCourseFlag) {
+		if(addNewCourseFlag) {
 			const tableDataCopy = [...coursesTableData];
 			const index = coursesTableData.findIndex((td:any) => td.id === editCourseId);
 
@@ -727,7 +727,6 @@ function GarantPage({apiPath}:Props) {
 					isRegistrationEnabled: editCourseTermFormData.isRegistrationEnabled,
 					isOptional: editCourseTermFormData.isOptional,
 				}
-				//  /term/edit -> same data
 
 				fetch(apiPath + "/term/create", {
 					method:"POST",
@@ -737,7 +736,15 @@ function GarantPage({apiPath}:Props) {
 					},
 					body:JSON.stringify(dataToSend)
 					}
-				).then(res => res.json()).then(recData => {
+				).then(res => {
+					if(res.status != 200)
+					{
+						tableDataCopy.pop();
+						return null;
+					}
+					tableDataCopy[index] =  dataToPrepare;
+					return res.json();
+				}).then(recData => {
 					console.log(recData);
 				});
 			}
@@ -767,14 +774,23 @@ function GarantPage({apiPath}:Props) {
 					},
 					body:JSON.stringify(dataToSend)
 					}
-				).then(res => res.json()).then(recData => {
+				).then(res => {
+					if(res.status != 200)
+					{
+						return null;
+					}
+					tableDataCopy[index] =  dataToPrepare;
+					return res.json();
+				}).then(recData => {
 					console.log(recData);
 				});
 			}
 
 			tableDataCopy[index] = dataToPrepare;
 		} else {
-			tableDataCopy.splice(index, 1);
+			if (addNewCourseTermFlag) {
+				tableDataCopy.splice(index, 1);
+			}
 		}
 
 		setCourseTermsTableData(tableDataCopy);
@@ -863,14 +879,14 @@ function GarantPage({apiPath}:Props) {
 
 	return (
 		<div id="garantPage">	
-			<PageHeader homePage='/home' useLogout={true}></PageHeader>
+			<PageHeader apiPath={apiPath} homePage='/home' useLogout={true}></PageHeader>
 			{
 				editMode?
 					<div id="garantCourseEdit">
-						<div id="courseEditSpace" className="blurable">
+						<div id="courseEditPageContent" className="blurable">
 							<h1>Kurz {editCourseFormData.shortcut}</h1>
-							<Fragment>
-								<div id="courseEditSpace">
+							<div id="courseEditSpace">
+								<div id="courseParams">
 									<TextField 
 										value={editCourseFormData.shortcut}
 										size="small" 
@@ -884,9 +900,9 @@ function GarantPage({apiPath}:Props) {
 									<TextField 
 										value={editCourseFormData.name}
 										size="medium" 
-										placeholder='Nazev' 
+										placeholder='Název' 
 										id="standard-basic" 
-										label="Nazev" 
+										label="Název" 
 										variant="standard" 
 										onChange={(event) => handleCourseFormChange(event, "name")}
 									/>
@@ -901,9 +917,9 @@ function GarantPage({apiPath}:Props) {
 									<TextField 
 										value={editCourseFormData.studentLimit}
 										size="small" 
-										placeholder= "Limit studentu" 
+										placeholder= "Limit studentů" 
 										id="standard-basic" 
-										label="Pocet studentu" 
+										label="Limit studentů" 
 										variant="standard" 
 										onChange={(event) => handleCourseFormChange(event, "studentLimit")}
 									/>
@@ -911,239 +927,247 @@ function GarantPage({apiPath}:Props) {
 									<TextField 
 										value={editCourseFormData.credits}
 										size="small" 
-										placeholder= "Pocet kreditu" 
+										placeholder= "Počet kreditů" 
 										id="standard-basic" 
-										label="Pocet kreditu" 
+										label="Počet kreditů" 
 										variant="standard" 
 										onChange={(event) => handleCourseFormChange(event, "credits")}
 									/>
 									<br/><br/>
-									<label>Schvaleno:</label>
+									<label>Schváleno:</label>
 									<Checkbox
 										disabled 
 										checked={editCourseFormData.isApproved}
 									/>
 									<br/>
-									<Button onClick={onCourseSaveButton}>Ulozit</Button>
-									<Button onClick={onCourseCloseButton}>Zarvit</Button>
+									<Button onClick={onCourseSaveButton}>Uložit</Button>
+									<Button onClick={onCourseCloseButton}>Zavřít</Button>
 								</div>
-								<div id="lecturersOfCourse">
-									<h2>Prednasejici</h2>
-									<form>
-										<Fragment>
-											{
-												(courseLecturersTableData != null && courseLecturersFetchInProgressFlag == false)?
-													<Table sx={{ boxShadow: 2}}>
-														<colgroup>
-															<col style={{width:'30%'}}/>
-															<col style={{width:'30%'}}/>
-															<col style={{width:'30%'}}/>
-															<col style={{width:'10%'}}/>
-														</colgroup>
-														<TableHead>
-															<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-																<TableCell>Login</TableCell>
-																<TableCell>Jmeno</TableCell>
-																<TableCell>Prijmeni</TableCell>
-																<TableCell onClick={onCourseLecturerAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
-															</TableRow>
-														</TableHead>
-														<TableBody>
-															{courseLecturersTableData.map((td:any) => (
-																<Fragment>
-																	{
-																		<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-																			<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}}>{td.surname}</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
-																				<Button onClick={(event) => onCourseLecturerDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
-																			</TableCell>
-																		</TableRow>
-																	}
-																</Fragment>
-															))}
+								<div id="courseRelated">
+									<div id="courseRegistrationRequests">
+										<h3>Žádosti o registrace na kurz</h3>
+										<form>
+											<Fragment>
+												{
+													(courseRegistrationsTableData != null && courseRegistrationsFetchInProgressFlag == false)?
+														<Table sx={{ boxShadow: 2}}	>
+															<colgroup>
+																<col style={{width:'30%'}}/>
+																<col style={{width:'30%'}}/>
+																<col style={{width:'40%'}}/>
+															</colgroup>
+															<TableHead>
+																<TableRow>
+																	<TableCell>Login</TableCell>
+																	<TableCell>Jméno</TableCell>
+																	<TableCell>Příjmení</TableCell>
+																	<TableCell></TableCell>
+																</TableRow>
+															</TableHead>
+															<TableBody>
+																{courseRegistrationsTableData.map((td:any) => (
+																	<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+																		<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
+																		<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
+																		<TableCell sx={{ borderBottom: '0'}}>{td.surname}</TableCell>
+																		<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
+																			<Button onClick={(event) => onCourseRegistrationAcceptClicked(event, td)}><i className="fa-solid fa-thumbs-up"></i></Button>
+																			<Button onClick={(event) => onCourseRegistrationDeclineClicked(event, td)}><i className="fa-solid fa-thumbs-down"></i></Button>
+																		</TableCell>
+																	</TableRow>
+																))}
+															</TableBody>
+														</Table>
+													:
+														<Fragment>
 															{
-																<Fragment>
-																	{
-																		(addNewCourseLecturerFlag && otherUsersTableData.length > 0) ?
-																			<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-																				<TableCell>
-																					<InputLabel id="lectureLogin">Login uzivatele</InputLabel>
-																					<Select
-																						labelId="lectureLogin"
-																						name='login'
-																						id="standard-basic"
-																						value={addCourseLecturerFormData.id}
-																						label="Login uzivatele"
-																						placeholder='xlogin00' 
-																						onChange={(event) => handleCourseLecturerFormChange(event)}
-																					>
-																						{
-																							otherUsersTableData.map((td:any) => (
-																								<MenuItem value={td.id}>{td.login}</MenuItem>
-																							))
-																						}
-																					</Select>
-																				</TableCell>
-																				<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
-																					<Button onClick={onCourseLecturerSaveButton}>Ulozit</Button>
+																(courseRegistrationsFetchInProgressFlag == false)?
+																	<CannotLoadError text="registrace na kurz"></CannotLoadError>
+																:
+																	<LoadingSign></LoadingSign>
+															}
+														</Fragment>
+												}
+											</Fragment>
+										</form>
+									</div>
+									<div id="lecturersOfCourse">
+										<h3>Přednášející</h3>
+										<form>
+											<Fragment>
+												{
+													(courseLecturersTableData != null && courseLecturersFetchInProgressFlag == false)?
+														<Table sx={{ boxShadow: 2}}>
+															<colgroup>
+																<col style={{width:'30%'}}/>
+																<col style={{width:'30%'}}/>
+																<col style={{width:'30%'}}/>
+																<col style={{width:'10%'}}/>
+															</colgroup>
+															<TableHead>
+																<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+																	<TableCell>Login</TableCell>
+																	<TableCell>Jméno</TableCell>
+																	<TableCell>Příjmení</TableCell>
+																	<TableCell onClick={onCourseLecturerAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
+																</TableRow>
+															</TableHead>
+															<TableBody>
+																{courseLecturersTableData.map((td:any) => (
+																	<Fragment>
+																		{
+																			<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+																				<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}}>{td.surname}</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
+																					<Button onClick={(event) => onCourseLecturerDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
 																				</TableCell>
 																			</TableRow>
-																		:
-																			<></>
-																	}
-																</Fragment>
+																		}
+																	</Fragment>
+																))}
+																{
+																	<Fragment>
+																		{
+																			(addNewCourseLecturerFlag && (otherUsersTableData != null && otherUsersTableData.length > 0)) ?
+																				<TableRow sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+																					<TableCell>
+																						<InputLabel id="lectureLogin">Login uživatele</InputLabel>
+																						<Select
+																							labelId="lectureLogin"
+																							name='login'
+																							id="standard-basic"
+																							value={addCourseLecturerFormData.id}
+																							label="Login uživatele"
+																							placeholder='xlogin00' 
+																							onChange={(event) => handleCourseLecturerFormChange(event)}
+																						>
+																							{
+																								otherUsersTableData.map((td:any) => (
+																									<MenuItem value={td.id}>{td.login}</MenuItem>
+																								))
+																							}
+																						</Select>
+																					</TableCell>
+																					<TableCell  sx={{ borderBottom: '0'}} style={{textAlign: 'center'}}>
+																						<Button onClick={onCourseLecturerSaveButton}>Uložit</Button>
+																					</TableCell>
+																				</TableRow>
+																			:
+																				<></>
+																		}
+																	</Fragment>
+																}
+															</TableBody>
+														</Table>
+													:
+														<Fragment>
+															{
+																(courseLecturersFetchInProgressFlag == false)?
+																	<CannotLoadError text="učitele kurzu"></CannotLoadError>
+																:
+																	<LoadingSign></LoadingSign>
 															}
-														</TableBody>
-													</Table>
-												:
-													<Fragment>
-														{
-															(courseLecturersFetchInProgressFlag == false)?
-																<CannotLoadError text="ucitele kurzu"></CannotLoadError>
-															:
-																<LoadingSign></LoadingSign>
-														}
-													</Fragment>
-											}
-										</Fragment>
-									</form>
-								</div>
-								<div id="courseRegistrationRequests">
-									<h1>Zadosti o registrace na kurzy</h1>
-									<form>
-										<Fragment>
-											{
-												(courseRegistrationsTableData != null && courseRegistrationsFetchInProgressFlag == false)?
-													<Table sx={{ boxShadow: 2}}	>
-														<colgroup>
-															<col style={{width:'20%'}}/>
-															<col style={{width:'40%'}}/>
-															<col style={{width:'20%'}}/>
-														</colgroup>
-														<TableHead>
-															<TableRow>
-																<TableCell>Login</TableCell>
-																<TableCell>Jmeno</TableCell>
-																<TableCell>Predmet</TableCell>
-																<TableCell></TableCell>
-															</TableRow>
-														</TableHead>
-														<TableBody>
-															{courseRegistrationsTableData.map((td:any) => (
-																<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-																	<TableCell sx={{ borderBottom: '0'}}>{td.login}</TableCell>
-																	<TableCell sx={{ borderBottom: '0'}}>{td.name}</TableCell>
-																	<TableCell sx={{ borderBottom: '0'}}>{td.surname}</TableCell>
-																	<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
-																		<Button onClick={(event) => onCourseRegistrationAcceptClicked(event, td)}><i className="fa-solid fa-thumbs-up"></i></Button>
-																		<Button onClick={(event) => onCourseRegistrationDeclineClicked(event, td)}><i className="fa-solid fa-thumbs-down"></i></Button>
-																	</TableCell>
+														</Fragment>
+												}
+											</Fragment>
+										</form>
+									</div>
+									<div id="termTable">
+										<h3>Správa termínů</h3>
+										<form>
+											<Fragment>
+												{
+													(courseTermsTableData != null && courseTermsFetchInProgressFlag == false)?
+														<Table sx={{ boxShadow: 2}}	>
+															<colgroup>
+																<col style={{width:'25%'}}/>
+																<col style={{width:'25%'}}/>
+																<col style={{width:'25%'}}/>
+																<col style={{width:'5%'}}/>
+																<col style={{width:'5%'}}/>
+																<col style={{width:'15%'}}/>
+															</colgroup>
+															<TableHead>
+																<TableRow>
+																	<TableCell>Název</TableCell>
+																	<TableCell>Začátek</TableCell>
+																	<TableCell>Konec</TableCell>
+																	<TableCell>Registrace</TableCell>
+																	<TableCell>Volitelné</TableCell>
+																	<TableCell
+																		onClick={(event) => {
+																			onPopupEvent(event);
+																			setButtonTermPopup(true);
+																			onCourseTermAddButton(event);
+																		}} 
+																		style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 																</TableRow>
-															))}
-														</TableBody>
-													</Table>
-												:
-													<Fragment>
-														{
-															(courseRegistrationsFetchInProgressFlag == false)?
-																<CannotLoadError text="registrace na kurz"></CannotLoadError>
-															:
-																<LoadingSign></LoadingSign>
-														}
-													</Fragment>
-											}
-										</Fragment>
-									</form>
+															</TableHead>
+															<TableBody>
+																{courseTermsTableData.map((td:any) => (
+																	<Fragment>
+																		<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
+																				<TableCell sx={{ borderBottom: '0'}}>{td.classname}</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}}>{(td.startDate != null) ? (new Date(td.startDate)).toISOString().substring(0, 10) : ""}</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}}>{(td.endDate != null) ? (new Date(td.endDate)).toISOString().substring(0, 10) : ""}</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}}>
+																					<Checkbox
+																						disabled 
+																						checked={td.isRegistrationEnabled} 
+																					/>
+																				</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}}>
+																					<Checkbox
+																						disabled 
+																						checked={td.isOptional} 
+																					/>
+																				</TableCell>
+																				<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
+																					<Button 
+																						onClick={(event) => {
+																							onPopupEvent(event);
+																							setButtonTermPopup(true);
+																							onCourseTermEditButton(event, td);
+																						}}
+																					>
+																							<i className='far fa-edit'></i>
+																					</Button>
+																					<Button onClick={(event) => onCourseTermDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
+																				</TableCell>
+																			</TableRow>
+																	</Fragment>
+																))}
+															</TableBody>
+														</Table>
+													:
+														<Fragment>
+															{
+																(courseTermsFetchInProgressFlag == false)?
+																	<CannotLoadError text="termíny kurzu"></CannotLoadError>
+																:
+																	<LoadingSign></LoadingSign>
+															}
+														</Fragment>
+												}
+											</Fragment>
+										</form>
+									</div>
 								</div>
-								<div id="termTable">
-									<h2>Sprava terminu {editCourseFormData.shortcut}</h2>
-									<form>
-										<Fragment>
-											{
-												(courseTermsTableData != null && courseTermsFetchInProgressFlag == false)?
-													<Table sx={{ boxShadow: 2}}	>
-														<colgroup>
-															<col style={{width:'25%'}}/>
-															<col style={{width:'25%'}}/>
-															<col style={{width:'25%'}}/>
-															<col style={{width:'5%'}}/>
-															<col style={{width:'5%'}}/>
-															<col style={{width:'15%'}}/>
-														</colgroup>
-														<TableHead>
-															<TableRow>
-																<TableCell>Nazev</TableCell>
-																<TableCell>Zacatek</TableCell>
-																<TableCell>Konec</TableCell>
-																<TableCell>Registrace</TableCell>
-																<TableCell>Volitelne</TableCell>
-																<TableCell onClick={onCourseTermAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
-															</TableRow>
-														</TableHead>
-														<TableBody>
-															{courseTermsTableData.map((td:any) => (
-																<Fragment>
-																	<TableRow key={td.id} sx={{ borderBottom: '1px solid rgba(224, 224, 224, 1)'}}>
-																			<TableCell sx={{ borderBottom: '0'}}>{td.classname}</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}}>{(td.startDate != null) ? (new Date(td.startDate)).toISOString().substring(0, 10) : ""}</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}}>{(td.endDate != null) ? (new Date(td.endDate)).toISOString().substring(0, 10) : ""}</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}}>
-																				<Checkbox
-																					disabled 
-																					checked={td.isRegistrationEnabled} 
-																				/>
-																			</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}}>
-																				<Checkbox
-																					disabled 
-																					checked={td.isOptional} 
-																				/>
-																			</TableCell>
-																			<TableCell sx={{ borderBottom: '0'}} style={{display:'flex'}}>
-																				<Button 
-																					onClick={(event) => {
-																						onPopupEvent(event);
-																						setButtonTermPopup(true);
-																						onCourseTermEditButton(event, td);
-																					}}
-																				>
-																						<i className='far fa-edit'></i>
-																				</Button>
-																				<Button onClick={(event) => onCourseTermDeleteButton(event, td)}><i className='fas fa-eraser'></i></Button>
-																			</TableCell>
-																		</TableRow>
-																</Fragment>
-															))}
-														</TableBody>
-													</Table>
-												:
-													<Fragment>
-														{
-															(courseTermsFetchInProgressFlag == false)?
-																<CannotLoadError text="terminy kurzu"></CannotLoadError>
-															:
-																<LoadingSign></LoadingSign>
-														}
-													</Fragment>
-											}
-										</Fragment>
-									</form>
-								</div>
-							</Fragment>
+							</div>
 						</div>
 						<div id="termPopup">
 							<Popup triggered={buttonTermPopup} setTrigger={setButtonTermPopup}>
 								<div className='popupScroll'>
-									<h1>Termin {editCourseFormData.shortcut}</h1>
+									<h1>Termín {editCourseFormData.shortcut}</h1>
 									<Fragment>
 										<TextField 
 											value={editCourseTermFormData.classname}
 											size="small" 
-											placeholder='Nazev' 
+											placeholder='Název' 
 											id="standard-basic" 
-											label="Nazev" 
+											label="Název" 
 											variant="standard" 
 											onChange={(event) => handleCourseTermFormChange(event, "classname")}
 										/>
@@ -1155,7 +1179,7 @@ function GarantPage({apiPath}:Props) {
 											onChange={(event) => handleCourseTermFormChange(event, "description")}
 										/>
 										<br/><br/>
-										<InputLabel id="startdate">Zacatek</InputLabel>
+										<InputLabel id="startdate">Začátek</InputLabel>
 										<TextField 
 											value={((editCourseTermFormData.startDate != null)? new Date(editCourseTermFormData.startDate) : new Date()).toISOString().substring(0, 16)}
 											type="datetime-local"
@@ -1180,7 +1204,7 @@ function GarantPage({apiPath}:Props) {
 											{
 												editCourseTermFormData.isRegistrationEnabled? 
 												<div>
-													<InputLabel id="rstartdate">Zacatek registrace</InputLabel>
+													<InputLabel id="rstartdate">Začátek registrace</InputLabel>
 													<TextField 
 														value={((editCourseTermFormData.registrationStartDate != null)? new Date(editCourseTermFormData.registrationStartDate) : new Date()).toISOString().substring(0, 16)}
 														type="datetime-local"
@@ -1207,9 +1231,9 @@ function GarantPage({apiPath}:Props) {
 										<TextField
 											value={editCourseTermFormData.maxMark}
 											size="small"
-											placeholder='Max bodu'
+											placeholder='Max bodů'
 											id="standard-basic"
-											label="Max bodu"
+											label="Max bodů"
 											variant="standard"
 											onChange={(event) => handleCourseTermFormChange(event, "maxMark")}
 										/>
@@ -1217,9 +1241,9 @@ function GarantPage({apiPath}:Props) {
 										<TextField
 											value={editCourseTermFormData.studentLimit}
 											size="small"
-											placeholder='Limit studentu'
+											placeholder='Limit studentů'
 											id="standard-basic"
-											label="Limit studentu"
+											label="Limit studentů"
 											variant="standard"
 											onChange={(event) => handleCourseTermFormChange(event, "studentLimit")}
 										/>
@@ -1231,7 +1255,7 @@ function GarantPage({apiPath}:Props) {
 											inputProps={{ 'aria-label': 'Registration' }}
 										/>
 										<br/>
-										<label>Volitelne:</label>
+										<label>Volitelné:</label>
 										<Checkbox
 											checked={editCourseTermFormData.isOptional}
 											onChange={(event) => handleCourseTermCheckboxFormChange(event, "isOptional")}
@@ -1251,7 +1275,7 @@ function GarantPage({apiPath}:Props) {
 											setButtonTermPopup(false);
 											onCourseTermCloseButton(event);
 										}}
-										>Zarvit</Button>
+										>Zavřít</Button>
 										
 									</Fragment>
 								</div>
@@ -1278,10 +1302,10 @@ function GarantPage({apiPath}:Props) {
 												<TableHead>
 													<TableRow>
 														<TableCell>Zkratka</TableCell>
-														<TableCell>Nazev</TableCell>
-														<TableCell>Pocet kreditu</TableCell>
-														<TableCell>Limit studentu</TableCell>
-														<TableCell>Schvaleno</TableCell>
+														<TableCell>Název</TableCell>
+														<TableCell>Počet kreditů</TableCell>
+														<TableCell>Limit studentů</TableCell>
+														<TableCell>Schváleno</TableCell>
 														<TableCell onClick={onCourseAddButton} style={{display:'flex', justifyContent:'center'}}><Button ><i style={{fontSize:20}} className='fa fa-plus-square'></i></Button></TableCell>
 													</TableRow>
 												</TableHead>
