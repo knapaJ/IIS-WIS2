@@ -110,14 +110,14 @@ function AdminPage({apiPath}:Props) {
 
 
 	// PAGINATION USERS
-	const usersPaginationChange = (event:any) => {
-		fetchData(event.target.textContent);
+	const usersPaginationChange = (event:any, value:any) => {
+		fetchData(value);
 	};
 	// PAGINATION USERS
 
 	// PAGINATION ROOMS
-	const roomsPaginationChange = (event:any) => {
-		fetchRoomData(event.target.textContent);
+	const roomsPaginationChange = (event:any, value:any) => {
+		fetchRoomData(value);
 	}
 	// PAGINATION ROOMS
 
@@ -556,7 +556,7 @@ function AdminPage({apiPath}:Props) {
 						<TableFooter>
 							<TableRow>
 								<TableCell colSpan={6}>
-									<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event) => usersPaginationChange(event)}></Pagination>
+									<Pagination count={maxPagesNumber?? 1} defaultPage={pageNumber?? 1} onChange={(event, value) => usersPaginationChange(event, value)}></Pagination>
 								</TableCell>
 							</TableRow>
 						</TableFooter>
@@ -612,7 +612,7 @@ function AdminPage({apiPath}:Props) {
 						<TableFooter>
 							<TableRow>
 								<TableCell colSpan={3}>
-									<Pagination count={maxRoomPagesNumber?? 1} defaultPage={pageRoomNumber?? 1} onChange={(event) => roomsPaginationChange(event)}></Pagination>
+									<Pagination count={maxRoomPagesNumber?? 1} defaultPage={pageRoomNumber?? 1} onChange={(event, value) => roomsPaginationChange(event, value)}></Pagination>
 								</TableCell>
 							</TableRow>
 						</TableFooter>

@@ -26,11 +26,15 @@ function App() {
   return (
     <Routes>
       <Route element={<PrivateRouteAdmin apiPath={apiPath}/>}>
-        <Route path="/adminPage" element={<AdminPage apiPath={apiPath}/>}/>
+        
       </Route>
 
       <Route element={<PrivateRouteUser apiPath={apiPath}/>}>
-        <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
+        
+      </Route>
+      <Route path="/adminPage" element={<AdminPage apiPath={apiPath}/>}/>
+
+      <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
         <Route path="/termRegistration" element={<SubjectRegistrationPage apiPath={apiPath}/>}/>
         <Route path="/subjectDetails" element={<SubjectDetailsPage apiPath={apiPath}/>}/>
         <Route path="/home" element={<HomePage apiPath={apiPath}/>}/>
