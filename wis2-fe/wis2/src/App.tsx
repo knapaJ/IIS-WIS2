@@ -20,7 +20,7 @@ import TimeTablePage from './pages/TimeTablePage';
 
 function App() {
 
-  var apiPath = "";
+  var apiPath = "/api";
 
   return (
     <Routes>
@@ -29,8 +29,10 @@ function App() {
       </Route>
 
       <Route element={<PrivateRouteUser apiPath={apiPath}/>}>
-        <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
-        <Route path="/termRegistration" element={<SubjectRegistrationPage apiPath={apiPath}/>}/>
+        
+      </Route>
+      <Route path="/student" element={<StudentPage apiPath={apiPath}/>}/>
+        <Route path="/courseRegistration" element={<SubjectRegistrationPage apiPath={apiPath}/>}/>
         <Route path="/subjectDetails" element={<SubjectDetailsPage apiPath={apiPath}/>}/>
         <Route path="/home" element={<HomePage apiPath={apiPath}/>}/>
         <Route path="/employee" element={<EmployeePage apiPath={apiPath}/>}/>
@@ -42,8 +44,6 @@ function App() {
         <Route path="/lecturedCourseLectures/:id" element={<LecturedCoursesLectures apiPath={apiPath}/>}/>
         <Route path="/timeTable" element={<TimeTablePage apiPath={apiPath}/>}/>
         <Route path="/garant" element={<GarantPage apiPath={apiPath}/>}/>
-      </Route>
-
       <Route path="/noAccount" element={<NoAccPage apiPath={apiPath}/>}/>
       <Route path="/" element={<LoginPage apiPath={apiPath}/>}/>
     </Routes>

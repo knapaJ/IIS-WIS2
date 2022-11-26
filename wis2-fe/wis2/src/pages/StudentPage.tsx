@@ -14,7 +14,7 @@ function StudentPage({apiPath}:Props) {
 		<div id="studentPageMainContent">
 			<div id="buttonMenu">
 				<LinkButton linkText='Profil' linkValue='/userProfile'></LinkButton>
-				<LinkButton linkText='Registrácie termínov' linkValue='/termRegistration'></LinkButton>
+				<LinkButton linkText='Registrácie predmetov' linkValue='/courseRegistration'></LinkButton>
 				<LinkButton linkText='Aktuálne predmety' linkValue='/registeredSubjects'></LinkButton>
 				<LinkButton linkText='Rozvrh' linkValue='/timeTable'></LinkButton>
 			</div>
