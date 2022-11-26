@@ -1,5 +1,5 @@
 from app import db
-from app.models.User import User, UserType
+from app.models.User import User, UserType, EmailFormatException
 from flask import Blueprint, abort, jsonify, request, session
 from sqlalchemy.exc import IntegrityError
 from app.blueprints.user_util import user_auth, need_user_logged
@@ -42,6 +42,8 @@ def register_user():
         abort(400, description="Missing keys in JSON data")
     except IntegrityError:
         return jsonify(message="User already exists"), 409
+    except EmailFormatException:
+        abort(400, description="Bad e-mail format")
 
     return jsonify(status="OK"), 200
 
@@ -143,6 +145,8 @@ def admin_edit_user():
         abort_bad_json()
     except IntegrityError:
         return jsonify(message=f"Login {data['login']} is already taken"), 409
+    except EmailFormatException:
+        abort(400, description="Bad e-mail format")
 
 
 @user_endpoint.route("/remove", methods=["DELETE"])

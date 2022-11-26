@@ -270,17 +270,24 @@ def list_studetns_in_course(course_id):
     return jsonify(ret), 200
 
 
-@course_endpoint.route('/list/unapproverregistrations/<course_id>', methods=["GET"])
+@course_endpoint.route('/list/unapproverregistrations/<course_id>/<int:page>', methods=["GET"])
 @need_user_logged
-def list_unapproved_students(user, course_id):
+def list_unapproved_students(user, course_id, page):
     course = Course.query.filter_by(uuid=course_id).first_or_404()
     if user.uuid != course.garant.uuid:
         abort(403)
     ret = []
-    for registration in course.user_registrations:
-        if registration.isApproved:
-            continue
-        ret.append({
+    registrations_paged = db.paginate(db.select(CourseRegistration).filter(
+            CourseRegistration.course.has(uuid=course.uuid),
+            CourseRegistration.isApproved == False
+        ).order_by(CourseRegistration.time), page=page, per_page=10)
+    ret = {
+        "registrations": [],
+        'currentPage': registrations_paged.page,
+        'totalPages': registrations_paged.pages
+    }
+    for registration in registrations_paged:
+        ret["registrations"].append({
             'id': registration.uuid,
             'name': registration.student.name,
             'surname': registration.student.surname,

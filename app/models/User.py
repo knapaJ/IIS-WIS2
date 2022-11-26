@@ -3,6 +3,11 @@ from app import db
 import enum
 from . import Utils
 from sqlalchemy.ext.associationproxy import association_proxy
+from re import match
+
+
+class EmailFormatException(Exception):
+    pass
 
 
 class UserType(enum.Enum):
@@ -28,6 +33,13 @@ class User(db.Model):
     # Proxies
     registered_courses = association_proxy("course_registrations", "course")
     registered_terms = association_proxy("term_marks", "term")
+
+    @db.validates('e_mail')
+    def validate_e_mail(self, key, value):
+        if match(r'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}$', value):
+            return value
+        else:
+            raise EmailFormatException('Bad e-mail format')
 
     @db.validates("uuid")
     def uuid_edit_blocker(self, key, value):

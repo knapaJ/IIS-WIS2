@@ -63,7 +63,7 @@ def list_terms_for_taught_course(course_id):
 def term_detail_teacher(term_id, page):
     term = Term.query.filter_by(uuid=term_id).first_or_404()
     marks_paged = db.paginate(db.select(TermMark).filter(TermMark.term.has(uuid=term.uuid)),
-                              per_page=1, page=page)
+                              per_page=10, page=page)
     ret = {
         'totalPages': marks_paged.pages,
         'currentPage': marks_paged.page,
@@ -209,3 +209,44 @@ def list_upcomming_terms_monked(user):
             'end': term.end_date.isoformat() if term.start_date else datetime.datetime.utcnow().isoformat()
         })
     return jsonify(ret), 200
+
+
+@term_endpoint.route('/delete', methods=['DELETE'])
+@need_user_logged
+def delete_term(user):
+    data = request.get_json()
+    try:
+        term = Term.query.filter_by(uuid=data["id"]).first_or_404()
+        if not term.course.garant.uuid == user.uuid:
+            abort(403, description="Unauthorised")
+        db.session.delete(term)
+        db.session.commit()
+        return jsonify(status='OK'), 200
+    except KeyError:
+        abort_bad_json()
+
+
+@term_endpoint.route('/edit', methods=["POST"])
+@need_user_logged
+def edit_term(user):
+    data = request.get_json()
+    try:
+        term = Term.query.filter_by(uuid=data["id"]).first_or_404()
+        if not term.course.garant.uuid == user.uuid:
+            abort(403, description="Unauthorised")
+        term.title = data["classname"]
+        term.start_date = dateparse.parse(data["startDate"])
+        term.end_date = dateparse.parse(data["endDate"])
+        term.registrationEndDate = dateparse.parse(data["registrationEndDate"]) if data['registrationEndDate'] else None
+        term.registrationStartDate = dateparse.parse(data["registrationStartDate"]) if data['registrationStartDate'] else None
+        term.isOptional = data["isOptional"]
+        term.isRegistrationEnabled = data["isRegistrationEnabled"]
+        term.description = data["description"]
+        term.maxMark = data["maxMark"]
+        db.session.add(term)
+        db.session.commit()
+        return jsonify(status='OK'), 200
+    except KeyError:
+        abort_bad_json()
+    except dateparse.ParserError:
+        abort_bad_json()

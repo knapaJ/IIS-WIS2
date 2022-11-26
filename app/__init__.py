@@ -74,8 +74,7 @@ def create_app(test_config=None):
                                    "dev")
         course = models.Course.Course("TEST", "test course", 99, garant, 5)
         course.registered_lecturers.append(teacher)
-        course.description = "Dajaka snuska sraciek o tomto predmetu" \
-                             "A tady vuber <b>nezkousim</b> XSS :pepeLa:"
+        course.description = "Lorem ipsum dolor shit amet, consectetuer adipiscing elit. Nullam faucibus mi quis velit. Nullam lectus justo, vulputate eget mollis sed, tempor sed magna. Duis pulvinar. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Ut tempus purus at lorem. Integer tempor. Curabitur sagittis hendrerit ante. Vivamus porttitor turpis ac leo. Curabitur ligula sapien, pulvinar a vestibulum quis, facilisis vel sapien. Fusce aliquam vestibulum ipsum. Fusce consectetuer risus a nunc. Fusce nibh. Nulla accumsan, elit sit amet varius semper, nulla mauris mollis quam, tempor suscipit diam nulla vel leo. Maecenas aliquet accumsan leo. Praesent vitae arcu tempor neque lacinia pretium. Mauris metus."
         student = models.User.User("tstude00", "test", "student", "student@test.wis", models.User.UserType.USER,
                                    "dev")
         student2 = models.User.User("tstude01", "test", "student2", "student@test.wis", models.User.UserType.USER,
@@ -89,7 +88,7 @@ def create_app(test_config=None):
         termmark2 = models.TermMark.TermMark(student2, term)
         termmark.modify(9, teacher)
         classroom = models.Classroom.Classroom("D105")
-        classroom.building = "bOzEtEcHoVa 220PIC0"
+        classroom.building = "bOzEtEcHoVa 28"
         term.classroom = classroom
         db.session.add(termmark2)
         db.session.add(coursereg2)
