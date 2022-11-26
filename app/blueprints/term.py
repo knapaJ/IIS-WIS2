@@ -114,7 +114,7 @@ def create_term(user):
         term.start_date = dateparse.parse(data["startDate"])
         term.end_date = dateparse.parse(data["endDate"])
         term.registrationEndDate = dateparse.parse(data["registrationEndDate"])
-        term.registrationStartDate = dateparse.parse(data["registrationEndDate"])
+        term.registrationStartDate = dateparse.parse(data["registrationStartDate"])
         term.isOptional = data["isOptional"]
         term.isRegistrationEnabled = data["isRegistrationEnabled"]
         db.session.add(term)
