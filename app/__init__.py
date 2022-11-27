@@ -58,7 +58,7 @@ def create_app(test_config=None):
 
     @app.cli.command()
     def createdb():
-        print("Creating DB")
+        print(f"Creating DB at {app.config['SQLALCHEMY_DATABASE_URI']}")
         db.create_all()
         root_user = models.User.User("xrootx00", "root", "root", "root@this.wis", models.User.UserType.ADMIN,
                                      "dev")
